@@ -47,3 +47,6 @@ next-env.d.ts
 
 # payload local upload directory — media is served from R2 in production
 /media/
+
+# regenerated at build time from image-assets.json
+/src/lib/r2-media-map.generated.ts

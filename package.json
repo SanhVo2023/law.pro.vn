@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/generate-r2-map.mjs",
+    "prebuild": "node scripts/generate-r2-map.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "patch-package",
     "generate:types": "payload generate:types",
+    "generate:r2-map": "node scripts/generate-r2-map.mjs",
     "migrate:status": "payload migrate:status",
     "migrate": "payload migrate"
   },

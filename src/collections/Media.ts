@@ -67,11 +67,19 @@ export const Media: CollectionConfig = {
     afterRead: [
       ({ doc }) => {
         if (!doc) return doc
-        return {
-          ...doc,
-          url: rewriteUrl(doc.filename, doc.url),
-          thumbnailURL: rewriteUrl(doc.filename, doc.thumbnailURL),
-          sizes: rewriteSizes(doc.filename, doc.sizes),
+        try {
+          return {
+            ...doc,
+            url: rewriteUrl(doc.filename, doc.url),
+            thumbnailURL: rewriteUrl(doc.filename, doc.thumbnailURL),
+            sizes: rewriteSizes(doc.filename, doc.sizes),
+          }
+        } catch (err) {
+          // Never let URL rewriting break a Media read — falling back to the
+          // raw doc means the worst case is broken images on a single record,
+          // not 500s on every page that touches Media (hubs, articles, etc.).
+          console.error('[Media.afterRead] rewrite failed:', err)
+          return doc
         }
       },
     ],
