@@ -37,7 +37,16 @@ Local Netlify check (optional): `npx netlify-cli build --offline` will simulate 
 
 Production media must be served from R2, not the Netlify ephemeral filesystem.
 
-1. Add the four `R2_*` env vars to your local `.env` (and to Netlify, per step 3 above).
+0. **Add the `prefix` column to `lpv.media` once** (the storage-s3 plugin tracks per-doc R2 path namespaces here; production runs with `push: false`, so the column must be created manually):
+   ```bash
+   node scripts/add-media-prefix-column.mjs
+   ```
+   Or in the Supabase SQL editor:
+   ```sql
+   ALTER TABLE lpv.media ADD COLUMN IF NOT EXISTS prefix VARCHAR;
+   UPDATE lpv.media SET prefix = 'law.pro.vn' WHERE prefix IS NULL OR prefix = '';
+   ```
+1. Add the four `R2_*` env vars to your local `.env` (and to Netlify).
 2. Wipe the local Media collection so files re-upload to R2 (existing rows still point at the dev-time `/api/media/file/...` paths):
    ```bash
    # via Payload admin → Media → select all → delete
