@@ -1,6 +1,6 @@
 {
   "site": {
-    "name": "law.pro.vn",
+    "name": "The Apolo Review",
     "tagline": "Phân tích pháp lý chuyên sâu",
     "description": "Tạp chí phân tích pháp lý chuyên sâu cho luật sư, chuyên viên pháp chế và nhà nghiên cứu luật tại Việt Nam."
   },
@@ -41,7 +41,7 @@
     "sectionsHeading": "Các chuyên mục"
   },
   "footer": {
-    "brand": "law.pro.vn",
+    "brand": "The Apolo Review",
     "brandDescription": "Một sản phẩm thuộc hệ sinh thái Apolo Lawyers — không gian phân tích pháp lý chuyên sâu cho giới hành nghề.",
     "ecosystemHeading": "Hệ sinh thái Apolo",
     "sectionsHeading": "Chuyên mục",

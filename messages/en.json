@@ -1,6 +1,6 @@
 {
   "site": {
-    "name": "law.pro.vn",
+    "name": "The Apolo Review",
     "tagline": "Vietnam Legal Analysis Journal",
     "description": "A long-form legal analysis publication for practising lawyers, in-house counsel and legal researchers working with Vietnamese law."
   },
@@ -41,7 +41,7 @@
     "sectionsHeading": "Sections"
   },
   "footer": {
-    "brand": "law.pro.vn",
+    "brand": "The Apolo Review",
     "brandDescription": "Part of the Apolo Lawyers ecosystem — a publication of practitioner-grade legal analysis for the profession.",
     "ecosystemHeading": "Apolo ecosystem",
     "sectionsHeading": "Sections",

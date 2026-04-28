@@ -57,8 +57,8 @@ export default async function AuthorsIndex({
           </h1>
           <p className="mt-7 max-w-3xl font-[family-name:var(--font-lora)] text-lg lg:text-xl leading-[1.65] text-[var(--color-ink-muted)]">
             {locale === 'vi'
-              ? 'Tác giả và cộng tác viên đóng góp phân tích chuyên sâu cho law.pro.vn — luật sư hành nghề, chuyên gia pháp lý và giảng viên luật.'
-              : 'Authors and contributing editors at law.pro.vn — practising lawyers, legal experts, and academic contributors.'}
+              ? 'Tác giả và cộng tác viên đóng góp phân tích chuyên sâu cho The Apolo Review — luật sư hành nghề, chuyên gia pháp lý và giảng viên luật.'
+              : 'Authors and contributing editors at The Apolo Review — practising lawyers, legal experts, and academic contributors.'}
           </p>
         </div>
       </section>

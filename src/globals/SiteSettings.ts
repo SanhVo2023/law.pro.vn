@@ -4,7 +4,7 @@ export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   access: { read: () => true },
   fields: [
-    { name: 'siteName', type: 'text', required: true, defaultValue: 'law.pro.vn' },
+    { name: 'siteName', type: 'text', required: true, defaultValue: 'The Apolo Review' },
     { name: 'tagline', type: 'text', localized: true, defaultValue: 'Phân tích chuyên sâu cho giới luật sư' },
     { name: 'description', type: 'textarea', localized: true },
     { name: 'defaultOgImage', type: 'upload', relationTo: 'media' },

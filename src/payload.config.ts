@@ -55,7 +55,7 @@ export default buildConfig({
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
     meta: {
-      titleSuffix: ' — law.pro.vn',
+      titleSuffix: ' — The Apolo Review',
     },
   },
   collections: [
@@ -105,7 +105,7 @@ export default buildConfig({
       collections: ['articles', 'pages', 'categories', 'series', 'authors'],
       uploadsCollection: 'media',
       generateTitle: ({ doc }) =>
-        `${typeof doc?.title === 'string' ? doc.title : 'law.pro.vn'} | Phân tích pháp lý chuyên sâu`,
+        `${typeof doc?.title === 'string' ? doc.title : 'The Apolo Review'} | Phân tích pháp lý chuyên sâu`,
       generateDescription: ({ doc }) =>
         typeof doc?.excerpt === 'string' ? doc.excerpt : '',
     }),
