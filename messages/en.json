@@ -1,0 +1,51 @@
+{
+  "site": {
+    "name": "law.pro.vn",
+    "tagline": "Vietnam Legal Analysis Journal",
+    "description": "A long-form legal analysis publication for practising lawyers, in-house counsel and legal researchers working with Vietnamese law."
+  },
+  "nav": {
+    "home": "Home",
+    "courtPractice": "Court Practice",
+    "litigationStrategy": "Litigation Strategy",
+    "evidenceAssessment": "Evidence Assessment",
+    "litigationSkills": "Procedural Practice",
+    "professionalPerspective": "Professional Perspective",
+    "caseCommentary": "Case Commentary",
+    "authors": "Authors",
+    "search": "Search",
+    "topics": "Topics"
+  },
+  "common": {
+    "readMore": "Read more",
+    "readingTime": "{minutes} min read",
+    "publishedOn": "Published {date}",
+    "byAuthor": "by {name}",
+    "keyTakeaways": "Key Takeaways",
+    "relatedArticles": "Related articles",
+    "shareArticle": "Share this article",
+    "newsletterHeading": "New analysis, monthly",
+    "newsletterDescription": "Receive long-form legal analysis from our editorial team — once a month, no spam.",
+    "subscribe": "Subscribe",
+    "emailPlaceholder": "Your email",
+    "loading": "Loading...",
+    "notFound": "Nothing here yet."
+  },
+  "home": {
+    "heroEyebrow": "Vietnam legal analysis",
+    "heroTitle": "Where legal practice meets deep thinking.",
+    "heroSubtitle": "Commentary, analysis and practitioner perspective on Vietnamese court practice, litigation strategy, and the judgments shaping the profession.",
+    "heroCta": "Read the latest analysis",
+    "featuredHeading": "Featured analysis",
+    "latestHeading": "Latest publications",
+    "sectionsHeading": "Sections"
+  },
+  "footer": {
+    "brand": "law.pro.vn",
+    "brandDescription": "Part of the Apolo Lawyers ecosystem — a publication of practitioner-grade legal analysis for the profession.",
+    "ecosystemHeading": "Apolo ecosystem",
+    "sectionsHeading": "Sections",
+    "aboutHeading": "About the journal",
+    "copyright": "© 2026 APOLO LAWYERS LAW FIRM"
+  }
+}

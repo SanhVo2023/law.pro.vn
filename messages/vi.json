@@ -1,0 +1,51 @@
+{
+  "site": {
+    "name": "law.pro.vn",
+    "tagline": "Phân tích pháp lý chuyên sâu",
+    "description": "Tạp chí phân tích pháp lý chuyên sâu cho luật sư, chuyên viên pháp chế và nhà nghiên cứu luật tại Việt Nam."
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "courtPractice": "Thực tiễn xét xử",
+    "litigationStrategy": "Chiến lược hồ sơ",
+    "evidenceAssessment": "Đánh giá chứng cứ",
+    "litigationSkills": "Kỹ năng tranh tụng",
+    "professionalPerspective": "Góc nhìn nghề luật",
+    "caseCommentary": "Bình luận bản án",
+    "authors": "Tác giả",
+    "search": "Tìm kiếm",
+    "topics": "Chủ đề"
+  },
+  "common": {
+    "readMore": "Đọc tiếp",
+    "readingTime": "{minutes} phút đọc",
+    "publishedOn": "Đăng ngày {date}",
+    "byAuthor": "bởi {name}",
+    "keyTakeaways": "Điểm chính",
+    "relatedArticles": "Bài viết liên quan",
+    "shareArticle": "Chia sẻ bài viết",
+    "newsletterHeading": "Nhận bài phân tích mới",
+    "newsletterDescription": "Đăng ký để nhận các bài phân tích pháp lý chuyên sâu hàng tháng.",
+    "subscribe": "Đăng ký",
+    "emailPlaceholder": "Email của bạn",
+    "loading": "Đang tải...",
+    "notFound": "Không tìm thấy nội dung."
+  },
+  "home": {
+    "heroEyebrow": "Tạp chí phân tích pháp lý",
+    "heroTitle": "Khi pháp lý gặp tư duy chuyên sâu.",
+    "heroSubtitle": "Bình luận, phân tích và quan điểm chuyên gia về thực tiễn xét xử, chiến lược tranh tụng và những bản án định hình ngành luật Việt Nam.",
+    "heroCta": "Khám phá phân tích mới nhất",
+    "featuredHeading": "Bài viết tiêu biểu",
+    "latestHeading": "Phân tích mới nhất",
+    "sectionsHeading": "Các chuyên mục"
+  },
+  "footer": {
+    "brand": "law.pro.vn",
+    "brandDescription": "Một sản phẩm thuộc hệ sinh thái Apolo Lawyers — không gian phân tích pháp lý chuyên sâu cho giới hành nghề.",
+    "ecosystemHeading": "Hệ sinh thái Apolo",
+    "sectionsHeading": "Chuyên mục",
+    "aboutHeading": "Về tạp chí",
+    "copyright": "© 2026 CÔNG TY LUẬT APOLO LAWYERS"
+  }
+}

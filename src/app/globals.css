@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+@theme {
+  --color-burgundy: #6B1D2A;
+  --color-burgundy-light: #F5EAEC;
+  --color-burgundy-dark: #4D1019;
+  --color-charcoal: #2D2D2D;
+  --color-gold: #C9A84C;
+  --color-gold-soft: #DCBE6A;
+  --color-parchment: #FAF8F5;
+  --color-parchment-deep: #F2EDE4;
+  --color-surface: #FFFFFF;
+  --color-ink: #1C1C1C;
+  --color-ink-muted: #6B6B6B;
+  --color-rule: #E8DDD5;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-parchment);
+  color: var(--color-ink);
+  font-family: var(--font-lora), Georgia, serif;
+  font-feature-settings: "liga", "kern", "lnum";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Cormorant headings: tighter tracking, oldstyle figures off, lining figures on */
+h1, h2, h3, h4 {
+  font-feature-settings: "lnum", "kern", "ss01";
+  letter-spacing: -0.005em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Editorial flourishes — magazine-grade detailing                  *
+ * ---------------------------------------------------------------- */
+
+/* Magazine drop cap — applied automatically to the FIRST paragraph
+ * of an article body via LexicalContent.tsx. */
+.lead-paragraph {
+  font-size: 1.18rem;
+  line-height: 1.78;
+}
+.lead-paragraph::first-letter {
+  font-family: var(--font-cormorant), serif;
+  font-weight: 600;
+  float: left;
+  font-size: 4.6em;
+  line-height: 0.85;
+  margin: 0.06em 0.12em -0.05em -0.04em;
+  color: var(--color-burgundy);
+}
+
+/* Reusable dropcap helper for non-Lexical contexts */
+.dropcap::first-letter {
+  font-family: var(--font-cormorant), serif;
+  font-weight: 600;
+  float: left;
+  font-size: 4.6em;
+  line-height: 0.85;
+  margin: 0.08em 0.12em 0 -0.05em;
+  color: var(--color-burgundy);
+}
+
+/* Editorial divider: gold double-rule with a centred fleurette.
+ * Pure CSS — no extra image fetch.
+ * Use: <hr class="editorial-divider" /> or <div class="editorial-divider" /> */
+.editorial-divider {
+  --rule: var(--color-gold);
+  position: relative;
+  height: 1px;
+  border: 0;
+  background: linear-gradient(to right, transparent 0%, var(--rule) 18%, var(--rule) 82%, transparent 100%);
+  margin: 3.5rem auto;
+  max-width: 28rem;
+  opacity: 0.85;
+}
+.editorial-divider::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent 0%, var(--rule) 22%, var(--rule) 78%, transparent 100%);
+  opacity: 0.55;
+}
+.editorial-divider::after {
+  content: "❦";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-cormorant), serif;
+  font-size: 1.4rem;
+  color: var(--color-gold);
+  background: var(--color-parchment);
+  padding: 0 0.85rem;
+  line-height: 1;
+}
+
+/* Card hover: gold underline animation that slides in */
+.editorial-link {
+  position: relative;
+  display: inline-block;
+}
+.editorial-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 1.5px;
+  background: var(--color-gold);
+  transition: width 240ms ease-out;
+}
+.editorial-link:hover::after,
+.group:hover .editorial-link::after {
+  width: 100%;
+}
+
+/* Hero image overlay: parchment-tinted gradient on top of editorial photographs */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(28, 28, 28, 0.05) 0%,
+    rgba(28, 28, 28, 0.15) 45%,
+    rgba(28, 28, 28, 0.55) 90%,
+    rgba(28, 28, 28, 0.7) 100%
+  );
+  pointer-events: none;
+}
+.hero-overlay-light {
+  background: linear-gradient(
+    180deg,
+    rgba(250, 248, 245, 0) 0%,
+    rgba(250, 248, 245, 0.35) 70%,
+    rgba(250, 248, 245, 0.92) 100%
+  );
+}
+
+/* Issue masthead small-cap eyebrow */
+.eyebrow {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: var(--color-burgundy);
+}
+
+/* Subtle paper-grain hint behind hero placeholder cards */
+.paper-grain {
+  background-color: var(--color-parchment-deep);
+  background-image:
+    radial-gradient(circle at 30% 20%, rgba(107, 29, 42, 0.04) 0%, transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(201, 168, 76, 0.05) 0%, transparent 50%);
+}
