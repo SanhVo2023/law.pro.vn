@@ -90,7 +90,15 @@ export default buildConfig({
   db: postgresAdapter({
     push: process.env.NODE_ENV !== 'production',
     schemaName: 'lpv',
-    pool: { connectionString: process.env.DATABASE_URI },
+    // max:2 caps each Node process's pool to 2 sessions so that Netlify's
+    // parallel build workers (one Payload init per worker) stay well under
+    // the Supabase Session Pooler's 15-session cap. idleTimeoutMillis low
+    // so unused connections release quickly between prerender steps.
+    pool: {
+      connectionString: process.env.DATABASE_URI,
+      max: 2,
+      idleTimeoutMillis: 10_000,
+    },
   }),
   plugins: [
     seoPlugin({
