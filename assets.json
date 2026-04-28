@@ -350,5 +350,148 @@
     "local_path": "assets/icon/ornament-divider.webp",
     "alt": "Magazine Section Divider Ornament - law.pro.vn",
     "description": "Horizontal magazine section divider ornament: a centred small laurel-fleurette in solid antique gold #C9A84C, flanked by a thin double-line gold rule extending to either edge with generous breathing r"
+  },
+  {
+    "id": "home-hero-feature-realistic",
+    "name": "Home Cover — Documentary Photograph",
+    "category": "hero",
+    "width": 2400,
+    "aspect": "21:9",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/hero/home-hero-feature-realistic-77847326.webp",
+    "local_path": "assets/hero/home-hero-feature-realistic.webp",
+    "alt": "Home Cover — Documentary Photograph - law.pro.vn",
+    "description": "Cinematic documentary photograph in soft daylight: a Vietnamese woman lawyer in her thirties walking through the marble corridor of the Ho Chi Minh City People's Court, holding a brown leather case fi"
+  },
+  {
+    "id": "hero-court-practice-realistic",
+    "name": "Court Practice Hub — Documentary",
+    "category": "hero",
+    "width": 1600,
+    "aspect": "16:9",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/hero/hero-court-practice-realistic-e7847a41.webp",
+    "local_path": "assets/hero/hero-court-practice-realistic.webp",
+    "alt": "Court Practice Hub — Documentary - law.pro.vn",
+    "description": "Editorial documentary photograph, wide angle: an empty Vietnamese courtroom in the moments before proceedings begin — three rows of wooden gallery benches, the elevated judge's bench at the far end, a"
+  },
+  {
+    "id": "hero-litigation-strategy-realistic",
+    "name": "Litigation Strategy Hub — Documentary",
+    "category": "hero",
+    "width": 1600,
+    "aspect": "16:9",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/hero/hero-litigation-strategy-realistic-bc0fa8e6.webp",
+    "local_path": "assets/hero/hero-litigation-strategy-realistic.webp",
+    "alt": "Litigation Strategy Hub — Documentary - law.pro.vn",
+    "description": "Documentary photograph from above: three Vietnamese lawyers in dark suits gathered around a polished walnut conference table, mid-discussion. Open folders, a laptop, hand-drawn timeline on a yellow le"
+  },
+  {
+    "id": "hero-evidence-assessment-realistic",
+    "name": "Evidence Assessment Hub — Documentary",
+    "category": "hero",
+    "width": 1600,
+    "aspect": "16:9",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/hero/hero-evidence-assessment-realistic-7d113832.webp",
+    "local_path": "assets/hero/hero-evidence-assessment-realistic.webp",
+    "alt": "Evidence Assessment Hub — Documentary - law.pro.vn",
+    "description": "Editorial documentary close photograph: a senior Vietnamese lawyer's hands carefully laying out a numbered sequence of documentary evidence — printed photographs, an old contract, expert-witness repor"
+  },
+  {
+    "id": "hero-litigation-skills-realistic",
+    "name": "Procedural Practice Hub — Documentary",
+    "category": "hero",
+    "width": 1600,
+    "aspect": "16:9",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/hero/hero-litigation-skills-realistic-60d3fa24.webp",
+    "local_path": "assets/hero/hero-litigation-skills-realistic.webp",
+    "alt": "Procedural Practice Hub — Documentary - law.pro.vn",
+    "description": "Documentary editorial photograph: a Vietnamese male lawyer in a dark suit, mid-speech at a polished wooden lectern in a Vietnamese courtroom, captured in a half-profile from the side at a gentle 3/4 a"
+  },
+  {
+    "id": "hero-professional-perspective-realistic",
+    "name": "Professional Perspective Hub — Documentary",
+    "category": "hero",
+    "width": 1600,
+    "aspect": "16:9",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/hero/hero-professional-perspective-realistic-8d48a4dd.webp",
+    "local_path": "assets/hero/hero-professional-perspective-realistic.webp",
+    "alt": "Professional Perspective Hub — Documentary - law.pro.vn",
+    "description": "Editorial documentary photograph: a senior Vietnamese lawyer in his sixties seated at his private office desk in an HCMC high-rise, gazing thoughtfully out a floor-to-ceiling window at the city skylin"
+  },
+  {
+    "id": "hero-case-commentary-realistic",
+    "name": "Case Commentary Hub — Documentary",
+    "category": "hero",
+    "width": 1600,
+    "aspect": "16:9",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/hero/hero-case-commentary-realistic-13998ebf.webp",
+    "local_path": "assets/hero/hero-case-commentary-realistic.webp",
+    "alt": "Case Commentary Hub — Documentary - law.pro.vn",
+    "description": "Editorial overhead documentary photograph: a Vietnamese law academic's hands annotating a printed published court judgment with a red felt-tip pen, crossing out and writing marginal notes. The judgmen"
+  },
+  {
+    "id": "thumb-template-thuc-tien-xet-xu-realistic",
+    "name": "Court Practice — Thumb (Documentary)",
+    "category": "thumbnail",
+    "width": 1024,
+    "aspect": "4:3",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/thumbnail/thumb-template-thuc-tien-xet-xu-realistic-9cbb1954.webp",
+    "local_path": "assets/thumbnail/thumb-template-thuc-tien-xet-xu-realistic.webp",
+    "alt": "Court Practice — Thumb (Documentary) - law.pro.vn",
+    "description": "Documentary close-up photograph: a judge's wooden gavel mid-strike, a touch of motion blur on the gavel head as it descends toward the sound block. Dark courtroom hardwood beneath. Dramatic single-sou"
+  },
+  {
+    "id": "thumb-template-chien-luoc-ho-so-realistic",
+    "name": "Litigation Strategy — Thumb (Documentary)",
+    "category": "thumbnail",
+    "width": 1024,
+    "aspect": "4:3",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/thumbnail/thumb-template-chien-luoc-ho-so-realistic-44d82001.webp",
+    "local_path": "assets/thumbnail/thumb-template-chien-luoc-ho-so-realistic.webp",
+    "alt": "Litigation Strategy — Thumb (Documentary) - law.pro.vn",
+    "description": "Documentary close-up: a pair of professional hands in a Vietnamese law office organising colour-tabbed manila case folders into stacks on a polished walnut desk. Three coloured tabs visible: burgundy,"
+  },
+  {
+    "id": "thumb-template-danh-gia-chung-cu-realistic",
+    "name": "Evidence Assessment — Thumb (Documentary)",
+    "category": "thumbnail",
+    "width": 1024,
+    "aspect": "4:3",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/thumbnail/thumb-template-danh-gia-chung-cu-realistic-b1356184.webp",
+    "local_path": "assets/thumbnail/thumb-template-danh-gia-chung-cu-realistic.webp",
+    "alt": "Evidence Assessment — Thumb (Documentary) - law.pro.vn",
+    "description": "Documentary editorial close-up: a Vietnamese lawyer's gloved hand (white cotton evidence-handling glove) holding up a single piece of paper documentary evidence to a desk lamp's warm light, examining "
+  },
+  {
+    "id": "thumb-template-ky-nang-tranh-tung-realistic",
+    "name": "Procedural Practice — Thumb (Documentary)",
+    "category": "thumbnail",
+    "width": 1024,
+    "aspect": "4:3",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/thumbnail/thumb-template-ky-nang-tranh-tung-realistic-c5deed32.webp",
+    "local_path": "assets/thumbnail/thumb-template-ky-nang-tranh-tung-realistic.webp",
+    "alt": "Procedural Practice — Thumb (Documentary) - law.pro.vn",
+    "description": "Documentary close-up of a hand resting on a wooden courtroom lectern, the other hand gripping the rim of a clip-on microphone, mid-argument. The lectern and microphone are antique brass and dark wood."
+  },
+  {
+    "id": "thumb-template-goc-nhin-nghe-luat-realistic",
+    "name": "Professional Perspective — Thumb (Documentary)",
+    "category": "thumbnail",
+    "width": 1024,
+    "aspect": "4:3",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/thumbnail/thumb-template-goc-nhin-nghe-luat-realistic-c5578d16.webp",
+    "local_path": "assets/thumbnail/thumb-template-goc-nhin-nghe-luat-realistic.webp",
+    "alt": "Professional Perspective — Thumb (Documentary) - law.pro.vn",
+    "description": "Documentary editorial photograph: silhouette of a Vietnamese lawyer standing at a floor-to-ceiling window of a high-rise HCMC office, looking out at the city at dusk. Reflective, contemplative mood. W"
+  },
+  {
+    "id": "thumb-template-binh-luan-ban-an-realistic",
+    "name": "Case Commentary — Thumb (Documentary)",
+    "category": "thumbnail",
+    "width": 1024,
+    "aspect": "4:3",
+    "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/thumbnail/thumb-template-binh-luan-ban-an-realistic-b5ac1a17.webp",
+    "local_path": "assets/thumbnail/thumb-template-binh-luan-ban-an-realistic.webp",
+    "alt": "Case Commentary — Thumb (Documentary) - law.pro.vn",
+    "description": "Documentary close-up: an open published Vietnamese court judgment lying flat on a walnut desk, with red pen annotations in the margins (legible as marks, not readable text), highlighted passages in ye"
   }
 ]
