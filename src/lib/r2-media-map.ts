@@ -15,20 +15,43 @@ import path from 'node:path'
 // Path: src/lib/r2-media-map.ts → ../../image-assets.json (project root).
 import manifest from '../../image-assets.json'
 
-type ImageEntry = { id: string; result_url?: string; status?: string }
+type ImageEntry = {
+  id: string
+  result_url?: string
+  status?: string
+  /** When present, this entry's image should be served *in place of* the
+   *  named v1 entry. Used to migrate to documentary-style imagery without
+   *  touching component code. */
+  aliasOf?: string
+}
+
+function extOf(url: string): string {
+  try {
+    return path.posix.extname(new URL(url).pathname) || '.webp'
+  } catch {
+    return '.webp'
+  }
+}
+
+const images: ImageEntry[] = (manifest as { images: ImageEntry[] }).images || []
 
 const map = new Map<string, string>()
-for (const img of (manifest as { images: ImageEntry[] }).images || []) {
+
+// Pass 1: register every uploaded entry under its own filename.
+for (const img of images) {
   if (img.status !== 'uploaded' || !img.result_url) continue
-  // seed-media.mjs uploads each image as `${id}${ext}` where ext is from the
-  // R2 URL (always .webp here) — match Media.filename exactly.
-  let ext = '.webp'
-  try {
-    ext = path.posix.extname(new URL(img.result_url).pathname) || '.webp'
-  } catch {
-    /* keep default */
-  }
-  map.set(`${img.id}${ext}`, img.result_url)
+  map.set(`${img.id}${extOf(img.result_url)}`, img.result_url)
+}
+
+// Pass 2: aliases — if an entry is uploaded AND aliasOf points at a v1 id,
+// override the v1 filename's URL with this entry's URL. This lets us swap to
+// new imagery (e.g. -realistic variants) by uploading once, no code change.
+for (const img of images) {
+  if (img.status !== 'uploaded' || !img.result_url || !img.aliasOf) continue
+  // The Media collection's `filename` for the aliased v1 row is `${aliasOf}.webp`
+  // (seed-media uploaded it that way); always use .webp for the alias key
+  // regardless of the realistic variant's actual extension.
+  map.set(`${img.aliasOf}.webp`, img.result_url)
 }
 
 export function r2UrlForFilename(filename: unknown): string | null {
