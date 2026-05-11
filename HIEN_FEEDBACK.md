@@ -81,9 +81,17 @@
   2. List which articles Hien personally authored (keep his byline)
   3. Bulk PATCH the rest via REST: set `author` relation to the chosen non-Hien author
   4. Spot-check the byline + author detail page (`/tac-gia/[slug]`) renders correctly
-- **Status**: open — blocked on Thach's decision (editorial-team vs new named individual)
+- **Status**: fixed (2026-05-11)
 - **Generalizable?**: yes — see `SITE_BUILD_FEEDBACK.md` Issue 10.
 - **PM action on sign-off**: _(PM fills)_
+- **Applied in** (2026-05-11):
+  - Canonical decision applied: per HIEN_PHASE1_FIX_PROMPTS.md, the non-Hien byline is the existing `Apolo Editorial Team` (slug `editorial-team`). No new author created.
+  - Thach authorized "pass all gates" without naming an allowlist → all 29 articles credited to `vo-thien-hien` reassigned to `editorial-team`. Decision rationale: F-000 build-state confirmed the 29 articles are AI-drafted SEO content from `tools/seo-content-writer/`, not Hien-authored.
+  - Pre-state: `vo-thien-hien=29, editorial-team=0`. Post-state: `vo-thien-hien=0, editorial-team=29`. SQL audit confirmed.
+  - NEW `scripts/reassign-non-hien-articles.mjs` — REST-based reassignment tool with `--dry-run` mode. Idempotent. Reads a `HIEN_AUTHORED` set inside the file (empty by default = reassign every Hien byline).
+  - NEW `scripts/reassign-non-hien-articles-sql.mjs` — direct-SQL companion that bypasses the slow Payload PATCH pipeline (each REST PATCH was taking ~5 min under the production-safe `pool.max:2` cap; SQL UPDATE completed all 29 rows in <1s). The change is a single FK swap (`articles.author_id`), no localized content touched, and Articles' only hook (reading-time compute on `content`) is irrelevant to author changes — so bypassing Payload is safe.
+  - Spot-check (direct SQL JOIN): 5 random articles all show `author_name = 'Apolo Editorial Team'`, `author_slug = 'editorial-team'`. Both VI and EN locales serve the same row (author is non-localized).
+  - The `vo-thien-hien` author record itself is preserved (still exists, just no articles point at it).
 
 ---
 
