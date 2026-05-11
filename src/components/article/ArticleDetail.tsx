@@ -10,6 +10,7 @@ import RelatedRail from './RelatedRail'
 import ConsultCta from './ConsultCta'
 import { listRelatedArticles } from '@/lib/queries'
 import JsonLd from '@/components/seo/JsonLd'
+import { organizationSchema } from '@/lib/identity'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://law.pro.vn'
 
@@ -107,11 +108,7 @@ export default async function ArticleDetail({ doc, locale, hubPathname, articleP
                   url: author.slug ? `${SITE_URL}/${locale}/${locale === 'vi' ? 'tac-gia' : 'authors'}/${author.slug}` : undefined,
                 }
               : undefined,
-            publisher: {
-              '@type': 'Organization',
-              name: 'Apolo Lawyers',
-              url: 'https://vothienhien.com',
-            },
+            publisher: organizationSchema(locale),
             isPartOf: {
               '@type': 'CollectionPage',
               name: category?.name || '',

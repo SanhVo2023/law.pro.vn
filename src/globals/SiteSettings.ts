@@ -20,11 +20,18 @@ export const SiteSettings: GlobalConfig = {
     {
       name: 'contact',
       type: 'group',
+      // Canonical post-2025 admin-merger contact block. SSOT is workspace-root
+      // address.txt + src/lib/identity.ts — do not hand-edit defaults here.
       fields: [
-        { name: 'companyName', type: 'text', defaultValue: 'CÔNG TY LUẬT APOLO LAWYERS' },
-        { name: 'address', type: 'textarea', localized: true, defaultValue: '108 Trần Đình Xu, Phường Nguyễn Cư Trinh, Quận 1, TP.HCM' },
+        { name: 'companyName', type: 'text', defaultValue: 'Công ty Luật Apolo Lawyers' },
+        {
+          name: 'address',
+          type: 'textarea',
+          localized: true,
+          defaultValue: '108 Trần Đình Xu, Phường Cầu Ông Lãnh, TP. Hồ Chí Minh',
+        },
         { name: 'email', type: 'email', defaultValue: 'contact@apolo.com.vn' },
-        { name: 'phone', type: 'text', defaultValue: '0903 419 479' },
+        { name: 'phone', type: 'text', defaultValue: '(028) 66.701.709' },
       ],
     },
   ],

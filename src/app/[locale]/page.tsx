@@ -13,6 +13,7 @@ import {
 } from '@/lib/queries'
 import JsonLd from '@/components/seo/JsonLd'
 import ArticleCard from '@/components/article/ArticleCard'
+import { organizationSchema } from '@/lib/identity'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://law.pro.vn'
 
@@ -102,11 +103,7 @@ export default async function Home({
           url: `${SITE_URL}/${locale}`,
           description: tSite('description'),
           inLanguage: locale === 'vi' ? 'vi-VN' : 'en-US',
-          publisher: {
-            '@type': 'Organization',
-            name: 'Apolo Lawyers',
-            url: 'https://vothienhien.com',
-          },
+          publisher: organizationSchema(locale),
         }}
       />
 
