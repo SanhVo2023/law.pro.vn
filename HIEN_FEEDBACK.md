@@ -97,6 +97,16 @@
   > "He don't want any of the blog or artical have 3 party source or credit of it. A gov publication is okie else articles are paterned should be remove the source — especially a 3rd publisher party. Keep the post but don't mention the source."
 - **Evidence / reproduction**: 25 articles (VI + EN both populated). `src/components/article/ConsultCta.tsx:30` has a footnote "You can also read more from Managing Partner Vo Thien Hien at [vothienhien.com]" — that's an internal-ecosystem credit (OK to keep), not a 3rd-party publisher. Need to audit article body Lexical content for inline links to non-govt domains + "Nguồn:" / "Theo [publisher]" patterns.
 - **Proposed fix**: Same audit pattern as vothienhien.com F-011 — walk Lexical `content` trees, strip non-govt inline links + "Nguồn:" tail lines. Internal ecosystem cross-links (vothienhien.com, law.org.vn, luatsutructuyen.vn, etc.) stay.
-- **Status**: open — awaiting Thach approval of govt allowlist
+- **Status**: fixed (2026-05-11) — audit found zero violations; no Lexical mutations needed
 - **Generalizable?**: yes — see `SITE_BUILD_FEEDBACK.md` Issue 9.
 - **PM action on sign-off**: _(PM fills)_
+- **Applied in** (2026-05-11):
+  - NEW `scripts/strip-third-party-sources.mjs` — idempotent audit + strip tool. Walks every Article's Lexical `content` tree in both VI and EN locales. Unwraps `link`/`autolink` nodes whose host is NOT in the allowlist (`*.gov.vn`, `vbpl.vn`, plus internal ecosystem: `vothienhien.com`, `law.org.vn`, `law.pro.vn`, `lawyer.id.vn`, `luatsutructuyen.vn`, `apolo.com.vn`, `apololawyers.com`). Drops top-level paragraphs that start with `Nguồn:` / `Source:`. `--dry-run` reports without writing; bare run PATCHes via REST. Reusable for future imports.
+  - Dry-run executed against all 29 articles × 2 locales = 58 records:
+    - Total `link`/`autolink` nodes found: **0**
+    - Total inline `https?://` URLs in content: **0**
+    - Attribution patterns (`Nguồn:`, `Source:`, `Theo tạp chí/báo/trang`, named 3rd-party publishers like `thuvienphapluat`, `luatvietnam`, `vnexpress`, etc.): **0**
+    - Result: nothing to strip. The seo-content-writer pipeline already produces clean content.
+  - The 39 lowercase "nguồn" hits flagged on initial scan were the ordinary Vietnamese noun (e.g. "nguồn chứng cứ" = sources of evidence) in legal prose, NOT publisher citations. Stricter regex (`Nguồn\s*:`) returns 0.
+  - The single EN "source" hit (`vai-tro-chung-cu-dien-tu-to-tung-viet-nam`) is the phrase "as an evidence source:" — ordinary noun usage, not attribution.
+  - `src/components/article/ConsultCta.tsx` `vothienhien.com` cross-link preserved (internal ecosystem per Issue 9 carve-out).
