@@ -61,16 +61,6 @@ export default async function SiteFooter({ locale }: Props) {
                 {tNav('authors')}
               </Link>
             </li>
-            <li>
-              <Link href="/chu-de" className="editorial-link text-[var(--color-charcoal)] hover:text-[var(--color-burgundy)] transition-colors">
-                {tNav('topics')}
-              </Link>
-            </li>
-            <li>
-              <Link href="/tim-kiem" className="editorial-link text-[var(--color-charcoal)] hover:text-[var(--color-burgundy)] transition-colors">
-                {tNav('search')}
-              </Link>
-            </li>
           </ul>
         </div>
 
