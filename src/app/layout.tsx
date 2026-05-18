@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     template: '%s | The Apolo Review',
   },
   description:
-    'The Apolo Review — tạp chí phân tích pháp lý chuyên sâu cho luật sư, chuyên viên pháp chế và nhà nghiên cứu luật tại Việt Nam.',
+    'The Apolo Review — chuyên trang phân tích pháp lý chuyên sâu cho luật sư, chuyên viên pháp chế và nhà nghiên cứu luật tại Việt Nam.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -32,7 +32,7 @@ const VI_DATA = {
   'vo-thien-hien': {
     credentials: [
       { label: 'Thẻ luật sư — Liên đoàn Luật sư Việt Nam', year: 2010 },
-      { label: 'Thạc sĩ Luật — Đại học Luật TP.HCM', year: 2015 },
+      { label: 'Thạc sĩ Luật — Đại học Luật Thành phố Hồ Chí Minh', year: 2015 },
     ],
     expertise: [
       { area: 'Tố tụng dân sự' },

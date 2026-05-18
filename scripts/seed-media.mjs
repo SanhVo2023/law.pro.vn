@@ -28,7 +28,7 @@ if (!EMAIL || !PASSWORD) {
 }
 
 const ALT_BY_ID = {
-  'hero-home':              { vi: 'Tạp chí phân tích pháp lý — trang chủ',                en: 'Legal review magazine — homepage hero' },
+  'hero-home':              { vi: 'Chuyên trang phân tích pháp lý — trang chủ',            en: 'Legal review magazine — homepage hero' },
   'hero-analysis-article':  { vi: 'Bài phân tích pháp lý — ảnh đầu bài',                  en: 'Analysis article hero' },
   'hero-case-commentary':   { vi: 'Bình luận bản án — ảnh đầu bài',                       en: 'Case commentary hero' },
   'og-default':             { vi: 'Thẻ chia sẻ mạng xã hội — mặc định',                   en: 'Default open-graph social card' },
