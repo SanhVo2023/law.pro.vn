@@ -412,7 +412,7 @@
     },
     {
       "id": "author-vo-thien-hien",
-      "name": "Author Portrait — Võ Thiên Hiển (editorial-style symbolic stand-in)",
+      "name": "Author Portrait — LS. Võ Thiện Hiển (editorial-style symbolic stand-in)",
       "type": "text-to-image",
       "prompt": "Editorial-style symbolic portrait composition for an author profile: a leather-bound personal notebook closed, with a pair of round wire-rim reading glasses resting on top, an antique gold pen and a small porcelain teacup beside. Soft warm window light from one side, deep walnut desk surface, shallow depth of field. NO faces, NO people. This stands in for the author's portrait until a real headshot is provided. Burgundy and gold tones.",
       "style": "editorial portrait",

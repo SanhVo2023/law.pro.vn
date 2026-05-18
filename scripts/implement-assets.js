@@ -305,13 +305,13 @@ const ASSETS = [
   },
   {
     "id": "author-vo-thien-hien",
-    "name": "Author Portrait — Võ Thiên Hiển (editorial-style symbolic stand-in)",
+    "name": "Author Portrait — LS. Võ Thiện Hiển (editorial-style symbolic stand-in)",
     "category": "author",
     "width": 1024,
     "aspect": "1:1",
     "cdn_url": "https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/author/author-vo-thien-hien-7060a5ed.webp",
     "local_path": "assets/author/author-vo-thien-hien.webp",
-    "alt": "Author Portrait — Võ Thiên Hiển (editorial-style symbolic stand-in) - law.pro.vn"
+    "alt": "Author Portrait — LS. Võ Thiện Hiển (editorial-style symbolic stand-in) - law.pro.vn"
   },
   {
     "id": "author-editorial-team",

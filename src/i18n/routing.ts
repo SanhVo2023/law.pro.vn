@@ -6,8 +6,8 @@ export const routing = defineRouting({
   localePrefix: 'always',
   pathnames: {
     '/': '/',
-    '/tim-kiem': { vi: '/tim-kiem', en: '/search' },
-    '/chu-de': { vi: '/chu-de', en: '/topics' },
+    // /tim-kiem (search) and /chu-de (topics) were declared but never
+    // implemented — removed from routing so misuse fails at build time.
     '/tac-gia': { vi: '/tac-gia', en: '/authors' },
     '/tac-gia/[slug]': { vi: '/tac-gia/[slug]', en: '/authors/[slug]' },
     '/thuc-tien-xet-xu': {

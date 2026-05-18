@@ -42,7 +42,7 @@ Use the CDN URL in your Next.js components:
 | og-ky-nang-tranh-tung | OG Card — Procedural Practice | og | 1200px | https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/og/og-ky-nang-tranh-tung-5e17e950.webp | assets/og/og-ky-nang-tranh-tung.webp |
 | og-goc-nhin-nghe-luat | OG Card — Professional Perspective | og | 1200px | https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/og/og-goc-nhin-nghe-luat-687c4a6c.webp | assets/og/og-goc-nhin-nghe-luat.webp |
 | og-binh-luan-ban-an | OG Card — Case Commentary | og | 1200px | https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/og/og-binh-luan-ban-an-dae33ed3.webp | assets/og/og-binh-luan-ban-an.webp |
-| author-vo-thien-hien | Author Portrait — Võ Thiên Hiển (editorial-style symbolic stand-in) | author | 1024px | https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/author/author-vo-thien-hien-7060a5ed.webp | assets/author/author-vo-thien-hien.webp |
+| author-vo-thien-hien | Author Portrait — LS. Võ Thiện Hiển (editorial-style symbolic stand-in) | author | 1024px | https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/author/author-vo-thien-hien-7060a5ed.webp | assets/author/author-vo-thien-hien.webp |
 | author-editorial-team | Author Avatar — Editorial Team (symbolic) | author | 1024px | https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/author/author-editorial-team-5db0dc92.webp | assets/author/author-editorial-team.webp |
 | ornament-divider | Magazine Section Divider Ornament | icon | 1200px | https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/icon/ornament-divider-d6152fa5.webp | assets/icon/ornament-divider.webp |
 | home-hero-feature-realistic | Home Cover — Documentary Photograph | hero | 2400px | https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/hero/home-hero-feature-realistic-77847326.webp | assets/hero/home-hero-feature-realistic.webp |
@@ -352,14 +352,14 @@ Use the CDN URL in your Next.js components:
 - **Alt text suggestion**: OG Card — Case Commentary - law.pro.vn
 
 ### author-vo-thien-hien
-- **Name**: Author Portrait — Võ Thiên Hiển (editorial-style symbolic stand-in)
+- **Name**: Author Portrait — LS. Võ Thiện Hiển (editorial-style symbolic stand-in)
 - **Category**: author
 - **Dimensions**: 1024px wide, 1:1 aspect ratio
 - **Type**: text-to-image
 - **CDN URL**: `https://pub-ebe397ad6fc946888f5c9aacc3cc48bb.r2.dev/law.pro.vn/author/author-vo-thien-hien-7060a5ed.webp`
 - **Local**: `assets/author/author-vo-thien-hien.webp`
 - **Description**: Editorial-style symbolic portrait composition for an author profile: a leather-bound personal notebook closed, with a pair of round wire-rim reading g...
-- **Alt text suggestion**: Author Portrait — Võ Thiên Hiển (editorial-style symbolic stand-in) - law.pro.vn
+- **Alt text suggestion**: Author Portrait — LS. Võ Thiện Hiển (editorial-style symbolic stand-in) - law.pro.vn
 
 ### author-editorial-team
 - **Name**: Author Avatar — Editorial Team (symbolic)
