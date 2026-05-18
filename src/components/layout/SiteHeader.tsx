@@ -10,6 +10,14 @@ export default async function SiteHeader({ locale }: Props) {
   const tNav = await getTranslations({ locale, namespace: 'nav' })
   const tSite = await getTranslations({ locale, namespace: 'site' })
 
+  // Issue stamp keeps pace with the current month so the masthead never
+  // looks stale. We bump Issue No. once a year (12 issues = 12 months).
+  const now = new Date()
+  const monthVi = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'][now.getMonth()]
+  const monthEn = now.toLocaleString('en-US', { month: 'long' })
+  const issueMonth = locale === 'vi' ? `${monthVi} ${now.getFullYear()}` : `${monthEn} ${now.getFullYear()}`
+  const issueNo = String(now.getMonth() + 1).padStart(2, '0')
+
   return (
     <header className="sticky top-0 z-40 bg-[var(--color-parchment)]/95 backdrop-blur-sm">
       {/* Top utility bar — issue stamp + authors + locale */}
@@ -18,11 +26,11 @@ export default async function SiteHeader({ locale }: Props) {
           <p className="hidden sm:block">
             <span className="text-[var(--color-burgundy)]">Vol. I</span>
             <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>
-            Issue 01
+            Issue {issueNo}
             <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>
-            April&nbsp;2026
+            <span className="whitespace-nowrap">{issueMonth}</span>
           </p>
-          <p className="sm:hidden text-[var(--color-burgundy)]">Vol. I · Issue 01</p>
+          <p className="sm:hidden text-[var(--color-burgundy)]">Vol. I · Issue {issueNo}</p>
           <div className="flex items-center gap-5">
             <Link
               href="/tac-gia"
