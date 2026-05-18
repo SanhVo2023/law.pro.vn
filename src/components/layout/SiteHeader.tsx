@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { SECTIONS } from '@/lib/sections'
 import LocaleSwitcher from './LocaleSwitcher'
+import StickyNavBar from './StickyNavBar'
 
 type Props = { locale: Locale }
 
@@ -18,9 +19,16 @@ export default async function SiteHeader({ locale }: Props) {
   const issueMonth = locale === 'vi' ? `${monthVi} ${now.getFullYear()}` : `${monthEn} ${now.getFullYear()}`
   const issueNo = String(now.getMonth() + 1).padStart(2, '0')
 
+  // Items consumed by the slim sticky bar (client component).
+  const stickyItems = SECTIONS.map((s) => ({
+    hubVi: s.hub.vi,
+    label: tNav(s.navKey as 'courtPractice'),
+  }))
+
   return (
-    <header className="sticky top-0 z-40 bg-[var(--color-parchment)]/95 backdrop-blur-sm">
-      {/* Top utility bar — issue stamp + authors + locale */}
+    <>
+      <header className="relative z-40 bg-[var(--color-parchment)]">
+        {/* Top utility bar — issue stamp + authors + locale */}
       <div className="border-b border-[var(--color-rule)]/70">
         <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 h-9 flex items-center justify-between text-[10.5px] font-[family-name:var(--font-inter)] uppercase tracking-[0.24em] text-[var(--color-ink-muted)]">
           <p className="hidden sm:block">
@@ -78,6 +86,19 @@ export default async function SiteHeader({ locale }: Props) {
           </div>
         </div>
       </nav>
-    </header>
+      </header>
+
+      {/* Sentinel — sits immediately under the full masthead. The slim sticky
+          nav-bar watches this element via IntersectionObserver; once it goes
+          above the viewport (= user scrolled past), the slim bar slides in. */}
+      <div id="site-header-sentinel" aria-hidden className="h-0" />
+
+      <StickyNavBar
+        brand={tSite('name')}
+        authorsLabel={tNav('authors')}
+        items={stickyItems}
+        locale={locale}
+      />
+    </>
   )
 }
