@@ -140,38 +140,27 @@ export default async function SiteFooter({ locale }: Props) {
                   {p}
                 </span>
               ))}
-              {'hotline' in id && id.hotline ? (
-                <>
-                  <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>
-                  <span>
-                    {locale === 'en' ? 'Hotline ' : 'Hotline '}
-                    {id.hotline}
-                  </span>
-                </>
-              ) : null}
             </p>
           </div>
 
-          {/* East Saigon branch — EN locale only, per Mr Hien (Issue 11). */}
-          {locale === 'en' && 'branch' in id && id.branch ? (
-            <div>
-              <p className="eyebrow text-[var(--color-burgundy)] mb-3">East Saigon Branch</p>
-              <p className="font-[family-name:var(--font-cormorant)] text-xl text-[var(--color-ink)] mb-2">
-                {id.branch.name}
-              </p>
-              <p className="text-[var(--color-ink-muted)] leading-relaxed">{id.branch.address}</p>
-              <p className="mt-2 text-[var(--color-ink-muted)]">
-                {id.branch.phones.map((p, i) => (
-                  <span key={p}>
-                    {i > 0 && <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>}
-                    {p}
-                  </span>
-                ))}
-                <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>
-                <span>Hotline {id.branch.hotline}</span>
-              </p>
-            </div>
-          ) : null}
+          {/* East Saigon branch — rendered on BOTH locales (Mr Hien 17/5/2026). */}
+          <div>
+            <p className="eyebrow text-[var(--color-burgundy)] mb-3">
+              {locale === 'vi' ? 'Chi nhánh' : 'Branch'}
+            </p>
+            <p className="font-[family-name:var(--font-cormorant)] text-xl text-[var(--color-ink)] mb-2">
+              {id.branch.name}
+            </p>
+            <p className="text-[var(--color-ink-muted)] leading-relaxed">{id.branch.address}</p>
+            <p className="mt-2 text-[var(--color-ink-muted)]">
+              {id.branch.phones.map((p, i) => (
+                <span key={p}>
+                  {i > 0 && <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>}
+                  {p}
+                </span>
+              ))}
+            </p>
+          </div>
         </div>
       </div>
 

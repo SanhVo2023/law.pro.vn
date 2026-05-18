@@ -3,6 +3,16 @@ import { hasLocale } from 'next-intl'
 import { notFound } from 'next/navigation'
 import { routing, type Locale } from '@/i18n/routing'
 import HubPage from '@/components/hub/HubPage'
+import { sectionByKey } from '@/lib/sections'
+import { hubMetadata } from '@/lib/seo'
+
+const SECTION_KEY = 'litigation-strategy'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  if (!hasLocale(routing.locales, locale)) return {}
+  return hubMetadata(SECTION_KEY, locale as Locale)
+}
 
 export default async function LitigationStrategyHub({
   params,
@@ -12,20 +22,18 @@ export default async function LitigationStrategyHub({
   const { locale } = await params
   if (!hasLocale(routing.locales, locale)) notFound()
   setRequestLocale(locale)
+  const section = sectionByKey(SECTION_KEY)!
 
   return (
     <HubPage
       locale={locale as Locale}
       navKey="litigationStrategy"
-      hubVi="/chien-luoc-ho-so"
-      hubEn="/litigation-strategy-vietnam"
+      hubVi={section.hub.vi}
+      hubEn={section.hub.en}
       categorySlug="chien-luoc-ho-so"
-      sectionKey="litigation-strategy"
+      sectionKey={SECTION_KEY}
       articlePathname="/chien-luoc-ho-so/[slug]"
-      description={{
-        vi: 'Chiến lược tố tụng, chuẩn bị hồ sơ kiện, lựa chọn diễn đàn giải quyết tranh chấp và quản lý rủi ro tố tụng cho luật sư hành nghề.',
-        en: 'Litigation strategy, case-file preparation, forum selection, and procedural risk management for practising counsel in Vietnam.',
-      }}
+      description={section.description}
     />
   )
 }

@@ -1,8 +1,8 @@
 {
   "site": {
     "name": "The Apolo Review",
-    "tagline": "Vietnam Legal Analysis Journal",
-    "description": "A long-form legal analysis publication for practising lawyers, in-house counsel and legal researchers working with Vietnamese law."
+    "tagline": "Vietnam Legal Analysis Review",
+    "description": "A long-form legal analysis review for practising lawyers, in-house counsel and legal researchers working with Vietnamese law."
   },
   "nav": {
     "home": "Home",
@@ -37,15 +37,17 @@
     "heroSubtitle": "Commentary, analysis and practitioner perspective on Vietnamese court practice, litigation strategy, and the judgments shaping the profession.",
     "heroCta": "Read the latest analysis",
     "featuredHeading": "Featured analysis",
-    "latestHeading": "Latest publications",
-    "sectionsHeading": "Sections"
+    "latestHeading": "Latest analyses",
+    "sectionsHeading": "Sections",
+    "disclaimerEyebrow": "Disclaimer",
+    "disclaimerBody": "The content on this website is provided for reference purposes only, does not constitute legal advice, and does not create an attorney client relationship. Readers should carefully consider and take responsibility for any use of the information in their specific circumstances."
   },
   "footer": {
     "brand": "The Apolo Review",
-    "brandDescription": "Part of the Apolo Lawyers ecosystem — a publication of practitioner-grade legal analysis for the profession.",
+    "brandDescription": "Part of the Apolo Lawyers ecosystem — an editorial review of practitioner-grade legal analysis for the profession.",
     "ecosystemHeading": "Apolo ecosystem",
     "sectionsHeading": "Sections",
-    "aboutHeading": "About the journal",
+    "aboutHeading": "About the review",
     "copyright": "© 2026 APOLO LAWYERS LAW FIRM"
   }
 }

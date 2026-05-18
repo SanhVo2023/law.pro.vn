@@ -2,7 +2,7 @@
   "site": {
     "name": "The Apolo Review",
     "tagline": "Phân tích pháp lý chuyên sâu",
-    "description": "Tạp chí phân tích pháp lý chuyên sâu cho luật sư, chuyên viên pháp chế và nhà nghiên cứu luật tại Việt Nam."
+    "description": "Chuyên trang phân tích pháp lý chuyên sâu cho luật sư, chuyên viên pháp chế và nhà nghiên cứu luật tại Việt Nam."
   },
   "nav": {
     "home": "Trang chủ",
@@ -32,20 +32,22 @@
     "notFound": "Không tìm thấy nội dung."
   },
   "home": {
-    "heroEyebrow": "Tạp chí phân tích pháp lý",
+    "heroEyebrow": "Chuyên trang phân tích pháp lý",
     "heroTitle": "Khi pháp lý gặp tư duy chuyên sâu.",
     "heroSubtitle": "Bình luận, phân tích và quan điểm chuyên gia về thực tiễn xét xử, chiến lược tranh tụng và những bản án định hình ngành luật Việt Nam.",
     "heroCta": "Khám phá phân tích mới nhất",
     "featuredHeading": "Bài viết tiêu biểu",
     "latestHeading": "Phân tích mới nhất",
-    "sectionsHeading": "Các chuyên mục"
+    "sectionsHeading": "Các chuyên mục",
+    "disclaimerEyebrow": "Loại trừ trách nhiệm",
+    "disclaimerBody": "Nội dung trên website chỉ có giá trị tham khảo, không thay thế cho ý kiến tư vấn pháp lý và không làm phát sinh quan hệ giữa luật sư và khách hàng. Việc sử dụng thông tin trên website cần được người đọc cân nhắc và tự chịu trách nhiệm trong từng trường hợp cụ thể."
   },
   "footer": {
     "brand": "The Apolo Review",
     "brandDescription": "Một sản phẩm thuộc hệ sinh thái Apolo Lawyers — không gian phân tích pháp lý chuyên sâu cho giới hành nghề.",
     "ecosystemHeading": "Hệ sinh thái Apolo",
     "sectionsHeading": "Chuyên mục",
-    "aboutHeading": "Về tạp chí",
+    "aboutHeading": "Về chuyên trang",
     "copyright": "© 2026 CÔNG TY LUẬT APOLO LAWYERS"
   }
 }

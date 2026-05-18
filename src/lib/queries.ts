@@ -172,7 +172,8 @@ export async function listAllArticleSlugs() {
   const res = await payload.find({
     collection: 'articles',
     locale: 'all' as never,
-    depth: 0,
+    // depth:1 so `category` comes back as an object (we need its slug for sitemap).
+    depth: 1,
     limit: 1000,
   })
   return res.docs

@@ -138,25 +138,8 @@ export default async function AuthorProfile({ params }: { params: Promise<Params
               </p>
             ) : null}
 
-            {Array.isArray(author.credentials) && author.credentials.length > 0 ? (
-              <ul className="mt-6 flex flex-wrap gap-2 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.14em] text-[var(--color-burgundy)]">
-                {author.credentials.map((c: { label?: string; year?: number }, i: number) => (
-                  <li key={i} className="border border-[var(--color-rule)] bg-[var(--color-surface)] px-2.5 py-1">
-                    {c.label}
-                    {c.year ? ` · ${c.year}` : ''}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-
-            {Array.isArray(author.expertise) && author.expertise.length > 0 ? (
-              <p className="mt-4 text-[var(--color-ink-muted)] text-sm">
-                {(author.expertise as { area?: string }[])
-                  .map((e) => e.area)
-                  .filter(Boolean)
-                  .join(' · ')}
-              </p>
-            ) : null}
+            {/* Credentials + expertise lists removed per Mr Hien 17/5/2026 —
+                "Bỏ dòng thẻ luật sư và thạc sỹ luật". CMS fields kept for archive. */}
 
             <div className="mt-8 max-w-3xl prose-magazine">
               <LexicalContent data={author.bio as never} />
@@ -167,7 +150,7 @@ export default async function AuthorProfile({ params }: { params: Promise<Params
 
       <section className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-16">
         <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl mb-10 text-[var(--color-ink)] border-b border-[var(--color-rule)] pb-4">
-          {locale === 'vi' ? 'Bài viết đã xuất bản' : 'Published analysis'}
+          {locale === 'vi' ? 'Bài viết đã đăng' : 'Published analysis'}
           <span className="ml-3 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.24em] text-[var(--color-ink-muted)]">
             {articles.length}
           </span>

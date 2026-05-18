@@ -16,7 +16,7 @@ export default function ConsultCta({ locale }: Props) {
         'Đặt lịch trao đổi với luật sư tại Luật Sư Trực Tuyến — dịch vụ tư vấn của Apolo Lawyers — để được phân tích cụ thể vụ việc của bạn.',
       cta: 'Đặt lịch tư vấn',
       url: 'https://luatsutructuyen.vn',
-      footnote: 'Ngoài ra, bạn có thể tìm hiểu thêm về quan điểm pháp lý của Luật sư Võ Thiên Hiển tại',
+      footnote: 'Ngoài ra, bạn có thể tìm hiểu thêm về quan điểm pháp lý của LS. Võ Thiện Hiển tại',
       footnoteLink: 'vothienhien.com',
       footnoteUrl: 'https://vothienhien.com',
     },

@@ -157,6 +157,21 @@ export default async function ArticleDetail({ doc, locale, hubPathname, articleP
             <KeyTakeaways title={tCommon('keyTakeaways')} points={takeaways} />
           ) : null}
 
+          {/* Case-commentary disclaimer — per Mr Hien 17/5/2026: tham khảo,
+              tên cá nhân chỉ mang tính minh họa, không thay thế tư vấn pháp lý. */}
+          {articlePathname.startsWith('/binh-luan-ban-an') ? (
+            <aside className="my-10 border-l-4 border-[var(--color-gold)] bg-[var(--color-parchment)] px-6 py-5">
+              <p className="eyebrow text-[var(--color-burgundy)] mb-2">
+                {locale === 'vi' ? 'Lưu ý' : 'Notice'}
+              </p>
+              <p className="font-[family-name:var(--font-cormorant)] italic text-base md:text-lg leading-relaxed text-[var(--color-ink-muted)]">
+                {locale === 'vi'
+                  ? 'Bài bình luận có tính chất tham khảo; các tên cá nhân (nếu có) chỉ mang tính minh họa. Nội dung không thay thế cho ý kiến tư vấn pháp lý trong từng vụ việc cụ thể.'
+                  : 'This commentary is for reference only; any names mentioned are illustrative. It does not substitute for legal advice in any specific matter.'}
+              </p>
+            </aside>
+          ) : null}
+
           <div className="article-body relative">
             <LexicalContent data={doc.content as never} />
           </div>

@@ -3,7 +3,7 @@
 **Document Version**: 1.0
 **Created**: 2026-04-03
 **Project Owner**: Apolo Lawyers (CONG TY LUAT APOLO LAWYERS)
-**Managing Partner**: Luat su Vo Thien Hien (Henry Vo)
+**Managing Lawyer**: LS. Vo Thien Hien (Henry Vo)
 **Status**: Phase 1
 
 ---

@@ -22,7 +22,7 @@ const CATEGORIES = [
     order: 1,
     name: { vi: 'Thực tiễn xét xử', en: 'Court Practice' },
     description: {
-      vi: 'Phân tích thực tiễn xét xử của các cấp toà án Việt Nam, xu hướng giải quyết tranh chấp và những bản án định hình ngành luật.',
+      vi: 'Phân tích thực tiễn xét xử của các cấp tòa án Việt Nam, xu hướng giải quyết tranh chấp và những bản án định hình ngành luật.',
       en: 'Analysis of how Vietnamese courts adjudicate disputes — practice trends, recurring reasoning, and the judgments shaping the profession.',
     },
   },
@@ -52,7 +52,7 @@ const CATEGORIES = [
     order: 4,
     name: { vi: 'Kỹ năng tranh tụng', en: 'Procedural Practice' },
     description: {
-      vi: 'Kỹ năng tranh tụng tại toà — trình bày, hỏi và đối chất, viết bản luận cứ, đàm phán hoà giải, quản lý thời hiệu tố tụng.',
+      vi: 'Kỹ năng tranh tụng tại tòa — trình bày, hỏi và đối chất, viết bản luận cứ, đàm phán hòa giải, quản lý thời hiệu tố tụng.',
       en: 'Courtroom advocacy skills: oral presentation, examination and cross-examination, written argument, mediation, and timeline management.',
     },
   },
@@ -96,21 +96,21 @@ const TAGS = [
 const AUTHORS = [
   {
     slug: 'vo-thien-hien',
-    name: 'Võ Thiên Hiển',
-    title: { vi: 'Luật sư Điều hành — Apolo Lawyers', en: 'Managing Partner — Apolo Lawyers' },
+    name: 'LS. Võ Thiện Hiển',
+    title: { vi: 'Luật sư Điều hành — Apolo Lawyers', en: 'Managing Lawyer — Apolo Lawyers' },
     bioMd: {
       vi:
-`Võ Thiên Hiển (Henry Vo) là Luật sư Điều hành Công ty Luật Apolo Lawyers, có hơn 15 năm kinh nghiệm tham gia tố tụng dân sự, tranh chấp doanh nghiệp và tư vấn pháp lý cho các tổ chức trong và ngoài nước tại Việt Nam.
+`Luật sư Võ Thiện Hiển (Henry Vo) là Luật sư Điều hành Công ty Luật Apolo Lawyers, với hơn 20 năm kinh nghiệm trong lĩnh vực tố tụng dân sự, tranh chấp thương mại, tranh chấp doanh nghiệp và tư vấn pháp lý cho các cá nhân, tổ chức trong và ngoài nước tại Việt Nam.
 
-Ông đã tham gia hàng trăm vụ tranh tụng cấp sơ thẩm và phúc thẩm, đặc biệt trong các lĩnh vực hợp đồng thương mại, đất đai và doanh nghiệp. Bài viết của ông tập trung vào **chiến lược tố tụng**, **đánh giá chứng cứ** và **bình luận án lệ**.`,
+Ông đã tham gia nhiều vụ việc tranh tụng ở cấp sơ thẩm và phúc thẩm, đặc biệt trong các lĩnh vực hợp đồng thương mại, đất đai và doanh nghiệp. Các bài viết của ông tập trung vào chiến lược tố tụng, đánh giá chứng cứ, thực tiễn xét xử và bình luận án lệ.`,
       en:
-`Vo Thien Hien (Henry Vo) is the Managing Partner of Apolo Lawyers Law Firm in Vietnam, with over 15 years of litigation and advisory experience for domestic and international clients.
+`Lawyer Vo Thien Hien (Mr. Henry Vo) is the Managing Lawyer of Apolo Lawyers, with more than 20 years of experience in civil litigation, commercial disputes, corporate disputes and legal advisory work for individuals and organizations in Vietnam and abroad.
 
-He has appeared in hundreds of first-instance and appellate proceedings, with particular focus on commercial contract, land and corporate disputes. His writing focuses on **litigation strategy**, **evidence assessment** and **precedent commentary**.`,
+He has been involved in numerous first-instance and appellate proceedings, particularly in matters concerning commercial contracts, land and corporate disputes. His writings focus on litigation strategy, evidence assessment, court practice and case commentary.`,
     },
     credentials: [
       { label: { vi: 'Thẻ luật sư — Liên đoàn Luật sư Việt Nam', en: 'Bar member — Vietnam Bar Federation' }, year: 2010 },
-      { label: { vi: 'Thạc sĩ Luật — Đại học Luật TP.HCM',         en: 'LLM — Ho Chi Minh City University of Law' }, year: 2015 },
+      { label: { vi: 'Thạc sĩ Luật — Đại học Luật Thành phố Hồ Chí Minh', en: 'LLM — Ho Chi Minh City University of Law' }, year: 2015 },
     ],
     expertise: {
       vi: ['Tố tụng dân sự', 'Tranh chấp hợp đồng', 'Đất đai', 'Doanh nghiệp', 'Trọng tài thương mại'],
@@ -121,12 +121,12 @@ He has appeared in hundreds of first-instance and appellate proceedings, with pa
   {
     slug: 'editorial-team',
     name: 'Apolo Editorial Team',
-    title: { vi: 'Ban biên tập — law.pro.vn', en: 'Editorial Team — law.pro.vn' },
+    title: { vi: 'Ban Biên tập — The Apolo Review', en: 'Editorial Team — The Apolo Review' },
     bioMd: {
       vi:
-`Ban biên tập tạp chí law.pro.vn gồm các luật sư hành nghề thuộc Công ty Luật Apolo Lawyers cùng cộng tác viên là chuyên gia pháp lý và giảng viên luật. Nội dung được biên tập kỹ lưỡng theo nguyên tắc *peer review* nội bộ, dẫn nguồn đầy đủ và cập nhật thường xuyên theo những thay đổi của pháp luật.`,
+`Ban Biên tập The Apolo Review gồm các luật sư và nhân sự chuyên môn pháp lý của Công ty Luật Apolo Lawyers, cùng các cộng tác viên chuyên môn khi phù hợp. Nội dung được biên tập theo định hướng phân tích pháp lý, có tham khảo nguồn pháp luật và thực tiễn áp dụng tại thời điểm biên soạn, chỉ có giá trị tham khảo và không thay thế cho ý kiến tư vấn pháp lý trong từng trường hợp cụ thể.`,
       en:
-`The editorial team at law.pro.vn is drawn from practising lawyers at Apolo Lawyers and contributing legal academics. Articles go through internal peer review, are fully cited, and are kept current with developments in Vietnamese law.`,
+`The Apolo Review Editorial Team comprises lawyers and legal professionals of Apolo Lawyers, together with specialist contributors where appropriate. The content is prepared for legal analysis purposes, with reference to applicable law and practice at the time of writing. It is for reference purposes only and does not substitute for legal advice in any specific case.`,
     },
     credentials: [],
     expertise: { vi: ['Biên tập pháp lý', 'Phân tích bản án'], en: ['Legal editorial', 'Case analysis'] },

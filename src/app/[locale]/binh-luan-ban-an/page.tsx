@@ -3,6 +3,16 @@ import { hasLocale } from 'next-intl'
 import { notFound } from 'next/navigation'
 import { routing, type Locale } from '@/i18n/routing'
 import HubPage from '@/components/hub/HubPage'
+import { sectionByKey } from '@/lib/sections'
+import { hubMetadata } from '@/lib/seo'
+
+const SECTION_KEY = 'case-commentary'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  if (!hasLocale(routing.locales, locale)) return {}
+  return hubMetadata(SECTION_KEY, locale as Locale)
+}
 
 export default async function CaseCommentaryHub({
   params,
@@ -12,20 +22,18 @@ export default async function CaseCommentaryHub({
   const { locale } = await params
   if (!hasLocale(routing.locales, locale)) notFound()
   setRequestLocale(locale)
+  const section = sectionByKey(SECTION_KEY)!
 
   return (
     <HubPage
       locale={locale as Locale}
       navKey="caseCommentary"
-      hubVi="/binh-luan-ban-an"
-      hubEn="/case-commentary-vietnam"
+      hubVi={section.hub.vi}
+      hubEn={section.hub.en}
       categorySlug="binh-luan-ban-an"
-      sectionKey="case-commentary"
+      sectionKey={SECTION_KEY}
       articlePathname="/binh-luan-ban-an/[slug]"
-      description={{
-        vi: 'Bình luận và phân tích các bản án tiêu biểu tại Việt Nam — tranh chấp hợp đồng, lao động, đất đai, hôn nhân gia đình, doanh nghiệp.',
-        en: 'Commentary and analysis of notable Vietnamese judgments — contract, labour, land, family, and corporate disputes.',
-      }}
+      description={section.description}
     />
   )
 }

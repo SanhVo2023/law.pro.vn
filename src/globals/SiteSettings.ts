@@ -28,7 +28,7 @@ export const SiteSettings: GlobalConfig = {
           name: 'address',
           type: 'textarea',
           localized: true,
-          defaultValue: '108 Trần Đình Xu, Phường Cầu Ông Lãnh, TP. Hồ Chí Minh',
+          defaultValue: '108 Trần Đình Xu, Phường Cầu Ông Lãnh, Thành phố Hồ Chí Minh',
         },
         { name: 'email', type: 'email', defaultValue: 'contact@apolo.com.vn' },
         { name: 'phone', type: 'text', defaultValue: '(028) 66.701.709' },

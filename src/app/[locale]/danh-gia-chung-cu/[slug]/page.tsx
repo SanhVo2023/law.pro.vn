@@ -5,8 +5,7 @@ import type { Metadata } from 'next'
 import { routing, type Locale } from '@/i18n/routing'
 import { getArticleBySlug } from '@/lib/queries'
 import ArticleDetail from '@/components/article/ArticleDetail'
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://law.pro.vn'
+import { articleMetadata } from '@/lib/seo'
 
 type Params = { locale: string; slug: string }
 
@@ -15,17 +14,14 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!hasLocale(routing.locales, locale)) return {}
   const doc = await getArticleBySlug(slug, locale as Locale)
   if (!doc) return {}
-  return {
-    title: doc.title || '',
-    description: doc.excerpt || '',
-    alternates: {
-      canonical: `${SITE_URL}/${locale}/danh-gia-chung-cu/${slug}`,
-      languages: {
-        vi: `${SITE_URL}/vi/danh-gia-chung-cu/${slug}`,
-        en: `${SITE_URL}/en/evidence-assessment-vietnam/${slug}`,
-      },
-    },
-  }
+  return articleMetadata(
+    doc as never,
+    locale as Locale,
+    '/danh-gia-chung-cu',
+    '/evidence-assessment-vietnam',
+    slug,
+    'evidence-assessment',
+  )
 }
 
 export default async function ArticlePage({ params }: { params: Promise<Params> }) {

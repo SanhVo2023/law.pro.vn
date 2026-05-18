@@ -3,6 +3,16 @@ import { hasLocale } from 'next-intl'
 import { notFound } from 'next/navigation'
 import { routing, type Locale } from '@/i18n/routing'
 import HubPage from '@/components/hub/HubPage'
+import { sectionByKey } from '@/lib/sections'
+import { hubMetadata } from '@/lib/seo'
+
+const SECTION_KEY = 'court-practice'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  if (!hasLocale(routing.locales, locale)) return {}
+  return hubMetadata(SECTION_KEY, locale as Locale)
+}
 
 export default async function CourtPracticeHub({
   params,
@@ -12,20 +22,18 @@ export default async function CourtPracticeHub({
   const { locale } = await params
   if (!hasLocale(routing.locales, locale)) notFound()
   setRequestLocale(locale)
+  const section = sectionByKey(SECTION_KEY)!
 
   return (
     <HubPage
       locale={locale as Locale}
       navKey="courtPractice"
-      hubVi="/thuc-tien-xet-xu"
-      hubEn="/court-practice-vietnam"
+      hubVi={section.hub.vi}
+      hubEn={section.hub.en}
       categorySlug="thuc-tien-xet-xu"
-      sectionKey="court-practice"
+      sectionKey={SECTION_KEY}
       articlePathname="/thuc-tien-xet-xu/[slug]"
-      description={{
-        vi: 'Phân tích thực tiễn xét xử của các cấp toà án, xu hướng giải quyết tranh chấp và những bản án định hình ngành luật Việt Nam.',
-        en: 'Analysis of how Vietnamese courts adjudicate disputes — practice trends, recurring reasoning, and the judgments that shape the profession.',
-      }}
+      description={section.description}
     />
   )
 }

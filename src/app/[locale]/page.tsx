@@ -177,6 +177,19 @@ export default async function Home({
         )}
       </section>
 
+      {/* Disclaimer — required at home, per Mr Hien (17/5/2026 xlsx item 20).
+          Read by every visitor before they engage with the analysis content. */}
+      <section className="border-y border-[var(--color-rule)] bg-[var(--color-parchment)]">
+        <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-10 lg:py-14 grid gap-4 md:grid-cols-[12rem_1fr] items-start">
+          <p className="eyebrow text-[var(--color-burgundy)]">
+            {t('disclaimerEyebrow')}
+          </p>
+          <p className="font-[family-name:var(--font-cormorant)] italic text-lg md:text-xl leading-relaxed text-[var(--color-ink-muted)] max-w-3xl">
+            {t('disclaimerBody')}
+          </p>
+        </div>
+      </section>
+
       {/* Featured spotlight + Editor's pick rail */}
       {featuredArticle ? (
         <section className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-20">

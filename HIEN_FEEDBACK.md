@@ -38,6 +38,138 @@
 
 <!-- New feedback items go below this line, newest at TOP -->
 
+## F-010: Technical SEO surface (canonical / meta / OG / sitemap / robots)
+
+- **Date**: 2026-05-17
+- **Source**: XLSX review (`Review 21 website - Hệ thống Apolo Lawyers.xlsx` sheet 2 = law.pro.vn, item 1.0)
+- **Severity**: medium
+- **Category**: SEO
+- **Feedback (verbatim)**:
+  > "Cần kiểm tra kỹ: Canonical / Meta description / OG image / sitemap VN / sitemap EN / robots.txt"
+- **Status**: fixed (2026-05-17)
+- **Generalizable?**: yes — every site should ship with home/hub/article/author metadata, OG images, and a sitemap that includes every leaf URL.
+- **Applied in** (2026-05-17):
+  - NEW `src/lib/seo.ts` — `hubMetadata`, `articleMetadata`, `ogImageForMedia`, `ogImageForSection`, `alternatesFor` helpers. Single source for canonical + hreflang + OG composition.
+  - NEW `src/lib/sections.ts` (extended) — per-section `description`, `ogFilename`, `thumbFilename`, `heroFilename` as SSOT. Fixes the "title/description/thumbnail chưa khớp" complaint by making them all read from one file.
+  - All 6 hub pages now export `generateMetadata` via `hubMetadata(sectionKey, locale)`. OG image points at the section's `og-{slug}.webp` from the R2 manifest.
+  - All 6 article-detail pages now export `generateMetadata` via `articleMetadata(...)`. OG image is the article's `featuredImage.url` (R2 CDN through the Media afterRead alias), falling back to the section thumbnail.
+  - `src/app/sitemap.ts` expanded — now emits home + 6 hubs + authors-index + 29 articles + 2 authors × 2 locales = ~80 URLs with hreflang `alternates.languages` on each.
+  - `src/app/robots.ts` unchanged (already correct).
+
+---
+
+## F-009: Case-commentary content rules (no real names, verified rulings only, disclaimer)
+
+- **Date**: 2026-05-17
+- **Source**: XLSX review item 19 + item 2 (copyright section)
+- **Severity**: high
+- **Category**: content / legal accuracy
+- **Feedback (verbatim)**:
+  > "Các bài về bình luận án dễ bị dính bản quyền nên để AI tự tìm bản án tự bình luận thì hay hơn, nhưng phải có bản án thực sự, đừng phịa
+  > Lưu ý quan trọng: không đưa tên người vào phần bình luận"
+- **Status**: fixed (2026-05-17)
+- **Generalizable?**: yes — codified in `CONTENT_GENERATION_GUIDE.md` (new "Case-commentary content rules" section).
+- **Applied in** (2026-05-17):
+  - Audit: scanned all 4 articles in `binh-luan-ban-an` (× 2 locales = 8 records) for Vietnamese full-name patterns. Zero candidates found — the seo-content-writer pipeline already produced clean content. No DB mutation needed.
+  - `src/components/article/ArticleDetail.tsx` — added a top-of-body bilingual disclaimer block that renders only when `articlePathname.startsWith('/binh-luan-ban-an')`. The disclaimer is hard-coded so content writers cannot accidentally omit it.
+  - `../../shared-assets/CONTENT_GENERATION_GUIDE.md` — appended "Case-commentary content rules" section with: no real-person names, verified `số bản án + ngày + tòa xử` only (no fabricated cases), no `Nguồn:` attribution outside `*.gov.vn` / `vbpl.vn`, no press-media vocabulary. Includes a grep-based pre-publish lint snippet.
+
+---
+
+## F-008: Vietnamese orthography sweep (hoá/toà/hoà → hóa/tòa/hòa + typos)
+
+- **Date**: 2026-05-17
+- **Source**: XLSX review items 3.0–7.0
+- **Severity**: medium
+- **Category**: copy / VN spelling
+- **Feedback (verbatim)**:
+  > "Về chính tả: hoá → hóa, toà → tòa, hoà → hòa, hòan → hoàn, tòan → toàn"
+- **Status**: fixed (2026-05-17)
+- **Generalizable?**: yes
+- **Applied in** (2026-05-17):
+  - NEW `scripts/fix-vn-spelling.mjs` — walks every Lexical content tree in `lpv.articles_locales`, `lpv.authors_locales`, `lpv.categories_locales`. Word-boundary-aware substitution (lookarounds against `[A-Za-zÀ-ỹ]`) so it never breaks valid forms like `hoặc`.
+  - Dry-run report: 0 hits in article bodies (seo-content-writer already used modern orthography), 0 in author bios, 3 in 2 category descriptions (court-practice + litigation-skills).
+  - Live run applied 3 substitutions. Verification SQL `SELECT count(*) FROM lpv.categories_locales WHERE name||description ~ '\m(hoá|toà|hoà|hòan|tòan)\M'` → 0.
+  - Static source files swept manually: `src/app/[locale]/thuc-tien-xet-xu/page.tsx`, `src/app/[locale]/ky-nang-tranh-tung/page.tsx`, `scripts/seed-taxonomy.mjs`.
+
+---
+
+## F-007: Home page legal disclaimer
+
+- **Date**: 2026-05-17
+- **Source**: XLSX review item 20.0
+- **Severity**: high
+- **Category**: content / legal accuracy
+- **Feedback (verbatim)**:
+  > "Bổ sung Nội dung loại trừ trách nhiệm Tại TRANG CHỦ"
+- **Status**: fixed (2026-05-17)
+- **Generalizable?**: yes — every Apolo Lawyers site should carry a home-page reference-only disclaimer.
+- **Applied in** (2026-05-17):
+  - `src/app/[locale]/page.tsx` — new `<section>` inserted directly beneath the cover hero, before the Featured spotlight. Parchment background, gold rule above/below, italic Cormorant body in `ink-muted`.
+  - `messages/{vi,en}.json` — added `home.disclaimerEyebrow` + `home.disclaimerBody` keys with the exact xlsx-supplied text (shared strings 141 EN / 142 VN, verbatim).
+
+---
+
+## F-006: Author rename + bio rewrite + credentials/expertise hide
+
+- **Date**: 2026-05-17
+- **Source**: XLSX review items 11, 12, 13
+- **Severity**: high
+- **Category**: content / brand
+- **Feedback (verbatim)**:
+  > "Võ Thiên Hiển → LS. Võ Thiện Hiển. Chữ Thiện thiếu dấu nặng. Bỏ dòng thẻ luật sư và thạc sỹ luật."
+  > Editorial-team bio: drop "peer review", "fully cited", "law.pro.vn" — use "The Apolo Review", add reference-only disclaimer.
+  > Hien bio: 15 năm → 20 năm, add "court practice".
+- **Status**: fixed (2026-05-17)
+- **Generalizable?**: yes — the rename "Võ Thiên Hiển → LS. Võ Thiện Hiển" should propagate to all 4 Phase 1 sites and Phase 2+ scaffolds. PM session to fan out cross-site.
+- **Applied in** (2026-05-17):
+  - NEW `scripts/apply-hien-feedback-author.mjs` — direct-SQL UPDATE on `lpv.authors.name` (vo-thien-hien) + `lpv.authors_locales.bio` for both authors × both locales. Bypasses Payload's slow PATCH pipeline (5+ min/row under `pool.max:2`); SQL UPDATE completes in <1s. `--dry-run` aware.
+  - Result: `lpv.authors WHERE slug='vo-thien-hien'.name` = `LS. Võ Thiện Hiển`. Bios for both authors rewritten to xlsx-supplied text.
+  - `src/app/[locale]/tac-gia/[slug]/page.tsx` — credentials list (lines 141–150) + expertise list (lines 152–159) removed. CMS fields preserved for archive.
+  - `src/components/article/AuthorBadge.tsx` — `credentials` prop and inline chips removed. Component now shows name + title only.
+  - `src/app/[locale]/tac-gia/page.tsx` — caller no longer passes `credentials` to AuthorBadge. Section heading "Bài viết đã xuất bản" → "Bài viết đã đăng" (avoid press-media vocab per F-005).
+  - `scripts/seed-taxonomy.mjs` — name + bios for both authors updated. `Thẻ luật sư`/`Thạc sĩ Luật` credential entries still defined (CMS schema retains them) but UI no longer renders.
+  - `src/components/article/ConsultCta.tsx` — "Luật sư Võ Thiên Hiển" → "LS. Võ Thiện Hiển".
+  - `PRD.md` — "Luat su Vo Thien Hien" → "LS. Vo Thien Hien".
+
+---
+
+## F-005: Brand vocabulary swap (no press-media terms)
+
+- **Date**: 2026-05-17
+- **Source**: XLSX review item 2.0 + items 8.0, 9.0
+- **Severity**: high
+- **Category**: brand / legal accuracy (VN press law)
+- **Feedback (verbatim)**:
+  > "Tránh sử dụng các cụm từ: xuất bản, tạp chí, ấn phẩm vì sẽ liên quan đến báo chí, truyền thông -> sẽ bị xử phạt hoặc truy cứu trách nhiệm. Thay thế: tạp chí = chuyên trang, journal = review"
+- **Status**: fixed (2026-05-17)
+- **Generalizable?**: yes — ecosystem-wide rule for all Apolo sites + future content gen.
+- **Applied in** (2026-05-17):
+  - `messages/vi.json` — `site.description` "Tạp chí" → "Chuyên trang"; `home.heroEyebrow` same; `footer.aboutHeading` "Về tạp chí" → "Về chuyên trang".
+  - `messages/en.json` — `site.tagline` "Vietnam Legal Analysis Journal" → "Vietnam Legal Analysis Review"; `site.description` "publication" → "review"; `home.latestHeading` "Latest publications" → "Latest analyses"; `footer.brandDescription` rewritten without "publication"; `footer.aboutHeading` "About the journal" → "About the review".
+  - `scripts/seed-taxonomy.mjs` — editorial-team title `Ban biên tập — law.pro.vn` → `Ban Biên tập — The Apolo Review`; editorial-team bio rewritten to drop `tạp chí` / `peer review` / `dẫn nguồn đầy đủ`.
+  - `src/app/[locale]/tac-gia/[slug]/page.tsx` — "Bài viết đã xuất bản" → "Bài viết đã đăng".
+  - Already-deployed bios on the DB also updated via the F-006 SQL script (both authors' `_locales.bio` rows).
+
+---
+
+## F-004: Address SSOT update + East Saigon branch on VN
+
+- **Date**: 2026-05-17
+- **Source**: XLSX review item 10.0
+- **Severity**: high
+- **Category**: content (brand consistency)
+- **Feedback (verbatim)**:
+  > VN block must use "Thành phố Hồ Chí Minh" (NOT abbreviated "TP. Hồ Chí Minh"). Render East Saigon branch on VN locale too.
+- **Status**: fixed (2026-05-17). Supersedes F-003.
+- **Generalizable?**: yes — `address.txt` SSOT updated; all Apolo sites should follow.
+- **Applied in** (2026-05-17):
+  - `E:\NEW APP\Apolo Website\address.txt` — `ADDRESS_VN` + `COMPANY_NAME_VN` rewritten to full "Thành phố Hồ Chí Minh". Added `BRANCH_VN_*` block (previously EN-only). Dropped standalone `HOTLINE_EN` entry; consolidated EN phones to `(+8428) 66.701.709` + `(+84) 903.419.479`.
+  - `src/lib/identity.ts` — synced to new SSOT. VN object now has a `branch` block matching EN. EN dropped `hotline` field.
+  - `src/components/layout/SiteFooter.tsx` — branch block no longer gated by `locale === 'en'`; renders on both locales. Hotline interpolation removed (no longer in identity).
+  - `src/globals/SiteSettings.ts` — `contact.address` default updated to full "Thành phố Hồ Chí Minh" form.
+  - Verification SQL: footer rendered HTML contains "Thành phố Hồ Chí Minh", "Chi nhánh Đông Sài Gòn", and per-locale parent-brand href.
+
 ## F-003: Use the official post-merger address word-by-word
 
 - **Date**: 2026-05-04

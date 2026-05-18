@@ -75,10 +75,6 @@ export default async function AuthorsIndex({
                 slug={a.slug}
                 title={a.title}
                 photoUrl={photo?.url || null}
-                credentials={(a.credentials || []).map((c: { label?: string; year?: number }) => ({
-                  label: c.label || '',
-                  year: c.year ?? null,
-                }))}
               />
             )
           })}
