@@ -82,7 +82,7 @@ export const SECTIONS: Section[] = [
     navKey: 'caseCommentary',
     description: {
       vi: 'Bình luận và phân tích các bản án tiêu biểu tại Việt Nam — tranh chấp hợp đồng, lao động, đất đai, hôn nhân gia đình, doanh nghiệp. Bài viết có tính tham khảo, tên cá nhân (nếu có) chỉ mang tính minh họa.',
-      en: 'Commentary and analysis of notable Vietnamese judgments — contract, labour, land, family, and corporate disputes. Reference only; any names mentioned are illustrative.',
+      en: 'Commentary and analysis of notable Vietnamese judgments — contract, labour, land, family, and corporate disputes. Each piece works from a verifiable ruling (number, date, court) and engages with how the court reasoned, where the precedent sits, and what counsel can take into practice. Reference only; any names mentioned are illustrative.',
     },
     ogFilename: 'og-binh-luan-ban-an.webp',
     thumbFilename: 'thumb-template-binh-luan-ban-an.webp',

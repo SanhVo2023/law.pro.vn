@@ -62,8 +62,16 @@ export default async function LocaleLayout({
     <html lang={locale} dir="ltr" suppressHydrationWarning>
       <body className={`${FONT_VARIABLES} antialiased`}>
         <NextIntlClientProvider>
+          {/* Skip-link — keyboard / screen reader users can bypass the magazine
+              masthead and 6-item nav and jump straight to article content. */}
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-[var(--color-burgundy)] focus:text-[var(--color-parchment)] focus:px-4 focus:py-2 focus:rounded-sm focus:font-[family-name:var(--font-inter)] focus:text-sm focus:no-underline"
+          >
+            {locale === 'vi' ? 'Đến nội dung chính' : 'Skip to main content'}
+          </a>
           <SiteHeader locale={locale as Locale} />
-          <main className="min-h-screen">{children}</main>
+          <main id="main" className="min-h-screen">{children}</main>
           <SiteFooter locale={locale as Locale} />
         </NextIntlClientProvider>
       </body>

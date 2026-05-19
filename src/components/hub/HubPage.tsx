@@ -95,7 +95,7 @@ export default async function HubPage({
       {/* Hub hero — photograph if available, typographic if not */}
       {hubHeroUrl ? (
         <section className="relative">
-          <div className="relative w-full h-[44vh] min-h-[360px] max-h-[560px]">
+          <div className="relative w-full h-[44vh] min-h-[360px] max-h-[460px]">
             <Image
               src={hubHeroUrl}
               alt={sectionTitle}

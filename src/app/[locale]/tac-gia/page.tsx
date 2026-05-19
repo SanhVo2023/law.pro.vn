@@ -64,7 +64,9 @@ export default async function AuthorsIndex({
       </section>
 
       <section className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-16">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-x-12 gap-y-10">
+        {/* Two cards on a screen-2xl page look isolated; cap the grid to a
+            comfortable max-width so the cards feel like a designed page. */}
+        <div className="grid sm:grid-cols-2 gap-x-12 gap-y-10 max-w-5xl">
           {authors.map((a) => {
             const photo = typeof a.photo === 'object' ? a.photo : null
             return (

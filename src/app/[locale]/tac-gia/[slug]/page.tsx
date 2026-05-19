@@ -106,12 +106,12 @@ export default async function AuthorProfile({ params }: { params: Promise<Params
                 alt={author.name}
                 width={320}
                 height={320}
-                className="w-44 h-44 lg:w-full lg:h-auto aspect-square object-cover rounded-full lg:rounded-none ring-1 ring-[var(--color-rule)]"
+                className="w-52 h-52 md:w-60 md:h-60 lg:w-full lg:h-auto aspect-square object-cover rounded-full lg:rounded-none ring-1 ring-[var(--color-rule)]"
               />
             ) : (
               <div
                 aria-hidden
-                className="w-44 h-44 lg:w-full lg:aspect-square rounded-full lg:rounded-none bg-[var(--color-burgundy)]/[0.06] flex items-center justify-center font-[family-name:var(--font-cormorant)] text-7xl text-[var(--color-burgundy)]/40"
+                className="w-52 h-52 md:w-60 md:h-60 lg:w-full lg:aspect-square rounded-full lg:rounded-none bg-[var(--color-burgundy)]/[0.06] flex items-center justify-center font-[family-name:var(--font-cormorant)] text-7xl text-[var(--color-burgundy)]/40"
               >
                 {author.name
                   .split(' ')
@@ -149,17 +149,34 @@ export default async function AuthorProfile({ params }: { params: Promise<Params
       </section>
 
       <section className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-16">
-        <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl mb-10 text-[var(--color-ink)] border-b border-[var(--color-rule)] pb-4">
-          {locale === 'vi' ? 'Bài viết đã đăng' : 'Published analysis'}
-          <span className="ml-3 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.24em] text-[var(--color-ink-muted)]">
-            {articles.length}
-          </span>
-        </h2>
+        <div className="mb-10 border-b border-[var(--color-rule)] pb-4 flex items-baseline justify-between gap-4">
+          <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl text-[var(--color-ink)]">
+            {locale === 'vi' ? 'Bài viết đã đăng' : 'Published analysis'}
+          </h2>
+          {articles.length > 0 ? (
+            <p className="eyebrow text-[var(--color-burgundy)]">
+              {articles.length} {locale === 'vi' ? 'bài' : 'pieces'}
+            </p>
+          ) : null}
+        </div>
 
         {articles.length === 0 ? (
-          <p className="font-[family-name:var(--font-inter)] text-sm uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-            {locale === 'vi' ? 'Chưa có bài viết.' : 'No articles yet.'}
-          </p>
+          /* When an author (e.g. the Managing Lawyer) hasn't personally
+             authored a piece yet — instead of a jarring "No articles yet" —
+             explain the editorial workflow and route to the team byline. */
+          <div className="max-w-2xl border-l-4 border-[var(--color-gold)] bg-[var(--color-parchment)] px-6 py-6">
+            <p className="font-[family-name:var(--font-cormorant)] italic text-lg leading-relaxed text-[var(--color-ink-muted)]">
+              {locale === 'vi'
+                ? 'Bài phân tích trên chuyên trang được đăng dưới byline “Apolo Editorial Team” và được rà soát biên tập trước khi đăng. Phần này sẽ cập nhật khi có bài viết do tác giả trực tiếp chấp bút.'
+                : 'Analysis on this review is published under the “Apolo Editorial Team” byline and goes through editorial review before publication. This section will fill in as the author personally bylines pieces.'}
+            </p>
+            <Link
+              href={{ pathname: '/tac-gia/[slug]', params: { slug: 'editorial-team' } }}
+              className="mt-5 inline-flex items-center gap-2 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.22em] text-[var(--color-burgundy)] hover:text-[var(--color-burgundy-dark)] transition-colors"
+            >
+              {locale === 'vi' ? 'Xem Ban Biên tập' : 'See the Editorial Team'} <span aria-hidden>→</span>
+            </Link>
+          </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12">
             {articles.map((a) => {

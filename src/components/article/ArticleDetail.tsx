@@ -161,7 +161,9 @@ export default async function ArticleDetail({ doc, locale, hubPathname, articleP
               tên cá nhân chỉ mang tính minh họa, không thay thế tư vấn pháp lý. */}
           {articlePathname.startsWith('/binh-luan-ban-an') ? (
             <aside className="my-10 border-l-4 border-[var(--color-gold)] bg-[var(--color-parchment)] px-6 py-5">
-              <p className="eyebrow text-[var(--color-burgundy)] mb-2">
+              {/* Disclaimer eyebrow tinted away from burgundy so it does not
+                  read like a navigational eyebrow (see UI audit Route-10). */}
+              <p className="font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.28em] text-[var(--color-gold)] mb-2">
                 {locale === 'vi' ? 'Lưu ý' : 'Notice'}
               </p>
               <p className="font-[family-name:var(--font-cormorant)] italic text-base md:text-lg leading-relaxed text-[var(--color-ink-muted)]">

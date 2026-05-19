@@ -130,8 +130,14 @@ h1, h2, h3, h4 {
   transition: width 240ms ease-out;
 }
 .editorial-link:hover::after,
+.editorial-link:focus-visible::after,
 .group:hover .editorial-link::after {
   width: 100%;
+}
+.editorial-link:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 4px;
+  border-radius: 2px;
 }
 
 /* Hero image overlay: dark only where text needs to read; photo dominates the top.
