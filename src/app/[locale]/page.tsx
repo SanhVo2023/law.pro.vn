@@ -118,7 +118,14 @@ export default async function Home({
       <section className="relative">
         {heroUrl ? (
           <div className="relative w-full h-[78vh] min-h-[560px] max-h-[820px]">
-            <Image src={heroUrl} alt="" fill sizes="100vw" priority className="object-cover" />
+            <Image
+              src={heroUrl}
+              alt={`${t('heroEyebrow')} — ${t('heroTitle')}`}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 100vw, 1920px"
+              priority
+              className="object-cover"
+            />
             <div className="hero-overlay" aria-hidden />
             <div className="absolute inset-0 flex flex-col">
               <div className="mx-auto max-w-screen-2xl w-full px-6 lg:px-12 pt-10 flex justify-end">

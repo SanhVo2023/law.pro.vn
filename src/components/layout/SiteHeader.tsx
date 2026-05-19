@@ -55,9 +55,11 @@ export default async function SiteHeader({ locale }: Props) {
       <div className="border-b border-[var(--color-gold)]/30">
         <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-7 md:py-9 text-center">
           <Link href="/" className="inline-block group">
-            <h1 className="font-[family-name:var(--font-cormorant)] uppercase text-[1.65rem] sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl tracking-[0.16em] text-[var(--color-burgundy)] leading-[1.05] font-medium">
+            {/* Wordmark is a logo, not a page heading. Demoted from <h1> per
+                the 2026-05-18 UI audit (CX-2): page bodies own the single h1. */}
+            <p className="font-[family-name:var(--font-cormorant)] uppercase text-[1.65rem] sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl tracking-[0.16em] text-[var(--color-burgundy)] leading-[1.05] font-medium m-0">
               {tSite('name')}
-            </h1>
+            </p>
             <div
               aria-hidden
               className="mx-auto mt-3 h-px w-16 md:w-20 bg-[var(--color-gold)]"

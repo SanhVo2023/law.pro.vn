@@ -111,7 +111,8 @@ export async function hubMetadata(sectionKey: string, locale: Locale): Promise<M
   const tSite = await getTranslations({ locale, namespace: 'site' })
   // navKey to translations key (camelCase) — matches the enum used in nav.
   const navKey = section.navKey as 'courtPractice'
-  const title = `${tNav(navKey)} | ${tSite('name')}`
+  // Title is bare — root layout.tsx's title.template appends `| The Apolo Review` once.
+  const title = tNav(navKey)
   const description = section.description[locale]
   const images = ogImageForSection(section.ogFilename)
   return {

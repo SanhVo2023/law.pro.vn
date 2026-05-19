@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
 
+// Root-level metadata is intentionally minimal — the per-locale layout
+// (src/app/[locale]/layout.tsx) supplies the localized title default +
+// template. Defining a `title.template` at BOTH levels causes Next to
+// cascade-append the brand twice ("Foo | The Apolo Review | The Apolo
+// Review"), which the 2026-05-18 UI audit flagged as CX-1.
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://law.pro.vn'),
-  title: {
-    default: 'The Apolo Review | Phân tích pháp lý chuyên sâu',
-    template: '%s | The Apolo Review',
-  },
-  description:
-    'The Apolo Review — chuyên trang phân tích pháp lý chuyên sâu cho luật sư, chuyên viên pháp chế và nhà nghiên cứu luật tại Việt Nam.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -43,7 +43,7 @@ export default function ArticleHero({
         <div className="relative w-full h-[60vh] min-h-[480px] max-h-[720px]">
           <Image
             src={heroImageUrl}
-            alt={heroAlt || ''}
+            alt={heroAlt || title}
             fill
             sizes="100vw"
             priority

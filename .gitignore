@@ -50,3 +50,9 @@ next-env.d.ts
 
 # regenerated at build time from image-assets.json
 /src/lib/r2-media-map.generated.ts
+
+# Playwright MCP scratch (per-session yml + console logs)
+/.playwright-mcp/
+
+# Office lock files (Excel ~$Foo.xlsx, Word ~$Foo.docx)
+~$*

@@ -66,9 +66,12 @@ function renderNode(node: LexicalNode, key: string | number): React.ReactNode {
       )
     }
     case 'heading': {
-      const Tag = (node.tag as 'h1' | 'h2' | 'h3' | 'h4') || 'h2'
+      // The page's <h1> belongs to ArticleHero / page title. Body content
+      // never owns the page heading — demote any `h1` the editor emits to
+      // `h2` so we keep exactly one <h1> per page (UI audit CX-2 / a11y).
+      const rawTag = (node.tag as 'h1' | 'h2' | 'h3' | 'h4') || 'h2'
+      const Tag = rawTag === 'h1' ? 'h2' : rawTag
       const sizeClass = {
-        h1: 'text-4xl md:text-5xl mt-16 mb-6',
         h2: 'text-3xl md:text-4xl mt-14 mb-5',
         h3: 'text-2xl md:text-3xl mt-10 mb-4',
         h4: 'text-xl md:text-2xl mt-8 mb-3',

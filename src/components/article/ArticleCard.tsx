@@ -56,7 +56,7 @@ export default function ArticleCard({
         >
           <Image
             src={imageUrl}
-            alt=""
+            alt={title}
             fill
             sizes={isFeature ? '(min-width:1024px) 60vw, 100vw' : '(min-width:1024px) 33vw, 100vw'}
             className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
