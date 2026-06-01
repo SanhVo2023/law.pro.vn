@@ -48,9 +48,31 @@ const dirname = path.dirname(filename)
 if (!process.env.PAYLOAD_SECRET) throw new Error('PAYLOAD_SECRET required')
 if (!process.env.DATABASE_URI) throw new Error('DATABASE_URI required')
 
+// Origins allowed to send authenticated (cookie) requests to the Payload API.
+// Without the live domain(s) here, the admin loads and reads (GET) succeed but
+// every Save (POST/PATCH/DELETE) returns 403 on the custom domain: a browser
+// attaches an Origin header, and Payload rejects cookie-authed mutations whose
+// origin is neither serverURL nor in this whitelist (CSRF protection). Node
+// fetch sends no Origin, which is why server-side scripts never tripped it.
+// Diagnose: GET /api/users/me returns the user (cookie valid) while a Save 403s
+// => CSRF/origin mismatch. Includes apex + www, NEXT_PUBLIC_SITE_URL, localhost.
+const allowedOrigins = Array.from(
+  new Set(
+    [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://law.pro.vn',
+      'https://www.law.pro.vn',
+      process.env.NEXT_PUBLIC_SITE_URL,
+    ].filter((o): o is string => Boolean(o)),
+  ),
+)
+
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   secret: process.env.PAYLOAD_SECRET,
+  cors: allowedOrigins,
+  csrf: allowedOrigins,
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
