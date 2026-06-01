@@ -109,25 +109,41 @@ export default buildConfig({
       generateDescription: ({ doc }) =>
         typeof doc?.excerpt === 'string' ? doc.excerpt : '',
     }),
-    // Cloudflare R2 (S3-compatible) cloud storage. Activates only when all
+    // Cloudflare R2 (S3-compatible) cloud storage. Activates only when all five
     // R2_* env vars are present — otherwise falls back to local disk (dev).
-    // Required for Netlify production deploy: Netlify functions are stateless.
+    // REQUIRED on Vercel, whose serverless FS is read-only: without this, signing
+    // in works but saving an article with a NEW image upload fails (Payload can't
+    // write to disk). The 74 pre-baked images render regardless (their URLs are
+    // baked into the build via the r2-media-map), so R2 only gates fresh uploads.
+    //
+    // Unlike the bucket-root sibling sites, law.pro.vn keeps `prefix: 'law.pro.vn'`
+    // so new uploads land at `apolowebsite/law.pro.vn/<file>` and serve from
+    // `${R2_PUBLIC_URL}/law.pro.vn/<file>` — matching the baked images, the
+    // `lpv.media.prefix` column (already migrated), and the next.config
+    // remotePattern `/law.pro.vn/**`. generateFileURL is therefore prefix-aware.
     ...(process.env.R2_ACCESS_KEY_ID &&
     process.env.R2_SECRET_ACCESS_KEY &&
-    process.env.R2_BUCKET &&
-    process.env.R2_ENDPOINT
+    process.env.R2_BUCKET_NAME &&
+    process.env.R2_ACCOUNT_ID &&
+    process.env.R2_PUBLIC_URL
       ? [
           s3Storage({
-            collections: { media: { prefix: 'law.pro.vn' } },
-            bucket: process.env.R2_BUCKET,
+            collections: {
+              media: {
+                prefix: 'law.pro.vn',
+                disablePayloadAccessControl: true,
+                generateFileURL: ({ prefix, filename }) =>
+                  `${process.env.R2_PUBLIC_URL}/${prefix ? `${prefix}/` : ''}${filename}`,
+              },
+            },
+            bucket: process.env.R2_BUCKET_NAME,
             config: {
-              endpoint: process.env.R2_ENDPOINT,
+              region: 'auto',
+              endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
               credentials: {
                 accessKeyId: process.env.R2_ACCESS_KEY_ID,
                 secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
               },
-              region: process.env.R2_REGION || 'auto',
-              forcePathStyle: true,
             },
           }),
         ]
