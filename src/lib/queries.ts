@@ -178,3 +178,36 @@ export async function listAllArticleSlugs() {
   })
   return res.docs
 }
+
+// ---- Footer global (CMS-editable footer) ----
+// Local shapes mirror src/globals/Footer.ts. Typed here (rather than relying on
+// the generated payload-types.ts) so the footer can ship without regenerating
+// types against the pooled DB. SiteFooter.tsx applies built-in fallbacks.
+export type FooterLink = { label?: string | null; href?: string | null; external?: boolean | null }
+export type FooterColumn = { heading?: string | null; links?: FooterLink[] | null }
+export type FooterOffice = {
+  label?: string | null
+  name?: string | null
+  address?: string | null
+  email?: string | null
+  phones?: string | null
+}
+export type FooterData = {
+  brandName?: string | null
+  brandTagline?: string | null
+  intro?: string | null
+  linkColumns?: FooterColumn[] | null
+  offices?: FooterOffice[] | null
+  copyrightLine?: string | null
+}
+
+export async function getFooter(locale: Locale): Promise<FooterData | null> {
+  try {
+    const payload = await getPayloadClient()
+    const footer = await payload.findGlobal({ slug: 'footer', locale, depth: 0 })
+    return (footer ?? null) as unknown as FooterData | null
+  } catch {
+    // Global unreadable (e.g. schema not yet synced) — let the footer fall back.
+    return null
+  }
+}
