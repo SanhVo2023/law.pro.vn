@@ -63,7 +63,7 @@ const DATA = {
       },
       {
         label: 'Chi nhánh',
-        name: 'Chi nhánh Đông Sài Gòn - Công ty Luật Apolo Lawyers',
+        name: 'Chi nhánh Đông Sài Gòn',
         address:
           'Tầng 9, Tòa nhà K&M, 33 Ung Văn Khiêm, Phường Thạnh Mỹ Tây, Thành phố Hồ Chí Minh',
         email: '',
@@ -110,7 +110,7 @@ const DATA = {
       },
       {
         label: 'Branch',
-        name: 'EAST SAI GON BRANCH - APOLO LAWYERS LAWFIRM',
+        name: 'East Saigon Branch',
         address:
           '9th/F, Tower K&M Building, 33 Ung Van Khiem Street, Thanh My Tay Ward, Ho Chi Minh City, Vietnam',
         email: '',

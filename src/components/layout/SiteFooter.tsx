@@ -35,6 +35,33 @@ function phoneList(phones: string | string[] | null | undefined): string[] {
   return (Array.isArray(phones) ? phones : phones.split('\n')).map((p) => p.trim()).filter(Boolean)
 }
 
+// Small gold line-icons for the contact block (matches the site's inline-SVG
+// convention — no icon library). Decorative, so aria-hidden.
+const ICON = 'shrink-0 text-[var(--color-gold)]'
+function PinIcon() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={`${ICON} mt-[3px]`}>
+      <path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10Z" />
+      <circle cx="12" cy="11" r="2.1" />
+    </svg>
+  )
+}
+function MailIcon() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={ICON}>
+      <rect x="3" y="5" width="18" height="14" rx="1.6" />
+      <path d="m3.6 6.7 8.4 6 8.4-6" />
+    </svg>
+  )
+}
+function PhoneIcon() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={ICON}>
+      <path d="M5 4h3l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V18a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2Z" />
+    </svg>
+  )
+}
+
 export default async function SiteFooter({ locale }: Props) {
   const t = await getTranslations({ locale })
   const tSite = await getTranslations({ locale, namespace: 'site' })
@@ -98,78 +125,95 @@ export default async function SiteFooter({ locale }: Props) {
         ]
 
   return (
-    <footer className="mt-32 bg-[var(--color-parchment)] border-t border-[var(--color-rule)]">
-      {/* Ornate divider above the columns */}
-      <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 pt-20">
-        <div className="editorial-divider" aria-hidden />
-      </div>
-
-      <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 pb-14 grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-        <div className="space-y-4">
-          <p className="font-[family-name:var(--font-cormorant)] text-3xl text-[var(--color-burgundy)]">
-            {brandName}
-          </p>
-          <p className="font-[family-name:var(--font-cormorant)] italic text-lg text-[var(--color-charcoal)] leading-snug max-w-xs">
-            {brandTagline}
-          </p>
-          <p className="text-sm leading-relaxed text-[var(--color-ink-muted)] max-w-xs">
-            {brandDescription}
-          </p>
+    <footer className="mt-32 bg-[var(--color-parchment)] border-t border-[var(--color-rule)] text-[var(--color-charcoal)]">
+      <div className="mx-auto max-w-screen-2xl px-6 lg:px-10">
+        {/* Ornate divider */}
+        <div className="pt-14">
+          <div className="editorial-divider" aria-hidden />
         </div>
 
-        {columns.map((col, ci) => (
-          <div key={ci}>
-            <h4 className="eyebrow text-[var(--color-burgundy)] mb-5">{col.heading}</h4>
-            <ul className="space-y-3 text-sm font-[family-name:var(--font-lora)]">
-              {(col.links ?? []).map((link, li) => (
-                <li key={li}>
-                  <FooterLinkItem link={link} locale={locale} />
-                </li>
-              ))}
-            </ul>
+        {/* Brand + link columns */}
+        <div className="pt-12 pb-16 grid gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-4">
+          <div className="space-y-4">
+            <p className="font-[family-name:var(--font-cormorant)] text-3xl leading-none text-[var(--color-burgundy)]">
+              {brandName}
+            </p>
+            <p className="font-[family-name:var(--font-cormorant)] italic text-lg leading-snug text-[var(--color-charcoal)] max-w-xs">
+              {brandTagline}
+            </p>
+            <p className="text-sm leading-relaxed text-[var(--color-ink-muted)] max-w-xs">
+              {brandDescription}
+            </p>
           </div>
-        ))}
+
+          {columns.map((col, ci) => (
+            <div key={ci}>
+              <h4 className="eyebrow text-[var(--color-burgundy)] mb-5">{col.heading}</h4>
+              <ul className="space-y-3 text-sm font-[family-name:var(--font-lora)]">
+                {(col.links ?? []).map((link, li) => (
+                  <li key={li}>
+                    <FooterLinkItem link={link} locale={locale} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Contact / address block — locale-aware, CMS-editable (seeded from the
-          canonical address.txt). */}
+          canonical address.txt). Gold line-icons cue each detail. */}
       <div className="border-t border-[var(--color-rule)]">
-        <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-8 grid gap-8 md:grid-cols-2 text-sm text-[var(--color-charcoal)] font-[family-name:var(--font-lora)]">
+        <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-10 grid gap-x-10 gap-y-8 md:grid-cols-2">
           {offices.map((office, oi) => {
             const phones = phoneList(office.phones)
             return (
               <div key={oi}>
-                <p className="eyebrow text-[var(--color-burgundy)] mb-3">{office.label}</p>
-                <p className="font-[family-name:var(--font-cormorant)] text-xl text-[var(--color-ink)] mb-2">
+                <h4 className="eyebrow text-[var(--color-burgundy)] mb-2.5">{office.label}</h4>
+                <p className="font-[family-name:var(--font-cormorant)] text-xl leading-tight text-[var(--color-ink)] mb-4">
                   {office.name}
                 </p>
-                <p className="text-[var(--color-ink-muted)] leading-relaxed">{office.address}</p>
-                {office.email ? (
-                  <p className="mt-2 text-[var(--color-ink-muted)]">
-                    <a href={`mailto:${office.email}`} className="editorial-link hover:text-[var(--color-burgundy)]">
-                      {office.email}
-                    </a>
-                  </p>
-                ) : null}
-                {phones.length ? (
-                  <p className="mt-1 text-[var(--color-ink-muted)]">
-                    {phones.map((p, i) => (
-                      <span key={p}>
-                        {i > 0 && <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>}
-                        {p}
+                <ul className="space-y-2.5 text-sm font-[family-name:var(--font-lora)] text-[var(--color-ink-muted)]">
+                  {office.address ? (
+                    <li className="flex items-start gap-2.5">
+                      <PinIcon />
+                      <span className="leading-relaxed">{office.address}</span>
+                    </li>
+                  ) : null}
+                  {office.email ? (
+                    <li className="flex items-center gap-2.5">
+                      <MailIcon />
+                      <a href={`mailto:${office.email}`} className="editorial-link hover:text-[var(--color-burgundy)]">
+                        {office.email}
+                      </a>
+                    </li>
+                  ) : null}
+                  {phones.length ? (
+                    <li className="flex items-center gap-2.5">
+                      <PhoneIcon />
+                      <span>
+                        {phones.map((p, i) => (
+                          <span key={p}>
+                            {i > 0 && <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>}
+                            {p}
+                          </span>
+                        ))}
                       </span>
-                    ))}
-                  </p>
-                ) : null}
+                    </li>
+                  ) : null}
+                </ul>
               </div>
             )
           })}
         </div>
       </div>
 
+      {/* Copyright */}
       <div className="border-t border-[var(--color-rule)]">
-        <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-6 text-xs text-[var(--color-ink-muted)] font-[family-name:var(--font-inter)]">
-          <p className="uppercase tracking-[0.16em]">{copyright}</p>
+        <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-6">
+          <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-ink-muted)] font-[family-name:var(--font-inter)]">
+            {copyright}
+          </p>
         </div>
       </div>
     </footer>
