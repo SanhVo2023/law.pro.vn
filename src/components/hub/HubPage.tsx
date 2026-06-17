@@ -54,8 +54,7 @@ export default async function HubPage({
   hubVi,
   hubEn,
   categorySlug,
-  // sectionKey retained in the prop contract; hub hero imagery was retired in
-  // the Modern Authority redesign in favour of a clean typographic header.
+  sectionKey,
   articlePathname,
   description,
 }: Props) {
@@ -97,9 +96,10 @@ export default async function HubPage({
         }}
       />
 
-      {/* Typographic section header — count folded in, no oversized hero. */}
+      {/* Section header — typographic, count folded in, with a restrained
+          cinematic banner (contained strip, not a full-bleed mega-hero). */}
       <header className="border-b border-[var(--color-line)]">
-        <div className="wrap pt-14 lg:pt-20 pb-12">
+        <div className="wrap pt-14 lg:pt-20 pb-9">
           <Link
             href="/"
             className="inline-block eyebrow text-[var(--color-ink-muted)] hover:text-[var(--color-burgundy)] transition-colors mb-7"
@@ -115,6 +115,19 @@ export default async function HubPage({
             <span className="text-[var(--color-burgundy)]">{articles.length}</span>{' '}
             {locale === 'vi' ? 'phân tích' : articles.length === 1 ? 'analysis' : 'analyses'}
           </p>
+        </div>
+        <div className="wrap pb-12 lg:pb-14">
+          <div className="relative w-full aspect-[21/9] max-h-[380px] overflow-hidden bg-[var(--color-rule)] ring-1 ring-[var(--color-line)]">
+            <Image
+              src={`/decor/sec-${sectionKey}.webp`}
+              alt=""
+              fill
+              sizes="(min-width:1024px) 1120px, 100vw"
+              priority
+              className="object-cover"
+            />
+            <span aria-hidden className="absolute inset-0 ring-1 ring-inset ring-[var(--color-gold)]/15" />
+          </div>
         </div>
       </header>
 

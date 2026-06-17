@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { setRequestLocale, getTranslations } from 'next-intl/server'
 import { hasLocale } from 'next-intl'
 import { notFound } from 'next/navigation'
@@ -60,6 +61,17 @@ export default async function AuthorsIndex({
               ? 'Tác giả và cộng tác viên đóng góp phân tích chuyên sâu cho The Apolo Review — luật sư hành nghề, chuyên gia pháp lý và giảng viên luật.'
               : 'Authors and contributing editors at The Apolo Review — practising lawyers, legal experts, and academic contributors.'}
           </p>
+          <div className="mt-10 relative w-full aspect-[21/9] max-h-[320px] overflow-hidden bg-[var(--color-rule)] ring-1 ring-[var(--color-line)]">
+            <Image
+              src="/decor/authors-hero.webp"
+              alt=""
+              fill
+              sizes="(min-width:1024px) 1120px, 100vw"
+              priority
+              className="object-cover"
+            />
+            <span aria-hidden className="absolute inset-0 ring-1 ring-inset ring-[var(--color-gold)]/15" />
+          </div>
         </div>
       </section>
 

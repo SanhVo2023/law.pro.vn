@@ -43,6 +43,10 @@ const SECTION_KEY_TO_SLUG = {
   'case-commentary': 'binh-luan-ban-an',
 } as const
 
+function mediaUrl(m: unknown): string | null {
+  return m && typeof m === 'object' && 'url' in m ? ((m as { url?: string }).url ?? null) : null
+}
+
 function fmtDate(d?: string | null) {
   return d
     ? new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
@@ -84,10 +88,7 @@ export default async function Home({
     featuredArticle && typeof featuredArticle.category === 'object'
       ? (featuredArticle.category as { slug?: string; name?: string })
       : null
-  const featuredImg =
-    featuredArticle && typeof featuredArticle.featuredImage === 'object'
-      ? (featuredArticle.featuredImage as { url?: string } | null)
-      : null
+  const featuredImg = mediaUrl(featuredArticle?.featuredImage)
   const featuredAuthor =
     featuredArticle && typeof featuredArticle.author === 'object'
       ? (featuredArticle.author as { name?: string } | null)
@@ -97,8 +98,6 @@ export default async function Home({
     : SECTION_PATHNAMES['court-practice']
 
   // Hero CTA → the featured article if we have one, else the first section hub.
-  // next-intl's typed Link accepts the article {pathname,params} form; the raw
-  // hub string is cast (matches the codebase's existing convention).
   const heroCtaHref = featuredArticle
     ? { pathname: featuredPath, params: { slug: featuredArticle.slug } }
     : (SECTIONS[0].hub.vi as never)
@@ -117,28 +116,45 @@ export default async function Home({
         }}
       />
 
-      {/* 1 — Purpose hero. Typographic, no full-bleed image: states what this is,
-            who it's for, and a single path in. This is the LCP, so no reveal. */}
-      <section className="wrap pt-16 lg:pt-24 pb-14 lg:pb-20">
-        <div className="max-w-4xl">
-          <p className="eyebrow text-[var(--color-burgundy)]">{t('heroEyebrow')}</p>
-          <div aria-hidden className="mt-5 h-px w-16 bg-[var(--color-gold)]" />
-          <h1 className="mt-6 font-[family-name:var(--font-cormorant)] font-semibold text-[2.75rem] leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-[var(--color-ink)]">
-            {t('heroTitle')}
-          </h1>
-          <p className="mt-6 max-w-2xl deck text-xl md:text-2xl">{t('heroSubtitle')}</p>
-          <div className="mt-9">
-            <Link
-              href={heroCtaHref}
-              className="inline-flex items-center gap-3 font-[family-name:var(--font-inter)] text-[12px] uppercase tracking-[0.16em] text-[var(--color-burgundy)] border-b-2 border-[var(--color-gold)] pb-1 hover:text-[var(--color-ink)] hover:border-[var(--color-ink)] transition-colors"
-            >
-              {t('heroCta')} <span aria-hidden>→</span>
-            </Link>
+      {/* 1 — Purpose hero. Value-prop text in a reading column, paired with a
+            contained editorial image on the right (lg+). LCP-friendly: the
+            headline is text; the image is sized, not full-bleed. */}
+      <section className="wrap pt-12 lg:pt-16 pb-14 lg:pb-16">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          <div className="lg:col-span-7">
+            <p className="eyebrow text-[var(--color-burgundy)]">{t('heroEyebrow')}</p>
+            <div aria-hidden className="mt-5 h-px w-16 bg-[var(--color-gold)]" />
+            <h1 className="mt-6 font-[family-name:var(--font-cormorant)] font-semibold text-[2.6rem] leading-[1.05] tracking-tight sm:text-6xl lg:text-[4rem] text-[var(--color-ink)]">
+              {t('heroTitle')}
+            </h1>
+            <p className="mt-6 max-w-xl deck text-xl md:text-2xl">{t('heroSubtitle')}</p>
+            <div className="mt-9">
+              <Link
+                href={heroCtaHref}
+                className="inline-flex items-center gap-3 font-[family-name:var(--font-inter)] text-[12px] uppercase tracking-[0.16em] text-[var(--color-burgundy)] border-b-2 border-[var(--color-gold)] pb-1 hover:text-[var(--color-ink)] hover:border-[var(--color-ink)] transition-colors"
+              >
+                {t('heroCta')} <span aria-hidden>→</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="hidden lg:block lg:col-span-5">
+            <div className="relative w-full aspect-[4/5] overflow-hidden bg-[var(--color-rule)] ring-1 ring-[var(--color-line)]">
+              <Image
+                src="/decor/home-hero.webp"
+                alt=""
+                fill
+                sizes="(min-width:1024px) 38vw, 0px"
+                priority
+                className="object-cover"
+              />
+              <span aria-hidden className="absolute inset-0 ring-1 ring-inset ring-[var(--color-gold)]/15" />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 2 — Featured spotlight + Latest rail. Two clearly-labeled columns. */}
+      {/* 2 — Featured spotlight + Latest rail (with thumbnails). */}
       {featuredArticle ? (
         <section className="border-t border-[var(--color-line)]">
           <div className="wrap py-16 lg:py-20 grid lg:grid-cols-12 gap-x-12 gap-y-14">
@@ -154,9 +170,9 @@ export default async function Home({
                   className="group block"
                 >
                   <div className="relative w-full aspect-[3/2] overflow-hidden bg-[var(--color-rule)] ring-1 ring-[var(--color-line)]">
-                    {featuredImg?.url ? (
+                    {featuredImg ? (
                       <Image
-                        src={featuredImg.url}
+                        src={featuredImg}
                         alt={featuredArticle.title}
                         fill
                         sizes="(min-width:1024px) 58vw, 100vw"
@@ -194,7 +210,7 @@ export default async function Home({
               </Reveal>
             </div>
 
-            {/* Latest — scannable list */}
+            {/* Latest — scannable list with thumbnails */}
             <aside className="lg:col-span-5 lg:border-l lg:border-[var(--color-line)] lg:pl-12">
               <div className="flex items-center gap-4 mb-7">
                 <span className="eyebrow">{t('latestHeading')}</span>
@@ -210,18 +226,34 @@ export default async function Home({
                     const cat = typeof a.category === 'object' ? (a.category as { slug?: string; name?: string }) : null
                     const author = typeof a.author === 'object' ? (a.author as { name?: string } | null) : null
                     const path = cat?.slug ? slugToPath[cat.slug] || SECTION_PATHNAMES['court-practice'] : SECTION_PATHNAMES['court-practice']
+                    const thumb = mediaUrl(a.featuredImage)
                     return (
                       <li key={a.id} className="py-5 first:pt-0">
-                        <Link href={{ pathname: path, params: { slug: a.slug } }} className="group block">
-                          <p className="eyebrow text-[var(--color-burgundy)] mb-2">{cat?.name || ''}</p>
-                          <h3 className="font-[family-name:var(--font-cormorant)] text-xl md:text-2xl leading-tight text-[var(--color-ink)] group-hover:text-[var(--color-burgundy)] transition-colors">
-                            <span className="editorial-link">{a.title}</span>
-                          </h3>
-                          <p className="mt-2.5 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-3">
-                            {author?.name ? <span>{author.name}</span> : null}
-                            {author?.name && a.readingTime ? <span aria-hidden className="opacity-50">·</span> : null}
-                            {a.readingTime ? <span>{a.readingTime} min</span> : null}
-                          </p>
+                        <Link href={{ pathname: path, params: { slug: a.slug } }} className="group flex gap-4">
+                          <div className="relative w-20 h-20 shrink-0 overflow-hidden bg-[var(--color-rule)] ring-1 ring-[var(--color-line)]">
+                            {thumb ? (
+                              <Image
+                                src={thumb}
+                                alt=""
+                                fill
+                                sizes="80px"
+                                className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                              />
+                            ) : (
+                              <div aria-hidden className="paper-grain absolute inset-0" />
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="eyebrow text-[var(--color-burgundy)] mb-1.5">{cat?.name || ''}</p>
+                            <h3 className="font-[family-name:var(--font-cormorant)] text-lg md:text-xl leading-tight text-[var(--color-ink)] group-hover:text-[var(--color-burgundy)] transition-colors line-clamp-2">
+                              {a.title}
+                            </h3>
+                            <p className="mt-2 font-[family-name:var(--font-inter)] text-[10.5px] uppercase tracking-[0.14em] text-[var(--color-ink-muted)] flex items-center gap-2.5">
+                              {author?.name ? <span className="truncate">{author.name}</span> : null}
+                              {author?.name && a.readingTime ? <span aria-hidden className="opacity-50">·</span> : null}
+                              {a.readingTime ? <span className="shrink-0">{a.readingTime} min</span> : null}
+                            </p>
+                          </div>
                         </Link>
                       </li>
                     )
@@ -233,8 +265,8 @@ export default async function Home({
         </section>
       ) : null}
 
-      {/* 3 — Browse by section. Parchment-tinted band so it reads as a distinct
-            zone; even grid of six defined section cards. */}
+      {/* 3 — Browse by section. Parchment-tinted band; each card now leads with
+            its section image so the grid reads as a designed page, not a list. */}
       <section className="border-t border-[var(--color-line)] bg-[var(--color-parchment)]">
         <div className="wrap py-16 lg:py-20">
           <div className="max-w-2xl mb-12">
@@ -245,13 +277,22 @@ export default async function Home({
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12">
             {sectionPreviews.map(({ section, latest: latestInSection }, i) => (
-              <Reveal key={section.key} delay={i * 0.05} className="h-full">
+              <Reveal key={section.key} delay={(i % 3) * 0.05} className="h-full">
                 <Link
                   // @ts-expect-error — pathnames keyed on VI
                   href={section.hub.vi}
-                  className="group flex flex-col h-full border-t border-[var(--color-charcoal)] pt-5"
+                  className="group flex flex-col h-full"
                 >
-                  <div className="flex items-baseline justify-between mb-3">
+                  <div className="relative w-full aspect-[16/10] overflow-hidden bg-[var(--color-rule)] ring-1 ring-[var(--color-line)] mb-5">
+                    <Image
+                      src={`/decor/sec-${section.key}.webp`}
+                      alt=""
+                      fill
+                      sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                    />
+                  </div>
+                  <div className="flex items-baseline justify-between mb-2">
                     <p className="eyebrow text-[var(--color-burgundy)]">{String(i + 1).padStart(2, '0')}</p>
                     {latestInSection?.readingTime ? (
                       <span className="eyebrow text-[var(--color-ink-muted)]">{latestInSection.readingTime} min</span>
