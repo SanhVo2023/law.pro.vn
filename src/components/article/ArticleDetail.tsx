@@ -152,7 +152,7 @@ export default async function ArticleDetail({ doc, locale, hubPathname, articleP
           heroAlt={heroAlt}
         />
 
-        <div className="mx-auto max-w-screen-md px-6 lg:px-0 pt-12">
+        <div className="wrap-read pt-12">
           {takeaways.length > 0 ? (
             <KeyTakeaways title={tCommon('keyTakeaways')} points={takeaways} />
           ) : null}

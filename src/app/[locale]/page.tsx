@@ -6,13 +6,12 @@ import { Link } from '@/i18n/navigation'
 import { SECTIONS } from '@/lib/sections'
 import { routing, type Locale } from '@/i18n/routing'
 import {
-  getHomeHeroMedia,
   getFeaturedHomepageArticle,
   listLatestArticles,
   listArticlesByCategorySlug,
 } from '@/lib/queries'
 import JsonLd from '@/components/seo/JsonLd'
-import ArticleCard from '@/components/article/ArticleCard'
+import Reveal from '@/components/ui/Reveal'
 import { organizationSchema } from '@/lib/identity'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://law.pro.vn'
@@ -26,6 +25,30 @@ const SECTION_PATHNAMES = {
   'case-commentary':          '/binh-luan-ban-an/[slug]',
 } as const
 
+const slugToPath: Record<string, (typeof SECTION_PATHNAMES)[keyof typeof SECTION_PATHNAMES]> = {
+  'thuc-tien-xet-xu':   SECTION_PATHNAMES['court-practice'],
+  'chien-luoc-ho-so':   SECTION_PATHNAMES['litigation-strategy'],
+  'danh-gia-chung-cu':  SECTION_PATHNAMES['evidence-assessment'],
+  'ky-nang-tranh-tung': SECTION_PATHNAMES['litigation-skills'],
+  'goc-nhin-nghe-luat': SECTION_PATHNAMES['professional-perspective'],
+  'binh-luan-ban-an':   SECTION_PATHNAMES['case-commentary'],
+}
+
+const SECTION_KEY_TO_SLUG = {
+  'court-practice': 'thuc-tien-xet-xu',
+  'litigation-strategy': 'chien-luoc-ho-so',
+  'evidence-assessment': 'danh-gia-chung-cu',
+  'litigation-skills': 'ky-nang-tranh-tung',
+  'professional-perspective': 'goc-nhin-nghe-luat',
+  'case-commentary': 'binh-luan-ban-an',
+} as const
+
+function fmtDate(d?: string | null) {
+  return d
+    ? new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+    : null
+}
+
 export default async function Home({
   params,
 }: { params: Promise<{ locale: string }> }) {
@@ -37,22 +60,13 @@ export default async function Home({
   const tSite = await getTranslations({ locale, namespace: 'site' })
   const tNav = await getTranslations({ locale, namespace: 'nav' })
 
-  const [heroMedia, featuredArticle, latestArticles, sectionPreviews] = await Promise.all([
-    getHomeHeroMedia(),
+  const [featuredArticle, latestArticles, sectionPreviews] = await Promise.all([
     getFeaturedHomepageArticle(locale as Locale),
-    listLatestArticles(locale as Locale, 4),
+    listLatestArticles(locale as Locale, 5),
     Promise.all(
       SECTIONS.map(async (s) => {
         const { articles } = await listArticlesByCategorySlug(
-          // map ecosystem section key to category slug used in DB
-          ({
-            'court-practice': 'thuc-tien-xet-xu',
-            'litigation-strategy': 'chien-luoc-ho-so',
-            'evidence-assessment': 'danh-gia-chung-cu',
-            'litigation-skills': 'ky-nang-tranh-tung',
-            'professional-perspective': 'goc-nhin-nghe-luat',
-            'case-commentary': 'binh-luan-ban-an',
-          } as const)[s.key as keyof typeof SECTION_PATHNAMES],
+          SECTION_KEY_TO_SLUG[s.key as keyof typeof SECTION_KEY_TO_SLUG],
           locale as Locale,
           1,
         )
@@ -61,15 +75,10 @@ export default async function Home({
     ),
   ])
 
-  const heroUrl =
-    heroMedia && typeof heroMedia === 'object' && 'url' in heroMedia
-      ? (heroMedia as { url?: string }).url ?? null
-      : null
-
-  // Build editor's-pick rail: latest articles excluding the featured one
-  const editorsPick = latestArticles
+  // Latest rail: most recent, excluding the featured spotlight.
+  const latest = latestArticles
     .filter((a) => !featuredArticle || a.id !== featuredArticle.id)
-    .slice(0, 3)
+    .slice(0, 4)
 
   const featuredCategory =
     featuredArticle && typeof featuredArticle.category === 'object'
@@ -83,16 +92,16 @@ export default async function Home({
     featuredArticle && typeof featuredArticle.author === 'object'
       ? (featuredArticle.author as { name?: string } | null)
       : null
+  const featuredPath = featuredCategory?.slug
+    ? slugToPath[featuredCategory.slug] || SECTION_PATHNAMES['court-practice']
+    : SECTION_PATHNAMES['court-practice']
 
-
-  const slugToPath: Record<string, (typeof SECTION_PATHNAMES)[keyof typeof SECTION_PATHNAMES]> = {
-    'thuc-tien-xet-xu':   SECTION_PATHNAMES['court-practice'],
-    'chien-luoc-ho-so':   SECTION_PATHNAMES['litigation-strategy'],
-    'danh-gia-chung-cu':  SECTION_PATHNAMES['evidence-assessment'],
-    'ky-nang-tranh-tung': SECTION_PATHNAMES['litigation-skills'],
-    'goc-nhin-nghe-luat': SECTION_PATHNAMES['professional-perspective'],
-    'binh-luan-ban-an':   SECTION_PATHNAMES['case-commentary'],
-  }
+  // Hero CTA → the featured article if we have one, else the first section hub.
+  // next-intl's typed Link accepts the article {pathname,params} form; the raw
+  // hub string is cast (matches the codebase's existing convention).
+  const heroCtaHref = featuredArticle
+    ? { pathname: featuredPath, params: { slug: featuredArticle.slug } }
+    : (SECTIONS[0].hub.vi as never)
 
   return (
     <>
@@ -108,214 +117,177 @@ export default async function Home({
         }}
       />
 
-      {/* Cover hero — full-bleed editorial photograph */}
-      <section className="relative">
-        {heroUrl ? (
-          <div className="relative w-full h-[78vh] min-h-[560px] max-h-[820px]">
-            <Image
-              src={heroUrl}
-              alt={`${t('heroEyebrow')} — ${t('heroTitle')}`}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 100vw, 1920px"
-              priority
-              className="object-cover"
-            />
-            <div className="hero-overlay" aria-hidden />
-            <div className="absolute inset-0 flex flex-col">
-              <div className="flex-1 flex items-end">
-                <div className="mx-auto max-w-screen-2xl w-full px-6 lg:px-12 pb-16 lg:pb-24 text-[var(--color-parchment)]">
-                  <p className="eyebrow text-[var(--color-gold)] mb-7">{t('heroEyebrow')}</p>
-                  <h1 className="font-[family-name:var(--font-cormorant)] text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] leading-[0.98] tracking-tight max-w-5xl drop-shadow-[0_2px_24px_rgba(0,0,0,0.5)]">
-                    {t('heroTitle')}
-                  </h1>
-                  <div aria-hidden className="h-[2px] w-24 bg-[var(--color-gold)] mt-8" />
-                  <p className="mt-7 max-w-2xl font-[family-name:var(--font-cormorant)] italic text-xl md:text-2xl leading-snug text-[var(--color-parchment)]/85">
-                    {t('heroSubtitle')}
-                  </p>
-                  <Link
-                    // @ts-expect-error pathnames keyed on VI
-                    href={SECTIONS[0].hub.vi}
-                    className="inline-flex items-center gap-3 mt-10 font-[family-name:var(--font-inter)] text-sm uppercase tracking-[0.16em] text-[var(--color-gold)] border-b-2 border-[var(--color-gold)] pb-1 hover:text-[var(--color-parchment)] hover:border-[var(--color-parchment)] transition-colors"
-                  >
-                    {t('heroCta')} <span aria-hidden>→</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
+      {/* 1 — Purpose hero. Typographic, no full-bleed image: states what this is,
+            who it's for, and a single path in. This is the LCP, so no reveal. */}
+      <section className="wrap pt-16 lg:pt-24 pb-14 lg:pb-20">
+        <div className="max-w-4xl">
+          <p className="eyebrow text-[var(--color-burgundy)]">{t('heroEyebrow')}</p>
+          <div aria-hidden className="mt-5 h-px w-16 bg-[var(--color-gold)]" />
+          <h1 className="mt-6 font-[family-name:var(--font-cormorant)] font-semibold text-[2.75rem] leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-[var(--color-ink)]">
+            {t('heroTitle')}
+          </h1>
+          <p className="mt-6 max-w-2xl deck text-xl md:text-2xl">{t('heroSubtitle')}</p>
+          <div className="mt-9">
+            <Link
+              href={heroCtaHref}
+              className="inline-flex items-center gap-3 font-[family-name:var(--font-inter)] text-[12px] uppercase tracking-[0.16em] text-[var(--color-burgundy)] border-b-2 border-[var(--color-gold)] pb-1 hover:text-[var(--color-ink)] hover:border-[var(--color-ink)] transition-colors"
+            >
+              {t('heroCta')} <span aria-hidden>→</span>
+            </Link>
           </div>
-        ) : (
-          // Fallback typographic hero (until home-hero-feature image is in R2)
-          <div className="border-b border-[var(--color-rule)]">
-            <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-20 lg:py-32 grid lg:grid-cols-12 gap-10">
-              <div className="lg:col-span-8">
-                <p className="eyebrow mb-7">{t('heroEyebrow')}</p>
-                <h1 className="font-[family-name:var(--font-cormorant)] text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.02] tracking-tight text-[var(--color-ink)]">
-                  {t('heroTitle')}
-                </h1>
-                <div aria-hidden className="h-[2px] w-24 bg-[var(--color-gold)] mt-8" />
-                <p className="mt-8 max-w-2xl text-lg lg:text-xl leading-[1.65] text-[var(--color-ink-muted)] font-[family-name:var(--font-cormorant)] italic">
-                  {t('heroSubtitle')}
-                </p>
-                <div className="mt-10">
-                  <Link
-                    // @ts-expect-error pathnames keyed on VI
-                    href={SECTIONS[0].hub.vi}
-                    className="inline-flex items-center gap-3 eyebrow border-b-2 border-[var(--color-gold)] pb-1 hover:text-[var(--color-charcoal)] transition-colors"
-                  >
-                    {t('heroCta')} <span aria-hidden>→</span>
-                  </Link>
-                </div>
-              </div>
-
-              <aside className="lg:col-span-4 lg:border-l lg:border-[var(--color-rule)] lg:pl-10 self-end">
-                <p className="eyebrow text-[var(--color-ink-muted)]">
-                  {tSite('affiliation')}
-                </p>
-                <p className="mt-3 font-[family-name:var(--font-cormorant)] italic text-xl text-[var(--color-charcoal)] leading-snug">
-                  &ldquo;{tSite('tagline')}&rdquo;
-                </p>
-              </aside>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* Disclaimer — required at home, per Mr Hien (17/5/2026 xlsx item 20).
-          Read by every visitor before they engage with the analysis content. */}
-      <section className="border-y border-[var(--color-rule)] bg-[var(--color-parchment)]">
-        <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-10 lg:py-14 grid gap-4 md:grid-cols-[12rem_1fr] items-start">
-          <div className="md:pt-1">
-            <p className="eyebrow text-[var(--color-burgundy)]">
-              {t('disclaimerEyebrow')}
-            </p>
-            <div aria-hidden className="mt-3 h-px w-12 bg-[var(--color-gold)]/60 md:w-16" />
-          </div>
-          <p className="font-[family-name:var(--font-cormorant)] italic text-lg md:text-xl leading-relaxed text-[var(--color-ink-muted)] max-w-3xl">
-            {t('disclaimerBody')}
-          </p>
         </div>
       </section>
 
-      {/* Featured spotlight + Editor's pick rail */}
+      {/* 2 — Featured spotlight + Latest rail. Two clearly-labeled columns. */}
       {featuredArticle ? (
-        <section className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-20">
-          <div className="flex items-baseline justify-between mb-10 border-b border-[var(--color-rule)] pb-4">
-            <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl text-[var(--color-ink)]">
-              {t('featuredHeading')}
-            </h2>
-            <span className="eyebrow text-[var(--color-ink-muted)]">{t('latestHeading')}</span>
-          </div>
-
-          <div className="grid lg:grid-cols-12 gap-12">
-            {/* Featured spotlight — left 8 cols */}
-            <div className="lg:col-span-8">
-              <ArticleCard
-                pathname={
-                  featuredCategory?.slug
-                    ? slugToPath[featuredCategory.slug] || SECTION_PATHNAMES['court-practice']
-                    : SECTION_PATHNAMES['court-practice']
-                }
-                slug={featuredArticle.slug}
-                category={featuredCategory?.name || ''}
-                title={featuredArticle.title}
-                excerpt={featuredArticle.excerpt}
-                authorName={featuredAuthor?.name}
-                publishedDate={featuredArticle.publishedDate}
-                readingTime={featuredArticle.readingTime}
-                imageUrl={featuredImg?.url || null}
-                variant="feature"
-              />
+        <section className="border-t border-[var(--color-line)]">
+          <div className="wrap py-16 lg:py-20 grid lg:grid-cols-12 gap-x-12 gap-y-14">
+            {/* Feature — dominant, contained 3:2 image */}
+            <div className="lg:col-span-7">
+              <div className="flex items-center gap-4 mb-7">
+                <span className="eyebrow">{t('featuredHeading')}</span>
+                <span aria-hidden className="h-px flex-1 bg-[var(--color-line)]" />
+              </div>
+              <Reveal>
+                <Link
+                  href={{ pathname: featuredPath, params: { slug: featuredArticle.slug } }}
+                  className="group block"
+                >
+                  <div className="relative w-full aspect-[3/2] overflow-hidden bg-[var(--color-rule)] ring-1 ring-[var(--color-line)]">
+                    {featuredImg?.url ? (
+                      <Image
+                        src={featuredImg.url}
+                        alt={featuredArticle.title}
+                        fill
+                        sizes="(min-width:1024px) 58vw, 100vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                      />
+                    ) : (
+                      <div aria-hidden className="paper-grain absolute inset-0" />
+                    )}
+                  </div>
+                  <p className="eyebrow text-[var(--color-burgundy)] mt-6 mb-3">
+                    {featuredCategory?.name || ''}
+                  </p>
+                  <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.1] text-[var(--color-ink)] group-hover:text-[var(--color-burgundy)] transition-colors">
+                    <span className="editorial-link">{featuredArticle.title}</span>
+                  </h2>
+                  {featuredArticle.excerpt ? (
+                    <p className="mt-4 max-w-2xl text-[var(--color-ink-muted)] leading-relaxed line-clamp-2">
+                      {featuredArticle.excerpt}
+                    </p>
+                  ) : null}
+                  <p className="mt-5 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-3">
+                    {featuredAuthor?.name ? <span>{featuredAuthor.name}</span> : null}
+                    {featuredAuthor?.name && (fmtDate(featuredArticle.publishedDate) || featuredArticle.readingTime) ? (
+                      <span aria-hidden className="opacity-50">·</span>
+                    ) : null}
+                    {fmtDate(featuredArticle.publishedDate) ? <span>{fmtDate(featuredArticle.publishedDate)}</span> : null}
+                    {featuredArticle.readingTime ? (
+                      <>
+                        <span aria-hidden className="opacity-50">·</span>
+                        <span>{featuredArticle.readingTime} min</span>
+                      </>
+                    ) : null}
+                  </p>
+                </Link>
+              </Reveal>
             </div>
 
-            {/* Editor's pick rail — right 4 cols, stacked */}
-            <div className="lg:col-span-4 lg:border-l lg:border-[var(--color-rule)] lg:pl-12 space-y-8">
-              {editorsPick.length === 0 ? (
+            {/* Latest — scannable list */}
+            <aside className="lg:col-span-5 lg:border-l lg:border-[var(--color-line)] lg:pl-12">
+              <div className="flex items-center gap-4 mb-7">
+                <span className="eyebrow">{t('latestHeading')}</span>
+                <span aria-hidden className="h-px flex-1 bg-[var(--color-line)]" />
+              </div>
+              {latest.length === 0 ? (
                 <p className="eyebrow text-[var(--color-ink-muted)]">
                   {locale === 'vi' ? 'Chưa có thêm bài viết.' : 'More analysis coming soon.'}
                 </p>
-              ) : null}
-              {editorsPick.map((a, i) => {
-                const cat = typeof a.category === 'object' ? (a.category as { slug?: string; name?: string }) : null
-                const author = typeof a.author === 'object' ? (a.author as { name?: string } | null) : null
-                const path = cat?.slug ? slugToPath[cat.slug] || SECTION_PATHNAMES['court-practice'] : SECTION_PATHNAMES['court-practice']
-                return (
-                  <Link
-                    key={a.id}
-                    href={{ pathname: path, params: { slug: a.slug } }}
-                    className="group block"
-                  >
-                    {i > 0 ? (
-                      <div aria-hidden className="h-px bg-[var(--color-rule)] -mt-4 mb-7" />
-                    ) : null}
-                    <p className="eyebrow text-[var(--color-burgundy)] mb-2">{cat?.name || ''}</p>
-                    <h3 className="font-[family-name:var(--font-cormorant)] text-xl md:text-2xl leading-tight text-[var(--color-ink)] group-hover:text-[var(--color-burgundy)] transition-colors">
-                      <span className="editorial-link">{a.title}</span>
-                    </h3>
-                    <p className="mt-3 eyebrow text-[var(--color-ink-muted)] flex items-center gap-3">
-                      {author?.name ? <span>{author.name}</span> : null}
-                      {a.readingTime ? (
-                        <>
-                          <span aria-hidden className="opacity-50">·</span>
-                          <span>{a.readingTime} min</span>
-                        </>
-                      ) : null}
-                    </p>
-                  </Link>
-                )
-              })}
-            </div>
+              ) : (
+                <ul className="divide-y divide-[var(--color-line)]">
+                  {latest.map((a) => {
+                    const cat = typeof a.category === 'object' ? (a.category as { slug?: string; name?: string }) : null
+                    const author = typeof a.author === 'object' ? (a.author as { name?: string } | null) : null
+                    const path = cat?.slug ? slugToPath[cat.slug] || SECTION_PATHNAMES['court-practice'] : SECTION_PATHNAMES['court-practice']
+                    return (
+                      <li key={a.id} className="py-5 first:pt-0">
+                        <Link href={{ pathname: path, params: { slug: a.slug } }} className="group block">
+                          <p className="eyebrow text-[var(--color-burgundy)] mb-2">{cat?.name || ''}</p>
+                          <h3 className="font-[family-name:var(--font-cormorant)] text-xl md:text-2xl leading-tight text-[var(--color-ink)] group-hover:text-[var(--color-burgundy)] transition-colors">
+                            <span className="editorial-link">{a.title}</span>
+                          </h3>
+                          <p className="mt-2.5 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-3">
+                            {author?.name ? <span>{author.name}</span> : null}
+                            {author?.name && a.readingTime ? <span aria-hidden className="opacity-50">·</span> : null}
+                            {a.readingTime ? <span>{a.readingTime} min</span> : null}
+                          </p>
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
+            </aside>
           </div>
         </section>
       ) : null}
 
-      <div className="editorial-divider" aria-hidden />
-
-      {/* Sections grid — each card now shows the latest article title from that section */}
-      <section className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-20">
-        <div className="flex items-baseline justify-between mb-10 border-b border-[var(--color-rule)] pb-4">
-          <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl text-[var(--color-ink)]">
-            {t('sectionsHeading')}
-          </h2>
-          <span className="eyebrow text-[var(--color-ink-muted)]">
-            {SECTIONS.length} {locale === 'vi' ? 'chuyên mục' : 'sections'}
-          </span>
+      {/* 3 — Browse by section. Parchment-tinted band so it reads as a distinct
+            zone; even grid of six defined section cards. */}
+      <section className="border-t border-[var(--color-line)] bg-[var(--color-parchment)]">
+        <div className="wrap py-16 lg:py-20">
+          <div className="max-w-2xl mb-12">
+            <span className="eyebrow text-[var(--color-burgundy)]">{t('sectionsHeading')}</span>
+            <h2 className="mt-3 font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl leading-tight text-[var(--color-ink)]">
+              {t('sectionsIntro')}
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12">
+            {sectionPreviews.map(({ section, latest: latestInSection }, i) => (
+              <Reveal key={section.key} delay={i * 0.05} className="h-full">
+                <Link
+                  // @ts-expect-error — pathnames keyed on VI
+                  href={section.hub.vi}
+                  className="group flex flex-col h-full border-t border-[var(--color-charcoal)] pt-5"
+                >
+                  <div className="flex items-baseline justify-between mb-3">
+                    <p className="eyebrow text-[var(--color-burgundy)]">{String(i + 1).padStart(2, '0')}</p>
+                    {latestInSection?.readingTime ? (
+                      <span className="eyebrow text-[var(--color-ink-muted)]">{latestInSection.readingTime} min</span>
+                    ) : null}
+                  </div>
+                  <h3 className="font-[family-name:var(--font-cormorant)] text-2xl md:text-[1.7rem] leading-tight text-[var(--color-ink)] group-hover:text-[var(--color-burgundy)] transition-colors">
+                    <span className="editorial-link">{tNav(section.navKey as 'courtPractice')}</span>
+                  </h3>
+                  {latestInSection ? (
+                    <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)] line-clamp-2 flex-1">
+                      <span className="text-[var(--color-ink-muted)]">{locale === 'vi' ? 'Mới nhất: ' : 'Latest: '}</span>
+                      <span className="text-[var(--color-charcoal)] font-medium">{latestInSection.title}</span>
+                    </p>
+                  ) : (
+                    <p className="mt-3 eyebrow text-[var(--color-ink-muted)] flex-1">
+                      {locale === 'vi' ? 'Sắp ra mắt' : 'Coming soon'}
+                    </p>
+                  )}
+                  <p className="mt-6 eyebrow text-[var(--color-ink-muted)] group-hover:text-[var(--color-burgundy)] transition-colors">
+                    {locale === 'vi' ? 'Xem chuyên mục →' : 'View section →'}
+                  </p>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14">
-          {sectionPreviews.map(({ section, latest }, i) => (
-            <Link
-              key={section.key}
-              // @ts-expect-error — pathnames keyed on VI
-              href={section.hub.vi}
-              className="group border-t border-[var(--color-charcoal)] pt-5"
-            >
-              <div className="flex items-baseline justify-between mb-3">
-                <p className="eyebrow text-[var(--color-burgundy)]">
-                  {String(i + 1).padStart(2, '0')}
-                </p>
-                {latest?.readingTime ? (
-                  <span className="eyebrow text-[var(--color-ink-muted)]">{latest.readingTime} min</span>
-                ) : null}
-              </div>
-              <h3 className="font-[family-name:var(--font-cormorant)] text-2xl md:text-3xl leading-tight text-[var(--color-ink)] group-hover:text-[var(--color-burgundy)] transition-colors">
-                <span className="editorial-link">{tNav(section.navKey as 'courtPractice')}</span>
-              </h3>
-              {latest ? (
-                <p className="mt-4 text-sm leading-relaxed text-[var(--color-ink-muted)] line-clamp-3 italic font-[family-name:var(--font-cormorant)]">
-                  {locale === 'vi' ? 'Mới nhất: ' : 'Latest: '}
-                  <span className="not-italic font-medium text-[var(--color-charcoal)]">
-                    {latest.title}
-                  </span>
-                </p>
-              ) : (
-                <p className="mt-4 eyebrow text-[var(--color-ink-muted)]">
-                  {locale === 'vi' ? 'Sắp ra mắt' : 'Coming soon'}
-                </p>
-              )}
-              <p className="mt-6 eyebrow text-[var(--color-ink-muted)]">
-                {locale === 'vi' ? 'Đọc chuyên mục →' : 'Read section →'}
-              </p>
-            </Link>
-          ))}
+      </section>
+
+      {/* 4 — Disclaimer (required at home per Mr Hien 17/5/2026), de-escalated to
+            a slim muted strip so it informs without alarming. */}
+      <section className="border-t border-[var(--color-line)]">
+        <div className="wrap py-6 flex flex-col gap-1.5 sm:flex-row sm:gap-5 sm:items-baseline">
+          <span className="eyebrow text-[var(--color-ink-muted)] shrink-0">{t('disclaimerEyebrow')}</span>
+          <p className="max-w-4xl font-[family-name:var(--font-inter)] text-[12.5px] leading-relaxed text-[var(--color-ink-muted)]">
+            {t('disclaimerBody')}
+          </p>
         </div>
       </section>
     </>

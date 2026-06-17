@@ -47,15 +47,15 @@ export default async function AuthorsIndex({
         }}
       />
 
-      <section className="border-b border-[var(--color-rule)]">
-        <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 pt-16 lg:pt-24 pb-14">
-          <p className="font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.32em] text-[var(--color-burgundy)] mb-7">
+      <section className="border-b border-[var(--color-line)]">
+        <div className="wrap pt-16 lg:pt-24 pb-14">
+          <p className="eyebrow text-[var(--color-burgundy)] mb-7">
             {locale === 'vi' ? 'Ban biên tập' : 'Editorial team'}
           </p>
-          <h1 className="font-[family-name:var(--font-cormorant)] text-5xl md:text-6xl lg:text-7xl leading-[1.02] tracking-tight text-[var(--color-ink)]">
+          <h1 className="font-[family-name:var(--font-cormorant)] font-semibold text-5xl md:text-6xl lg:text-7xl leading-[1.02] tracking-tight text-[var(--color-ink)]">
             {tNav('authors')}
           </h1>
-          <p className="mt-7 max-w-3xl font-[family-name:var(--font-lora)] text-lg lg:text-xl leading-[1.65] text-[var(--color-ink-muted)]">
+          <p className="mt-7 max-w-3xl deck text-xl md:text-2xl">
             {locale === 'vi'
               ? 'Tác giả và cộng tác viên đóng góp phân tích chuyên sâu cho The Apolo Review — luật sư hành nghề, chuyên gia pháp lý và giảng viên luật.'
               : 'Authors and contributing editors at The Apolo Review — practising lawyers, legal experts, and academic contributors.'}
@@ -63,7 +63,7 @@ export default async function AuthorsIndex({
         </div>
       </section>
 
-      <section className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-16">
+      <section className="wrap py-16">
         {/* Two cards on a screen-2xl page look isolated; cap the grid to a
             comfortable max-width so the cards feel like a designed page. */}
         <div className="grid sm:grid-cols-2 gap-x-12 gap-y-10 max-w-5xl">

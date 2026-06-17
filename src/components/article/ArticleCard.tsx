@@ -46,28 +46,22 @@ export default function ArticleCard({
   return (
     <Link
       href={{ pathname, params: { slug } }}
-      className="group flex flex-col"
+      className="group flex flex-col h-full"
     >
       {imageUrl ? (
-        <div
-          className={`relative w-full overflow-hidden ${
-            isFeature ? 'aspect-[16/10]' : 'aspect-[4/3]'
-          } bg-[var(--color-rule)]`}
-        >
+        <div className="relative w-full overflow-hidden aspect-[3/2] bg-[var(--color-rule)] ring-1 ring-[var(--color-line)]">
           <Image
             src={imageUrl}
             alt={title}
             fill
-            sizes={isFeature ? '(min-width:1024px) 60vw, 100vw' : '(min-width:1024px) 33vw, 100vw'}
+            sizes={isFeature ? '(min-width:1024px) 58vw, 100vw' : '(min-width:1024px) 33vw, 100vw'}
             className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
           />
         </div>
       ) : (
         <div
           aria-hidden
-          className={`paper-grain border border-[var(--color-rule)] ${
-            isFeature ? 'aspect-[16/10]' : 'aspect-[4/3]'
-          } relative overflow-hidden flex items-center justify-center`}
+          className="paper-grain border border-[var(--color-line)] aspect-[3/2] relative overflow-hidden flex items-center justify-center"
         >
           {/* Laurel ornament centred on parchment paper-grain */}
           <svg
@@ -91,23 +85,23 @@ export default function ArticleCard({
           <span aria-hidden className="absolute inset-x-8 bottom-3 h-px bg-gradient-to-r from-transparent via-[var(--color-gold)]/40 to-transparent" />
         </div>
       )}
-      <div className="pt-5">
-        <p className="font-[family-name:var(--font-inter)] text-[10.5px] uppercase tracking-[0.24em] text-[var(--color-burgundy)] mb-3">
+      <div className="pt-5 flex flex-col flex-1">
+        <p className="eyebrow text-[var(--color-burgundy)] mb-3">
           {category}
         </p>
         <h3
           className={`font-[family-name:var(--font-cormorant)] leading-tight text-[var(--color-ink)] group-hover:text-[var(--color-burgundy)] transition-colors ${
-            isFeature ? 'text-3xl md:text-4xl' : 'text-2xl'
+            isFeature ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl'
           }`}
         >
           <span className="editorial-link">{title}</span>
         </h3>
         {excerpt ? (
-          <p className="mt-3 text-[var(--color-ink-muted)] line-clamp-2 leading-relaxed">
+          <p className="mt-3 text-[15px] text-[var(--color-ink-muted)] line-clamp-2 leading-relaxed">
             {excerpt}
           </p>
         ) : null}
-        <p className="mt-4 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-3">
+        <p className="mt-4 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-3 flex-wrap">
           {authorName ? <span>{authorName}</span> : null}
           {authorName && (formattedDate || readingTime) ? (
             <span aria-hidden className="opacity-50">·</span>

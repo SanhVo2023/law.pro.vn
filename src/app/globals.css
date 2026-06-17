@@ -7,12 +7,20 @@
   --color-charcoal: #2D2D2D;
   --color-gold: #C9A84C;
   --color-gold-soft: #DCBE6A;
+  /* Modern Authority canvas: a clean near-white default; parchment is demoted
+     to an ACCENT surface (quotes, takeaways, CTA, disclaimer) so bands read as
+     deliberately defined rather than one undifferentiated wash. */
+  --color-paper: #FCFCFA;
   --color-parchment: #FAF8F5;
   --color-parchment-deep: #F2EDE4;
   --color-surface: #FFFFFF;
-  --color-ink: #1C1C1C;
-  --color-ink-muted: #6B6B6B;
+  /* Text ramp tuned for hierarchy: near-black headlines, a softer body tone,
+     muted metadata. */
+  --color-ink: #161616;
+  --color-body: #33312E;
+  --color-ink-muted: #6E6B66;
   --color-rule: #E8DDD5;
+  --color-line: #E7E4DE;
 }
 
 :root {
@@ -24,16 +32,21 @@ html {
 }
 
 body {
-  background: var(--color-parchment);
-  color: var(--color-ink);
+  background: var(--color-paper);
+  color: var(--color-body);
   font-family: var(--font-lora), Georgia, serif;
   font-feature-settings: "liga", "kern", "lnum";
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
+::selection {
+  background: rgba(107, 29, 42, 0.12);
+}
+
 /* Cormorant headings: tighter tracking, oldstyle figures off, lining figures on */
 h1, h2, h3, h4 {
+  color: var(--color-ink);
   font-feature-settings: "lnum", "kern", "ss01";
   letter-spacing: -0.005em;
 }
@@ -109,7 +122,7 @@ h1, h2, h3, h4 {
   font-family: var(--font-cormorant), serif;
   font-size: 1.4rem;
   color: var(--color-gold);
-  background: var(--color-parchment);
+  background: var(--color-paper);
   padding: 0 0.85rem;
   line-height: 1;
 }
@@ -180,14 +193,46 @@ h1, h2, h3, h4 {
   );
 }
 
-/* Issue masthead small-cap eyebrow */
+/* Small-cap label / eyebrow — the sans signal that anchors each section.
+   Slightly tighter tracking + heavier weight reads as a deliberate label
+   against the serif headlines (the key hierarchy cue). */
 .eyebrow {
   font-family: var(--font-inter), system-ui, sans-serif;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.2em;
   color: var(--color-burgundy);
+}
+
+/* ---------------------------------------------------------------- *
+ * Layout rhythm — consistent measures (Modern Authority)           *
+ * ---------------------------------------------------------------- */
+
+/* Index / grid pages: a controlled ~1200px measure (down from the old
+   1536px sprawl that made desktop hard to read). */
+.wrap {
+  margin-inline: auto;
+  max-width: 75rem;
+  padding-inline: 1.5rem;
+}
+@media (min-width: 1024px) {
+  .wrap { padding-inline: 2.5rem; }
+}
+
+/* Article reading column: ~68ch in Lora for comfortable long-form. */
+.wrap-read {
+  margin-inline: auto;
+  max-width: 44rem;
+  padding-inline: 1.5rem;
+}
+
+/* Standfirst / deck — the muted serif italic line under a headline. */
+.deck {
+  font-family: var(--font-cormorant), serif;
+  font-style: italic;
+  color: var(--color-ink-muted);
+  line-height: 1.4;
 }
 
 /* Subtle paper-grain hint behind hero placeholder cards */

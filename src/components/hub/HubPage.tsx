@@ -3,8 +3,9 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import JsonLd from '@/components/seo/JsonLd'
-import { listArticlesByCategorySlug, getHubHeroMedia } from '@/lib/queries'
+import { listArticlesByCategorySlug } from '@/lib/queries'
 import ArticleCard from '@/components/article/ArticleCard'
+import Reveal from '@/components/ui/Reveal'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://law.pro.vn'
 
@@ -41,13 +42,20 @@ type Props = {
   description: { vi: string; en: string }
 }
 
+function fmtDate(d?: string | null) {
+  return d
+    ? new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+    : null
+}
+
 export default async function HubPage({
   locale,
   navKey,
   hubVi,
   hubEn,
   categorySlug,
-  sectionKey,
+  // sectionKey retained in the prop contract; hub hero imagery was retired in
+  // the Modern Authority redesign in favour of a clean typographic header.
   articlePathname,
   description,
 }: Props) {
@@ -57,17 +65,14 @@ export default async function HubPage({
   const sectionTitle = tNav(navKey)
   const path = locale === 'vi' ? hubVi : hubEn
 
-  const [{ articles }, hubMedia] = await Promise.all([
-    listArticlesByCategorySlug(categorySlug, locale, 24),
-    getHubHeroMedia(sectionKey),
-  ])
-
-  const hubHeroUrl =
-    hubMedia && typeof hubMedia === 'object' && 'url' in hubMedia
-      ? (hubMedia as { url?: string }).url ?? null
-      : null
-
+  const { articles } = await listArticlesByCategorySlug(categorySlug, locale, 24)
   const [leadArticle, ...restArticles] = articles
+
+  const leadAuthor = leadArticle && typeof leadArticle.author === 'object' ? leadArticle.author : null
+  const leadImg =
+    leadArticle && typeof leadArticle.featuredImage === 'object'
+      ? (leadArticle.featuredImage as { url?: string } | null)
+      : null
 
   return (
     <>
@@ -92,118 +97,103 @@ export default async function HubPage({
         }}
       />
 
-      {/* Hub hero — photograph if available, typographic if not */}
-      {hubHeroUrl ? (
-        <section className="relative">
-          <div className="relative w-full h-[44vh] min-h-[360px] max-h-[460px]">
-            <Image
-              src={hubHeroUrl}
-              alt={sectionTitle}
-              fill
-              sizes="100vw"
-              priority
-              className="object-cover"
-            />
-            <div className="hero-overlay" aria-hidden />
-            <div className="absolute inset-x-0 bottom-0">
-              <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 pb-12 lg:pb-16 text-[var(--color-parchment)]">
-                <Link
-                  href="/"
-                  className="inline-block eyebrow text-[var(--color-gold)] hover:text-[var(--color-parchment)] transition-colors mb-5"
-                >
-                  ← {tNav('home')}
-                </Link>
-                <h1 className="font-[family-name:var(--font-cormorant)] text-5xl md:text-6xl lg:text-7xl leading-[1.02] tracking-tight max-w-4xl drop-shadow-[0_2px_24px_rgba(0,0,0,0.4)]">
-                  {sectionTitle}
-                </h1>
-                <p className="mt-5 max-w-2xl font-[family-name:var(--font-cormorant)] italic text-lg md:text-xl leading-snug text-[var(--color-parchment)]/85">
-                  {description[locale]}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      ) : (
-        <section className="border-b border-[var(--color-rule)]">
-          <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 pt-16 lg:pt-24 pb-14 grid lg:grid-cols-12 gap-10">
-            <div className="lg:col-span-9">
-              <Link href="/" className="inline-block eyebrow text-[var(--color-ink-muted)] hover:text-[var(--color-burgundy)] mb-7">
-                ← {tNav('home')}
-              </Link>
-              <div aria-hidden className="h-px w-16 bg-[var(--color-gold)] mb-7" />
-              <h1 className="font-[family-name:var(--font-cormorant)] text-5xl md:text-6xl lg:text-7xl leading-[1.02] tracking-tight text-[var(--color-ink)]">
-                {sectionTitle}
-              </h1>
-              <p className="mt-7 max-w-3xl font-[family-name:var(--font-cormorant)] italic text-xl lg:text-2xl leading-[1.5] text-[var(--color-charcoal)]">
-                {description[locale]}
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Section meta strip */}
-      <div className="border-b border-[var(--color-rule)] bg-[var(--color-parchment)]">
-        <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-4 flex items-center justify-between text-[11px] uppercase tracking-[0.24em] text-[var(--color-ink-muted)] font-[family-name:var(--font-inter)]">
-          <span>
-            <span className="text-[var(--color-burgundy)] font-medium">{articles.length}</span>{' '}
-            {locale === 'vi' ? 'phân tích' : 'analyses'}
-            <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>
-            {locale === 'vi' ? 'biên tập bởi ban biên tập' : 'curated by the editorial team'}
-          </span>
-        </div>
-      </div>
-
-      <section className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-16">
-        {articles.length === 0 ? (
-          <p className="font-[family-name:var(--font-inter)] text-sm uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-            {tCommon('notFound')}
+      {/* Typographic section header — count folded in, no oversized hero. */}
+      <header className="border-b border-[var(--color-line)]">
+        <div className="wrap pt-14 lg:pt-20 pb-12">
+          <Link
+            href="/"
+            className="inline-block eyebrow text-[var(--color-ink-muted)] hover:text-[var(--color-burgundy)] transition-colors mb-7"
+          >
+            ← {tNav('home')}
+          </Link>
+          <div aria-hidden className="h-px w-16 bg-[var(--color-gold)] mb-7" />
+          <h1 className="font-[family-name:var(--font-cormorant)] font-semibold text-[2.5rem] sm:text-5xl lg:text-6xl leading-[1.04] tracking-tight text-[var(--color-ink)]">
+            {sectionTitle}
+          </h1>
+          <p className="mt-6 max-w-3xl deck text-xl md:text-2xl">{description[locale]}</p>
+          <p className="mt-7 eyebrow text-[var(--color-ink-muted)]">
+            <span className="text-[var(--color-burgundy)]">{articles.length}</span>{' '}
+            {locale === 'vi' ? 'phân tích' : articles.length === 1 ? 'analysis' : 'analyses'}
           </p>
+        </div>
+      </header>
+
+      <section className="wrap py-14 lg:py-16">
+        {articles.length === 0 ? (
+          <p className="eyebrow text-[var(--color-ink-muted)]">{tCommon('notFound')}</p>
         ) : (
-          <div className="space-y-16">
-            {/* Lead feature article (if exists) */}
+          <div className="space-y-14">
+            {/* Lead — horizontal feature: contained image beside the headline,
+                so the image stays restrained instead of dominating the page. */}
             {leadArticle ? (
-              <div className="border-b border-[var(--color-rule)] pb-14">
-                {(() => {
-                  const author = typeof leadArticle.author === 'object' ? leadArticle.author : null
-                  const img = typeof leadArticle.featuredImage === 'object' ? leadArticle.featuredImage : null
-                  return (
-                    <ArticleCard
-                      pathname={articlePathname}
-                      slug={leadArticle.slug}
-                      category={sectionTitle}
-                      title={leadArticle.title}
-                      excerpt={leadArticle.excerpt}
-                      authorName={author?.name}
-                      publishedDate={leadArticle.publishedDate}
-                      readingTime={leadArticle.readingTime}
-                      imageUrl={(img as { url?: string } | null)?.url || null}
-                      variant="feature"
-                    />
-                  )
-                })()}
-              </div>
+              <Reveal>
+                <Link
+                  href={{ pathname: articlePathname, params: { slug: leadArticle.slug } }}
+                  className="group grid md:grid-cols-2 gap-8 lg:gap-10 items-center border-b border-[var(--color-line)] pb-14"
+                >
+                  <div className="relative w-full aspect-[3/2] overflow-hidden bg-[var(--color-rule)] ring-1 ring-[var(--color-line)] order-1">
+                    {leadImg?.url ? (
+                      <Image
+                        src={leadImg.url}
+                        alt={leadArticle.title}
+                        fill
+                        sizes="(min-width:768px) 50vw, 100vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                      />
+                    ) : (
+                      <div aria-hidden className="paper-grain absolute inset-0" />
+                    )}
+                  </div>
+                  <div className="order-2">
+                    <p className="eyebrow text-[var(--color-burgundy)] mb-3">
+                      {locale === 'vi' ? 'Bài mới nhất' : 'Latest'}
+                    </p>
+                    <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl leading-[1.1] text-[var(--color-ink)] group-hover:text-[var(--color-burgundy)] transition-colors">
+                      <span className="editorial-link">{leadArticle.title}</span>
+                    </h2>
+                    {leadArticle.excerpt ? (
+                      <p className="mt-4 text-[var(--color-ink-muted)] leading-relaxed line-clamp-3">
+                        {leadArticle.excerpt}
+                      </p>
+                    ) : null}
+                    <p className="mt-5 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-3 flex-wrap">
+                      {leadAuthor?.name ? <span>{leadAuthor.name}</span> : null}
+                      {leadAuthor?.name && (fmtDate(leadArticle.publishedDate) || leadArticle.readingTime) ? (
+                        <span aria-hidden className="opacity-50">·</span>
+                      ) : null}
+                      {fmtDate(leadArticle.publishedDate) ? <span>{fmtDate(leadArticle.publishedDate)}</span> : null}
+                      {leadArticle.readingTime ? (
+                        <>
+                          <span aria-hidden className="opacity-50">·</span>
+                          <span>{leadArticle.readingTime} min</span>
+                        </>
+                      ) : null}
+                    </p>
+                  </div>
+                </Link>
+              </Reveal>
             ) : null}
 
-            {/* Remaining articles in 3-up grid */}
+            {/* Even 3-up grid */}
             {restArticles.length > 0 ? (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14">
-                {restArticles.map((a) => {
+                {restArticles.map((a, i) => {
                   const author = typeof a.author === 'object' ? a.author : null
                   const img = typeof a.featuredImage === 'object' ? a.featuredImage : null
                   return (
-                    <ArticleCard
-                      key={a.id}
-                      pathname={articlePathname}
-                      slug={a.slug}
-                      category={sectionTitle}
-                      title={a.title}
-                      excerpt={a.excerpt}
-                      authorName={author?.name}
-                      publishedDate={a.publishedDate}
-                      readingTime={a.readingTime}
-                      imageUrl={(img as { url?: string } | null)?.url || null}
-                    />
+                    <Reveal key={a.id} delay={(i % 3) * 0.05} className="h-full">
+                      <ArticleCard
+                        pathname={articlePathname}
+                        slug={a.slug}
+                        category={sectionTitle}
+                        title={a.title}
+                        excerpt={a.excerpt}
+                        authorName={author?.name}
+                        publishedDate={a.publishedDate}
+                        readingTime={a.readingTime}
+                        imageUrl={(img as { url?: string } | null)?.url || null}
+                      />
+                    </Reveal>
                   )
                 })}
               </div>

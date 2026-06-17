@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import type { Locale } from '@/i18n/routing'
 import ArticleCard from './ArticleCard'
+import Reveal from '@/components/ui/Reveal'
 
 type SectionPathname =
   | '/thuc-tien-xet-xu/[slug]'
@@ -33,24 +34,25 @@ export default async function RelatedRail({ locale, articles, pathname, category
   const tCommon = await getTranslations({ locale, namespace: 'common' })
 
   return (
-    <section className="mx-auto max-w-screen-2xl px-6 lg:px-10 mt-24 pt-14 border-t border-[var(--color-rule)]">
+    <section className="wrap mt-24 pt-14 border-t border-[var(--color-line)]">
       <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl mb-10 text-[var(--color-ink)]">
         {tCommon('relatedArticles')}
       </h2>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12">
-        {articles.map((a) => (
-          <ArticleCard
-            key={a.id}
-            pathname={pathname}
-            slug={a.slug}
-            category={categoryName}
-            title={a.title}
-            excerpt={a.excerpt}
-            authorName={a.author?.name}
-            publishedDate={a.publishedDate}
-            readingTime={a.readingTime}
-            imageUrl={a.featuredImage?.url || null}
-          />
+        {articles.map((a, i) => (
+          <Reveal key={a.id} delay={(i % 3) * 0.05} className="h-full">
+            <ArticleCard
+              pathname={pathname}
+              slug={a.slug}
+              category={categoryName}
+              title={a.title}
+              excerpt={a.excerpt}
+              authorName={a.author?.name}
+              publishedDate={a.publishedDate}
+              readingTime={a.readingTime}
+              imageUrl={a.featuredImage?.url || null}
+            />
+          </Reveal>
         ))}
       </div>
     </section>

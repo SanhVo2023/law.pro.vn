@@ -126,14 +126,9 @@ export default async function SiteFooter({ locale }: Props) {
 
   return (
     <footer className="mt-32 bg-[var(--color-parchment)] border-t border-[var(--color-rule)] text-[var(--color-charcoal)]">
-      <div className="mx-auto max-w-screen-2xl px-6 lg:px-10">
-        {/* Ornate divider */}
-        <div className="pt-14">
-          <div className="editorial-divider" aria-hidden />
-        </div>
-
+      <div className="wrap">
         {/* Brand + link columns */}
-        <div className="pt-12 pb-16 grid gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="pt-16 pb-16 grid gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <p className="font-[family-name:var(--font-cormorant)] text-3xl leading-none text-[var(--color-burgundy)]">
               {brandName}
@@ -164,7 +159,7 @@ export default async function SiteFooter({ locale }: Props) {
       {/* Contact / address block — locale-aware, CMS-editable (seeded from the
           canonical address.txt). Gold line-icons cue each detail. */}
       <div className="border-t border-[var(--color-rule)]">
-        <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-10 grid gap-x-10 gap-y-8 md:grid-cols-2">
+        <div className="wrap py-10 grid gap-x-10 gap-y-8 md:grid-cols-2">
           {offices.map((office, oi) => {
             const phones = phoneList(office.phones)
             return (
@@ -210,7 +205,7 @@ export default async function SiteFooter({ locale }: Props) {
 
       {/* Copyright */}
       <div className="border-t border-[var(--color-rule)]">
-        <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-6">
+        <div className="wrap py-6">
           <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-ink-muted)] font-[family-name:var(--font-inter)]">
             {copyright}
           </p>

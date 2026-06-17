@@ -57,8 +57,8 @@ function renderNode(node: LexicalNode, key: string | number): React.ReactNode {
     case 'paragraph': {
       const isLead = (node as { __lead?: boolean }).__lead === true
       const cls = isLead
-        ? 'lead-paragraph my-6 font-[family-name:var(--font-lora)] text-[var(--color-charcoal)]'
-        : 'leading-[1.85] my-6 text-[17.5px] md:text-[18.5px] font-[family-name:var(--font-lora)] text-[var(--color-charcoal)]'
+        ? 'lead-paragraph my-6 font-[family-name:var(--font-lora)] text-[var(--color-body)]'
+        : 'leading-[1.85] my-6 text-[17.5px] md:text-[18.5px] font-[family-name:var(--font-lora)] text-[var(--color-body)]'
       return (
         <p key={key} className={cls}>
           {renderChildren(node.children)}
@@ -111,7 +111,7 @@ function renderNode(node: LexicalNode, key: string | number): React.ReactNode {
       return (
         <li
           key={key}
-          className="leading-[1.7] text-[17px] font-[family-name:var(--font-lora)] text-[var(--color-charcoal)] flex gap-3 items-start"
+          className="leading-[1.7] text-[17px] font-[family-name:var(--font-lora)] text-[var(--color-body)] flex gap-3 items-start"
         >
           {isUl ? null : null}
           <span className="flex-1">{renderChildren(node.children)}</span>

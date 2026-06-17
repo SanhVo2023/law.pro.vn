@@ -7,6 +7,7 @@ import { routing, type Locale } from '@/i18n/routing'
 import { getAuthorBySlug, listArticlesByAuthorId } from '@/lib/queries'
 import LexicalContent from '@/components/article/LexicalContent'
 import ArticleCard from '@/components/article/ArticleCard'
+import Reveal from '@/components/ui/Reveal'
 import JsonLd from '@/components/seo/JsonLd'
 import { Link } from '@/i18n/navigation'
 
@@ -97,8 +98,8 @@ export default async function AuthorProfile({ params }: { params: Promise<Params
         ]}
       />
 
-      <section className="border-b border-[var(--color-rule)]">
-        <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 pt-16 lg:pt-24 pb-14 grid lg:grid-cols-12 gap-10">
+      <section className="border-b border-[var(--color-line)]">
+        <div className="wrap pt-16 lg:pt-24 pb-14 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-3">
             {photo?.url ? (
               <Image
@@ -129,7 +130,7 @@ export default async function AuthorProfile({ params }: { params: Promise<Params
             >
               ← {tNav('authors')}
             </Link>
-            <h1 className="font-[family-name:var(--font-cormorant)] text-5xl md:text-6xl tracking-tight text-[var(--color-ink)] leading-tight">
+            <h1 className="font-[family-name:var(--font-cormorant)] font-semibold text-5xl md:text-6xl tracking-tight text-[var(--color-ink)] leading-tight">
               {author.name}
             </h1>
             {author.title ? (
@@ -148,8 +149,8 @@ export default async function AuthorProfile({ params }: { params: Promise<Params
         </div>
       </section>
 
-      <section className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-16">
-        <div className="mb-10 border-b border-[var(--color-rule)] pb-4 flex items-baseline justify-between gap-4">
+      <section className="wrap py-16">
+        <div className="mb-10 border-b border-[var(--color-line)] pb-4 flex items-baseline justify-between gap-4">
           <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl text-[var(--color-ink)]">
             {locale === 'vi' ? 'Bài viết đã đăng' : 'Published analysis'}
           </h2>
@@ -179,22 +180,23 @@ export default async function AuthorProfile({ params }: { params: Promise<Params
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12">
-            {articles.map((a) => {
+            {articles.map((a, i) => {
               const cat = typeof a.category === 'object' ? a.category : null
               const img = typeof a.featuredImage === 'object' ? a.featuredImage : null
               const pathname = cat?.slug ? SECTION_PATHNAMES[cat.slug] : SECTION_PATHNAMES['thuc-tien-xet-xu']
               return (
-                <ArticleCard
-                  key={a.id}
-                  pathname={pathname}
-                  slug={a.slug}
-                  category={cat?.name || ''}
-                  title={a.title}
-                  excerpt={a.excerpt}
-                  publishedDate={a.publishedDate}
-                  readingTime={a.readingTime}
-                  imageUrl={img?.url || null}
-                />
+                <Reveal key={a.id} delay={(i % 3) * 0.05} className="h-full">
+                  <ArticleCard
+                    pathname={pathname}
+                    slug={a.slug}
+                    category={cat?.name || ''}
+                    title={a.title}
+                    excerpt={a.excerpt}
+                    publishedDate={a.publishedDate}
+                    readingTime={a.readingTime}
+                    imageUrl={img?.url || null}
+                  />
+                </Reveal>
               )
             })}
           </div>

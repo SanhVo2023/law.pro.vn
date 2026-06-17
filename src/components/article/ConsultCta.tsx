@@ -34,8 +34,8 @@ export default function ConsultCta({ locale }: Props) {
   }[locale]
 
   return (
-    <aside className="mt-20 border-y-2 border-[var(--color-burgundy)] py-10">
-      <p className="font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.28em] text-[var(--color-burgundy)] mb-4">
+    <aside className="mt-20 bg-[var(--color-parchment)] border border-[var(--color-line)] border-t-2 border-t-[var(--color-burgundy)] px-7 py-9 md:px-9 md:py-10">
+      <p className="eyebrow text-[var(--color-burgundy)] mb-4">
         {copy.eyebrow}
       </p>
       <h3 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl text-[var(--color-ink)] leading-tight max-w-2xl">

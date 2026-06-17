@@ -33,13 +33,14 @@
     "notFound": "Nothing here yet."
   },
   "home": {
-    "heroEyebrow": "Vietnam legal analysis",
-    "heroTitle": "Where legal practice meets deep thinking.",
-    "heroSubtitle": "Commentary, analysis and practitioner perspective on Vietnamese court practice, litigation strategy, and the judgments shaping the profession.",
+    "heroEyebrow": "In-depth legal analysis · Vietnam",
+    "heroTitle": "Understand how Vietnamese courts actually decide.",
+    "heroSubtitle": "In-depth commentary and analysis for lawyers, in-house counsel and legal professionals working with Vietnamese law.",
     "heroCta": "Read the latest analysis",
-    "featuredHeading": "Featured analysis",
-    "latestHeading": "Latest analyses",
+    "featuredHeading": "Featured",
+    "latestHeading": "Latest",
     "sectionsHeading": "Sections",
+    "sectionsIntro": "Six core areas of litigation practice in Vietnam.",
     "disclaimerEyebrow": "Disclaimer",
     "disclaimerBody": "The content on this website is provided for reference purposes only, does not constitute legal advice, and does not create an attorney client relationship. Readers should carefully consider and take responsibility for any use of the information in their specific circumstances."
   },

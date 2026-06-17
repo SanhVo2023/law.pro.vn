@@ -20,7 +20,7 @@ export default function AuthorBadge({
     return (
       <Link
         href={{ pathname: '/tac-gia/[slug]', params: { slug } }}
-        className="group flex items-start gap-5 border-t border-[var(--color-rule)] pt-6"
+        className="group flex items-start gap-5 border-t border-[var(--color-line)] pt-6"
       >
         {photoUrl ? (
           <Image
@@ -28,7 +28,7 @@ export default function AuthorBadge({
             alt=""
             width={84}
             height={84}
-            className="h-16 w-16 md:h-20 md:w-20 rounded-full object-cover ring-1 ring-[var(--color-rule)]"
+            className="h-16 w-16 md:h-20 md:w-20 rounded-full object-cover ring-1 ring-[var(--color-line)]"
           />
         ) : (
           <div
@@ -62,7 +62,7 @@ export default function AuthorBadge({
           alt=""
           width={48}
           height={48}
-          className="h-10 w-10 rounded-full object-cover ring-1 ring-[var(--color-rule)]"
+          className="h-10 w-10 rounded-full object-cover ring-1 ring-[var(--color-line)]"
         />
       ) : (
         <span

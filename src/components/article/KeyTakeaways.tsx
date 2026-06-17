@@ -10,12 +10,12 @@ export default function KeyTakeaways({ title, points }: Props) {
     <aside
       role="complementary"
       aria-label={title}
-      className="my-12 border-l-2 border-[var(--color-gold)] bg-[var(--color-burgundy-light)]/40 px-6 py-6 md:px-8 md:py-7"
+      className="my-12 border border-[var(--color-line)] border-l-2 border-l-[var(--color-gold)] bg-[var(--color-parchment)] px-6 py-6 md:px-8 md:py-7"
     >
-      <p className="font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.28em] text-[var(--color-burgundy)] mb-4">
+      <p className="eyebrow text-[var(--color-burgundy)] mb-4">
         {title}
       </p>
-      <ul className="space-y-3 font-[family-name:var(--font-lora)] text-[var(--color-charcoal)]">
+      <ul className="space-y-3 font-[family-name:var(--font-lora)] text-[var(--color-body)]">
         {points.map((p, i) => (
           <li key={i} className="flex gap-3 leading-snug">
             <span
