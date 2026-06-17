@@ -2,6 +2,7 @@
   "site": {
     "name": "The Apolo Review",
     "tagline": "Vietnam Legal Analysis Review",
+    "affiliation": "By Apolo Lawyers",
     "description": "A long-form legal analysis review for practising lawyers, in-house counsel and legal researchers working with Vietnamese law."
   },
   "nav": {
@@ -24,8 +25,8 @@
     "keyTakeaways": "Key Takeaways",
     "relatedArticles": "Related articles",
     "shareArticle": "Share this article",
-    "newsletterHeading": "New analysis, monthly",
-    "newsletterDescription": "Receive long-form legal analysis from our editorial team — once a month, no spam.",
+    "newsletterHeading": "New analysis",
+    "newsletterDescription": "Receive long-form legal analysis from our editorial team — no spam.",
     "subscribe": "Subscribe",
     "emailPlaceholder": "Your email",
     "loading": "Loading...",
@@ -48,6 +49,6 @@
     "ecosystemHeading": "Apolo ecosystem",
     "sectionsHeading": "Sections",
     "aboutHeading": "About the review",
-    "copyright": "© 2026 APOLO LAWYERS LAW FIRM"
+    "copyright": "© 2026 APOLO LAWYERS - Solicitors & Litigators"
   }
 }

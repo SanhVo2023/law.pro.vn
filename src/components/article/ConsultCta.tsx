@@ -27,7 +27,7 @@ export default function ConsultCta({ locale }: Props) {
         'Schedule a consultation with a practising lawyer at Luật Sư Trực Tuyến — the consult service of Apolo Lawyers — for tailored analysis of your case.',
       cta: 'Book a consultation',
       url: 'https://luatsutructuyen.vn',
-      footnote: 'You can also read more from Managing Partner Vo Thien Hien at',
+      footnote: 'You can also read more from Managing Lawyer Võ Thiện Hiển at',
       footnoteLink: 'vothienhien.com',
       footnoteUrl: 'https://vothienhien.com',
     },

@@ -103,7 +103,7 @@ export default async function AuthorProfile({ params }: { params: Promise<Params
             {photo?.url ? (
               <Image
                 src={photo.url}
-                alt={author.name}
+                alt=""
                 width={320}
                 height={320}
                 className="w-52 h-52 md:w-60 md:h-60 lg:w-full lg:h-auto aspect-square object-cover rounded-full lg:rounded-none ring-1 ring-[var(--color-rule)]"
@@ -168,7 +168,7 @@ export default async function AuthorProfile({ params }: { params: Promise<Params
             <p className="font-[family-name:var(--font-cormorant)] italic text-lg leading-relaxed text-[var(--color-ink-muted)]">
               {locale === 'vi'
                 ? 'Bài phân tích trên chuyên trang được đăng dưới byline “Apolo Editorial Team” và được rà soát biên tập trước khi đăng. Phần này sẽ cập nhật khi có bài viết do tác giả trực tiếp chấp bút.'
-                : 'Analysis on this review is published under the “Apolo Editorial Team” byline and goes through editorial review before publication. This section will fill in as the author personally bylines pieces.'}
+                : 'Analysis on this review is published under the “Apolo Editorial Team” byline and is reviewed by our editorial team before it is posted. This section will fill in as the author personally bylines pieces.'}
             </p>
             <Link
               href={{ pathname: '/tac-gia/[slug]', params: { slug: 'editorial-team' } }}

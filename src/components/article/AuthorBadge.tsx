@@ -25,7 +25,7 @@ export default function AuthorBadge({
         {photoUrl ? (
           <Image
             src={photoUrl}
-            alt={name}
+            alt=""
             width={84}
             height={84}
             className="h-16 w-16 md:h-20 md:w-20 rounded-full object-cover ring-1 ring-[var(--color-rule)]"
@@ -59,7 +59,7 @@ export default function AuthorBadge({
       {photoUrl ? (
         <Image
           src={photoUrl}
-          alt={name}
+          alt=""
           width={48}
           height={48}
           className="h-10 w-10 rounded-full object-cover ring-1 ring-[var(--color-rule)]"

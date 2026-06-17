@@ -117,7 +117,7 @@ const DATA = {
         phones: '(+8428) 35.059.349\n(+84) 903.419.479',
       },
     ],
-    copyrightLine: '© 2026 APOLO LAWYERS LAW FIRM',
+    copyrightLine: '© 2026 APOLO LAWYERS - Solicitors & Litigators',
   },
 }
 

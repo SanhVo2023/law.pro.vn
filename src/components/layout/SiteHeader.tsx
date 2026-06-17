@@ -11,14 +11,6 @@ export default async function SiteHeader({ locale }: Props) {
   const tNav = await getTranslations({ locale, namespace: 'nav' })
   const tSite = await getTranslations({ locale, namespace: 'site' })
 
-  // Issue stamp keeps pace with the current month so the masthead never
-  // looks stale. We bump Issue No. once a year (12 issues = 12 months).
-  const now = new Date()
-  const monthVi = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'][now.getMonth()]
-  const monthEn = now.toLocaleString('en-US', { month: 'long' })
-  const issueMonth = locale === 'vi' ? `${monthVi} ${now.getFullYear()}` : `${monthEn} ${now.getFullYear()}`
-  const issueNo = String(now.getMonth() + 1).padStart(2, '0')
-
   // Items consumed by the slim sticky bar (client component).
   const stickyItems = SECTIONS.map((s) => ({
     hubVi: s.hub.vi,
@@ -28,17 +20,12 @@ export default async function SiteHeader({ locale }: Props) {
   return (
     <>
       <header className="relative z-40 bg-[var(--color-parchment)]">
-        {/* Top utility bar — issue stamp + authors + locale */}
+        {/* Top utility bar — firm attribution + authors + locale */}
       <div className="border-b border-[var(--color-rule)]/70">
         <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 h-9 flex items-center justify-between text-[10.5px] font-[family-name:var(--font-inter)] uppercase tracking-[0.24em] text-[var(--color-ink-muted)]">
-          <p className="hidden sm:block">
-            <span className="text-[var(--color-burgundy)]">Vol. I</span>
-            <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>
-            Issue {issueNo}
-            <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>
-            <span className="whitespace-nowrap">{issueMonth}</span>
+          <p className="whitespace-nowrap">
+            <span className="text-[var(--color-burgundy)]">{tSite('affiliation')}</span>
           </p>
-          <p className="sm:hidden text-[var(--color-burgundy)]">Vol. I · Issue {issueNo}</p>
           <div className="flex items-center gap-5">
             <Link
               href="/tac-gia"
@@ -51,7 +38,7 @@ export default async function SiteHeader({ locale }: Props) {
         </div>
       </div>
 
-      {/* Magazine masthead — centered wordmark, gold rule, italic tagline */}
+      {/* Masthead — centered wordmark, gold rule, italic tagline */}
       <div className="border-b border-[var(--color-gold)]/30">
         <div className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-7 md:py-9 text-center">
           <Link href="/" className="inline-block group">

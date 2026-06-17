@@ -79,7 +79,7 @@ export default function ArticleHero({
                 {authorPhotoUrl ? (
                   <Image
                     src={authorPhotoUrl}
-                    alt={authorName}
+                    alt=""
                     width={44}
                     height={44}
                     className="h-9 w-9 rounded-full object-cover ring-1 ring-[var(--color-rule)]"
@@ -140,7 +140,7 @@ export default function ArticleHero({
               {authorPhotoUrl ? (
                 <Image
                   src={authorPhotoUrl}
-                  alt={authorName}
+                  alt=""
                   width={44}
                   height={44}
                   className="h-10 w-10 rounded-full object-cover ring-1 ring-[var(--color-rule)]"

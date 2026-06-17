@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { routing, type Locale } from '@/i18n/routing'
+import { ogImageForSection } from '@/lib/seo'
 import { FONT_VARIABLES } from '@/lib/fonts'
 import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
@@ -19,6 +20,7 @@ export async function generateMetadata({
   if (!hasLocale(routing.locales, locale)) return {}
 
   const t = await getTranslations({ locale, namespace: 'site' })
+  const ogImages = ogImageForSection('og-default.webp')
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -39,6 +41,13 @@ export async function generateMetadata({
       url: `${SITE_URL}/${locale}`,
       title: `${t('name')} | ${t('tagline')}`,
       description: t('description'),
+      images: ogImages,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${t('name')} | ${t('tagline')}`,
+      description: t('description'),
+      images: ogImages,
     },
   }
 }

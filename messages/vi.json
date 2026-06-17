@@ -2,6 +2,7 @@
   "site": {
     "name": "The Apolo Review",
     "tagline": "Phân tích pháp lý chuyên sâu",
+    "affiliation": "Thuộc Công ty Luật Apolo Lawyers",
     "description": "Chuyên trang phân tích pháp lý chuyên sâu cho luật sư, chuyên viên pháp chế và nhà nghiên cứu luật tại Việt Nam."
   },
   "nav": {
@@ -25,7 +26,7 @@
     "relatedArticles": "Bài viết liên quan",
     "shareArticle": "Chia sẻ bài viết",
     "newsletterHeading": "Nhận bài phân tích mới",
-    "newsletterDescription": "Đăng ký để nhận các bài phân tích pháp lý chuyên sâu hàng tháng.",
+    "newsletterDescription": "Đăng ký để nhận các bài phân tích pháp lý chuyên sâu mới.",
     "subscribe": "Đăng ký",
     "emailPlaceholder": "Email của bạn",
     "loading": "Đang tải...",

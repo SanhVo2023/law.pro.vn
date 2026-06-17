@@ -84,12 +84,6 @@ export default async function Home({
       ? (featuredArticle.author as { name?: string } | null)
       : null
 
-  // Current month for the hero masthead and featured aside (auto-pace).
-  const now = new Date()
-  const monthVi = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'][now.getMonth()]
-  const monthEn = now.toLocaleString('en-US', { month: 'long' })
-  const issueMonth = locale === 'vi' ? `${monthVi} ${now.getFullYear()}` : `${monthEn} ${now.getFullYear()}`
-  const issueNo = String(now.getMonth() + 1).padStart(2, '0')
 
   const slugToPath: Record<string, (typeof SECTION_PATHNAMES)[keyof typeof SECTION_PATHNAMES]> = {
     'thuc-tien-xet-xu':   SECTION_PATHNAMES['court-practice'],
@@ -128,11 +122,6 @@ export default async function Home({
             />
             <div className="hero-overlay" aria-hidden />
             <div className="absolute inset-0 flex flex-col">
-              <div className="mx-auto max-w-screen-2xl w-full px-6 lg:px-12 pt-10 flex justify-end">
-                <p className="eyebrow text-[var(--color-gold)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]">
-                  Vol. I · Issue {issueNo} · {issueMonth}
-                </p>
-              </div>
               <div className="flex-1 flex items-end">
                 <div className="mx-auto max-w-screen-2xl w-full px-6 lg:px-12 pb-16 lg:pb-24 text-[var(--color-parchment)]">
                   <p className="eyebrow text-[var(--color-gold)] mb-7">{t('heroEyebrow')}</p>
@@ -180,7 +169,7 @@ export default async function Home({
 
               <aside className="lg:col-span-4 lg:border-l lg:border-[var(--color-rule)] lg:pl-10 self-end">
                 <p className="eyebrow text-[var(--color-ink-muted)]">
-                  Vol. I · Issue {issueNo} · {now.getFullYear()}
+                  {tSite('affiliation')}
                 </p>
                 <p className="mt-3 font-[family-name:var(--font-cormorant)] italic text-xl text-[var(--color-charcoal)] leading-snug">
                   &ldquo;{tSite('tagline')}&rdquo;

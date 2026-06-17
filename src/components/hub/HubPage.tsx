@@ -151,7 +151,6 @@ export default async function HubPage({
             <span aria-hidden className="mx-2 text-[var(--color-gold)]">·</span>
             {locale === 'vi' ? 'biên tập bởi ban biên tập' : 'curated by the editorial team'}
           </span>
-          <span className="hidden md:inline">{locale === 'vi' ? 'Cập nhật hàng tuần' : 'Updated weekly'}</span>
         </div>
       </div>
 
