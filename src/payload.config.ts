@@ -126,22 +126,22 @@ export default buildConfig({
     // FOREVER (CREATE still works — new rows, no conflicting lock), and with
     // NO connectionTimeoutMillis every request queues indefinitely once the
     // shared pooler is exhausted (HTTP 000 sitewide until Supabase reaps the
-    // zombies, ~4 min). The four timeouts below break that spiral:
-    //  - connectionTimeoutMillis: fail fast instead of queueing forever when
-    //    the pooler has no free session.
-    //  - statement_timeout: server aborts any statement stuck > 20s (e.g. a
-    //    write waiting behind a zombie lock) so Payload returns a real error.
-    //  - lock_timeout: lock waits abort even sooner — no lock convoys.
-    //  - idle_in_transaction_session_timeout: Postgres kills abandoned
-    //    transactions after 30s, releasing their locks (the self-heal).
+    // zombies, ~4 min). connectionTimeoutMillis fails fast instead of queueing
+    // forever when the pooler has no free session.
+    //
+    // IMPORTANT (2026-07-16 hotfix): statement_timeout / lock_timeout /
+    // idle_in_transaction_session_timeout MUST NOT be set here — node-postgres
+    // sends them as startup-packet parameters and the Supabase Session Pooler
+    // (Supavisor) rejects unknown startup params, killing EVERY connection
+    // ("There was an error initializing Payload" sitewide). Server-side zombie
+    // reaping belongs at the database role level instead:
+    //   ALTER ROLE ... SET idle_in_transaction_session_timeout = '30s'
+    // (coordinate with the PM — shared Authority project).
     pool: {
       connectionString: process.env.DATABASE_URI,
       max: 2,
       idleTimeoutMillis: 10_000,
       connectionTimeoutMillis: 10_000,
-      statement_timeout: 20_000,
-      lock_timeout: 15_000,
-      idle_in_transaction_session_timeout: 30_000,
     },
   }),
   plugins: [
