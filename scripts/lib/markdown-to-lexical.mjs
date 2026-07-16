@@ -16,7 +16,9 @@ function textNode(text, format = 0) {
 function parseInline(text) {
   const nodes = []
   // Order matters: bold-italic first, then bold, italic, code, link.
-  const regex = /(\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+?)`|\[([^\]]+?)\]\((https?:\/\/[^\s)]+)\))/g
+  // Code supports single AND double backticks (``x``) so stray literal
+  // backticks never leak into the rendered body (QA-LPRO-046/047).
+  const regex = /(\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`{1,2}\s*([^`]+?)\s*`{1,2}|\[([^\]]+?)\]\((https?:\/\/[^\s)]+)\))/g
   let last = 0
   let m
   while ((m = regex.exec(text)) !== null) {
@@ -42,106 +44,145 @@ function parseInline(text) {
   return nodes.length > 0 ? nodes : [textNode(text)]
 }
 
-export function markdownToLexical(markdown) {
-  if (!markdown) return undefined
-  const blocks = String(markdown).replace(/\r\n/g, '\n').split(/\n{2,}/).map((b) => b.trim()).filter(Boolean)
-  const children = []
-  for (const block of blocks) {
-    const lines = block.split('\n')
+function headingNode(depth, text) {
+  return {
+    type: 'heading',
+    tag: `h${Math.min(depth, 4)}`,
+    children: parseInline(text),
+    direction: null,
+    format: '',
+    indent: 0,
+    version: 1,
+  }
+}
 
-    // Heading
-    const heading = lines[0].match(/^(#{1,4})\s+(.+)$/)
-    if (heading && lines.length === 1) {
-      children.push({
-        type: 'heading',
-        tag: `h${heading[1].length}`,
-        children: parseInline(heading[2]),
-        direction: null,
-        format: '',
-        indent: 0,
-        version: 1,
-      })
-      continue
-    }
-
-    // Horizontal rule
-    if (block === '---' || block === '***') {
-      children.push({ type: 'horizontalrule', version: 1 })
-      continue
-    }
-
-    // Block quote (one or more lines starting with > )
-    if (lines.every((l) => l.startsWith('> '))) {
-      const text = lines.map((l) => l.slice(2)).join(' ')
-      children.push({
-        type: 'quote',
-        children: parseInline(text),
-        direction: null,
-        format: '',
-        indent: 0,
-        version: 1,
-      })
-      continue
-    }
-
-    // Unordered list
-    if (lines.every((l) => /^[-*]\s+/.test(l))) {
-      children.push({
-        type: 'list',
-        tag: 'ul',
-        listType: 'bullet',
-        start: 1,
-        children: lines.map((l, i) => ({
-          type: 'listitem',
-          value: i + 1,
-          children: parseInline(l.replace(/^[-*]\s+/, '')),
-          direction: null,
-          format: '',
-          indent: 0,
-          version: 1,
-        })),
-        direction: null,
-        format: '',
-        indent: 0,
-        version: 1,
-      })
-      continue
-    }
-
-    // Ordered list
-    if (lines.every((l) => /^\d+\.\s+/.test(l))) {
-      children.push({
-        type: 'list',
-        tag: 'ol',
-        listType: 'number',
-        start: 1,
-        children: lines.map((l, i) => ({
-          type: 'listitem',
-          value: i + 1,
-          children: parseInline(l.replace(/^\d+\.\s+/, '')),
-          direction: null,
-          format: '',
-          indent: 0,
-          version: 1,
-        })),
-        direction: null,
-        format: '',
-        indent: 0,
-        version: 1,
-      })
-      continue
-    }
-
-    // Default: paragraph (collapse soft line breaks into spaces)
-    const paragraphText = lines.join(' ')
-    children.push({
-      type: 'paragraph',
-      children: parseInline(paragraphText),
+function listNode(tag, listType, items) {
+  return {
+    type: 'list',
+    tag,
+    listType,
+    start: 1,
+    children: items.map((text, i) => ({
+      type: 'listitem',
+      value: i + 1,
+      children: parseInline(text),
       direction: null,
       format: '',
       indent: 0,
       version: 1,
-    })
+    })),
+    direction: null,
+    format: '',
+    indent: 0,
+    version: 1,
+  }
+}
+
+function paragraphNode(text) {
+  return {
+    type: 'paragraph',
+    children: parseInline(text),
+    direction: null,
+    format: '',
+    indent: 0,
+    version: 1,
+  }
+}
+
+/**
+ * Classify a single markdown line. QA-LPRO-016/019/026/030/032/045/048/051:
+ * the previous implementation only split on BLANK lines, so a heading
+ * followed directly by a list (single newline) — or a lead-in sentence
+ * followed by "- item" lines — collapsed into one space-joined paragraph
+ * with literal "###" and " - " markers. Segmentation is now line-level.
+ */
+function classifyLine(line) {
+  if (/^(#{1,6})\s+/.test(line)) return 'heading'
+  if (/^[-*]\s+/.test(line)) return 'ul'
+  if (/^\d+\.\s+/.test(line)) return 'ol'
+  if (/^>\s?/.test(line)) return 'quote'
+  if (/^\|/.test(line)) return 'table'
+  if (line === '---' || line === '***') return 'hr'
+  return 'text'
+}
+
+export function markdownToLexical(markdown) {
+  if (!markdown) return undefined
+  const blocks = String(markdown).replace(/\r\n/g, '\n').split(/\n{2,}/).map((b) => b.trim()).filter(Boolean)
+  const children = []
+
+  for (const block of blocks) {
+    const lines = block.split('\n').map((l) => l.trim()).filter(Boolean)
+    let i = 0
+    while (i < lines.length) {
+      const kind = classifyLine(lines[i])
+
+      if (kind === 'heading') {
+        const m = lines[i].match(/^(#{1,6})\s+(.+)$/)
+        children.push(headingNode(m[1].length, m[2]))
+        i += 1
+        continue
+      }
+
+      if (kind === 'hr') {
+        children.push({ type: 'horizontalrule', version: 1 })
+        i += 1
+        continue
+      }
+
+      if (kind === 'ul' || kind === 'ol') {
+        const items = []
+        while (i < lines.length && classifyLine(lines[i]) === kind) {
+          items.push(
+            lines[i]
+              .replace(kind === 'ul' ? /^[-*]\s+/ : /^\d+\.\s+/, '')
+              // Task-list markers render as literal "[ ]" (QA-LPRO-030) — strip.
+              .replace(/^\[(?:\s|x|X)?\]\s*/, ''),
+          )
+          i += 1
+        }
+        children.push(listNode(kind === 'ul' ? 'ul' : 'ol', kind === 'ul' ? 'bullet' : 'number', items))
+        continue
+      }
+
+      if (kind === 'quote') {
+        const parts = []
+        while (i < lines.length && classifyLine(lines[i]) === 'quote') {
+          parts.push(lines[i].replace(/^>\s?/, ''))
+          i += 1
+        }
+        children.push({
+          type: 'quote',
+          children: parseInline(parts.join(' ')),
+          direction: null,
+          format: '',
+          indent: 0,
+          version: 1,
+        })
+        continue
+      }
+
+      if (kind === 'table') {
+        // Keep the pipe-table lines as one space-joined paragraph — the
+        // frontend renderer (lexical-normalize.ts tryTable) reconstructs a
+        // real <table> from this shape.
+        const parts = []
+        while (i < lines.length && classifyLine(lines[i]) === 'table') {
+          parts.push(lines[i])
+          i += 1
+        }
+        children.push(paragraphNode(parts.join(' ')))
+        continue
+      }
+
+      // Plain text: consume consecutive text lines into one paragraph.
+      const parts = []
+      while (i < lines.length && classifyLine(lines[i]) === 'text') {
+        parts.push(lines[i])
+        i += 1
+      }
+      children.push(paragraphNode(parts.join(' ')))
+    }
   }
 
   return {

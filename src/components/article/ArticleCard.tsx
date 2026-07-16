@@ -1,5 +1,7 @@
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
+import type { Locale } from '@/i18n/routing'
+import { formatDate, readingTimeLabel } from '@/lib/format'
 
 type SectionPathname =
   | '/thuc-tien-xet-xu/[slug]'
@@ -20,6 +22,7 @@ type Props = {
   readingTime?: number | null
   imageUrl?: string | null
   variant?: 'default' | 'feature'
+  locale?: Locale
 }
 
 export default function ArticleCard({
@@ -33,15 +36,11 @@ export default function ArticleCard({
   readingTime,
   imageUrl,
   variant = 'default',
+  locale = 'vi',
 }: Props) {
   const isFeature = variant === 'feature'
-  const formattedDate = publishedDate
-    ? new Date(publishedDate).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      })
-    : null
+  const formattedDate = formatDate(publishedDate, locale)
+  const readLabel = readingTimeLabel(readingTime, locale)
 
   return (
     <Link
@@ -101,17 +100,22 @@ export default function ArticleCard({
             {excerpt}
           </p>
         ) : null}
-        <p className="mt-4 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-3 flex-wrap">
-          {authorName ? <span>{authorName}</span> : null}
-          {authorName && (formattedDate || readingTime) ? (
-            <span aria-hidden className="opacity-50">·</span>
+        {/* QA-LPRO-036/081: each token is a whitespace-nowrap unit with its
+            separator attached, so the row only wraps between whole items and
+            a '·' never dangles at the end of a line. */}
+        <p className="mt-4 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-x-3 gap-y-1 flex-wrap">
+          {authorName ? <span className="whitespace-nowrap">{authorName}</span> : null}
+          {formattedDate ? (
+            <span className="whitespace-nowrap">
+              {authorName ? <span aria-hidden className="opacity-50 mr-3">·</span> : null}
+              {formattedDate}
+            </span>
           ) : null}
-          {formattedDate ? <span>{formattedDate}</span> : null}
-          {readingTime ? (
-            <>
-              <span aria-hidden className="opacity-50">·</span>
-              <span>{readingTime} min</span>
-            </>
+          {readLabel ? (
+            <span className="whitespace-nowrap">
+              {authorName || formattedDate ? <span aria-hidden className="opacity-50 mr-3">·</span> : null}
+              {readLabel}
+            </span>
           ) : null}
         </p>
       </div>

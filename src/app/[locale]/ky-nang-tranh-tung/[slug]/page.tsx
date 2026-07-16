@@ -9,6 +9,17 @@ import { articleMetadata } from '@/lib/seo'
 
 type Params = { locale: string; slug: string }
 
+// ISR (QA-LPRO-010/011): render on demand, then cache for an hour. Without
+// this every article hit was a full SSR + DB round-trip (4-10s TTFB) and any
+// pooler hiccup surfaced as a 500. Empty params = no build-time DB hammering;
+// unknown slugs render once, then serve statically until revalidation.
+export const revalidate = 3600
+export const dynamicParams = true
+export function generateStaticParams() {
+  return []
+}
+
+
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { locale, slug } = await params
   if (!hasLocale(routing.locales, locale)) return {}

@@ -39,7 +39,9 @@ export const APOLO_IDENTITY = {
     companyNameFull:
       'APOLO LAWYERS - Solicitors & Litigators, a law practice organization belonging to the Ho Chi Minh City Bar Association, under the Vietnam Bar Federation',
     address: '108 Tran Dinh Xu Street, Cau Ong Lanh Ward, Ho Chi Minh City, Vietnam',
-    phones: ['(+8428) 66.701.709', '(+84) 903.419.479'],
+    // QA-LPRO-035/057: country code and area code are separate groups —
+    // "(+84 28)", never the fused "(+8428)" which reads as a bogus prefix.
+    phones: ['(+84 28) 66.701.709', '(+84) 903.419.479'],
     email: 'contact@apolo.com.vn',
     parentBrandUrl: 'https://www.apololawyers.com',
     parentBrandLabel: 'apololawyers.com',
@@ -47,7 +49,7 @@ export const APOLO_IDENTITY = {
       name: 'EAST SAI GON BRANCH - APOLO LAWYERS LAWFIRM',
       address:
         '9th/F, Tower K&M Building, 33 Ung Van Khiem Street, Thanh My Tay Ward, Ho Chi Minh City, Vietnam',
-      phones: ['(+8428) 35.059.349', '(+84) 903.419.479'],
+      phones: ['(+84 28) 35.059.349', '(+84) 903.419.479'],
     },
   },
 } as const

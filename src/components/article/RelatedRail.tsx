@@ -51,6 +51,7 @@ export default async function RelatedRail({ locale, articles, pathname, category
               publishedDate={a.publishedDate}
               readingTime={a.readingTime}
               imageUrl={a.featuredImage?.url || null}
+              locale={locale}
             />
           </Reveal>
         ))}

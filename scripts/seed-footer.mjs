@@ -106,7 +106,7 @@ const DATA = {
         name: 'APOLO LAWYERS - Solicitors & Litigators',
         address: '108 Tran Dinh Xu Street, Cau Ong Lanh Ward, Ho Chi Minh City, Vietnam',
         email: 'contact@apolo.com.vn',
-        phones: '(+8428) 66.701.709\n(+84) 903.419.479',
+        phones: '(+84 28) 66.701.709\n(+84) 903.419.479',
       },
       {
         label: 'Branch',
@@ -114,7 +114,7 @@ const DATA = {
         address:
           '9th/F, Tower K&M Building, 33 Ung Van Khiem Street, Thanh My Tay Ward, Ho Chi Minh City, Vietnam',
         email: '',
-        phones: '(+8428) 35.059.349\n(+84) 903.419.479',
+        phones: '(+84 28) 35.059.349\n(+84) 903.419.479',
       },
     ],
     copyrightLine: '© 2026 APOLO LAWYERS - Solicitors & Litigators',

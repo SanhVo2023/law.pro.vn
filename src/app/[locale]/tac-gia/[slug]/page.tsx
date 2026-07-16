@@ -10,10 +10,18 @@ import ArticleCard from '@/components/article/ArticleCard'
 import Reveal from '@/components/ui/Reveal'
 import JsonLd from '@/components/seo/JsonLd'
 import { Link } from '@/i18n/navigation'
+import { lexicalPlainText } from '@/lib/lexical-normalize'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://law.pro.vn'
 
 type Params = { locale: string; slug: string }
+
+// ISR (QA-LPRO-010): render author profiles on demand, cache for an hour.
+export const revalidate = 3600
+export const dynamicParams = true
+export function generateStaticParams() {
+  return []
+}
 
 const SECTION_PATHNAMES: Record<string, '/thuc-tien-xet-xu/[slug]' | '/chien-luoc-ho-so/[slug]' | '/danh-gia-chung-cu/[slug]' | '/ky-nang-tranh-tung/[slug]' | '/goc-nhin-nghe-luat/[slug]' | '/binh-luan-ban-an/[slug]'> = {
   'thuc-tien-xet-xu':   '/thuc-tien-xet-xu/[slug]',
@@ -29,9 +37,17 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!hasLocale(routing.locales, locale)) return {}
   const author = await getAuthorBySlug(slug, locale as Locale)
   if (!author) return {}
+  // QA-LPRO-091: use the first ~155 chars of the on-page bio as the meta
+  // description instead of the 3-4 word role subtitle.
+  const bioText = lexicalPlainText(author.bio).replace(/\s+/g, ' ').trim()
+  const description = bioText
+    ? bioText.length > 158
+      ? `${bioText.slice(0, 155).replace(/\s+\S*$/, '')}…`
+      : bioText
+    : [author.name, author.title].filter(Boolean).join(' — ')
   return {
     title: author.name,
-    description: author.title || undefined,
+    description,
     alternates: {
       canonical: `${SITE_URL}/${locale}/${locale === 'vi' ? 'tac-gia' : 'authors'}/${slug}`,
       languages: {
@@ -195,6 +211,7 @@ export default async function AuthorProfile({ params }: { params: Promise<Params
                     publishedDate={a.publishedDate}
                     readingTime={a.readingTime}
                     imageUrl={img?.url || null}
+                    locale={locale as Locale}
                   />
                 </Reveal>
               )

@@ -116,10 +116,32 @@ export default buildConfig({
     // parallel build workers (one Payload init per worker) stay well under
     // the Supabase Session Pooler's 15-session cap. idleTimeoutMillis low
     // so unused connections release quickly between prerender steps.
+    //
+    // Timeout hardening (QA-LPRO-009/010/011, 2026-07-16 root cause):
+    // admin UPDATE/DELETE hung forever and each retry took the whole API
+    // offline for minutes. Mechanism: a serverless invocation killed/frozen
+    // mid-transaction (Netlify sync function cap ~26s) leaves its pooler
+    // session 'idle in transaction', holding row locks. With NO server-side
+    // timeouts, every later UPDATE/DELETE of the same row waits on that lock
+    // FOREVER (CREATE still works — new rows, no conflicting lock), and with
+    // NO connectionTimeoutMillis every request queues indefinitely once the
+    // shared pooler is exhausted (HTTP 000 sitewide until Supabase reaps the
+    // zombies, ~4 min). The four timeouts below break that spiral:
+    //  - connectionTimeoutMillis: fail fast instead of queueing forever when
+    //    the pooler has no free session.
+    //  - statement_timeout: server aborts any statement stuck > 20s (e.g. a
+    //    write waiting behind a zombie lock) so Payload returns a real error.
+    //  - lock_timeout: lock waits abort even sooner — no lock convoys.
+    //  - idle_in_transaction_session_timeout: Postgres kills abandoned
+    //    transactions after 30s, releasing their locks (the self-heal).
     pool: {
       connectionString: process.env.DATABASE_URI,
       max: 2,
       idleTimeoutMillis: 10_000,
+      connectionTimeoutMillis: 10_000,
+      statement_timeout: 20_000,
+      lock_timeout: 15_000,
+      idle_in_transaction_session_timeout: 30_000,
     },
   }),
   plugins: [

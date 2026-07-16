@@ -80,8 +80,12 @@ export default async function ArticleDetail({ doc, locale, hubPathname, articleP
 
   const heroUrl =
     isObj<{ url?: string }>(doc.featuredImage) ? doc.featuredImage.url : null
-  const heroAlt =
+  // QA-LPRO-083/089/090: media alt text is stored in Vietnamese only — on the
+  // EN locale prefer the (localized) article title so screen readers don't get
+  // untranslated alt text.
+  const mediaAlt =
     isObj<{ alt?: string }>(doc.featuredImage) ? doc.featuredImage.alt : null
+  const heroAlt = locale === 'en' ? doc.title || mediaAlt : mediaAlt || doc.title
 
   const takeaways = (doc.keyTakeaways ?? []).map((t) => t?.point || '').filter(Boolean)
 
@@ -150,6 +154,7 @@ export default async function ArticleDetail({ doc, locale, hubPathname, articleP
           readingTime={doc.readingTime}
           heroImageUrl={heroUrl}
           heroAlt={heroAlt}
+          locale={locale}
         />
 
         <div className="wrap-read pt-12">
@@ -175,7 +180,9 @@ export default async function ArticleDetail({ doc, locale, hubPathname, articleP
           ) : null}
 
           <div className="article-body relative">
-            <LexicalContent data={doc.content as never} />
+            {/* title passed so a leading body heading that duplicates the H1
+                is dropped (QA-LPRO-044/050/065). */}
+            <LexicalContent data={doc.content as never} title={doc.title} />
           </div>
 
           {doc.footnotes && doc.footnotes.length > 0 ? (

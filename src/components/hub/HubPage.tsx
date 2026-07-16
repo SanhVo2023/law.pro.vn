@@ -6,6 +6,7 @@ import JsonLd from '@/components/seo/JsonLd'
 import { listArticlesByCategorySlug } from '@/lib/queries'
 import ArticleCard from '@/components/article/ArticleCard'
 import Reveal from '@/components/ui/Reveal'
+import { formatDate, readingTimeLabel } from '@/lib/format'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://law.pro.vn'
 
@@ -40,12 +41,6 @@ type Props = {
   sectionKey: SectionKey
   articlePathname: SectionPathname
   description: { vi: string; en: string }
-}
-
-function fmtDate(d?: string | null) {
-  return d
-    ? new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
-    : null
 }
 
 export default async function HubPage({
@@ -169,17 +164,21 @@ export default async function HubPage({
                         {leadArticle.excerpt}
                       </p>
                     ) : null}
-                    <p className="mt-5 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-3 flex-wrap">
-                      {leadAuthor?.name ? <span>{leadAuthor.name}</span> : null}
-                      {leadAuthor?.name && (fmtDate(leadArticle.publishedDate) || leadArticle.readingTime) ? (
-                        <span aria-hidden className="opacity-50">·</span>
+                    <p className="mt-5 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-x-3 gap-y-1 flex-wrap">
+                      {leadAuthor?.name ? <span className="whitespace-nowrap">{leadAuthor.name}</span> : null}
+                      {formatDate(leadArticle.publishedDate, locale) ? (
+                        <span className="whitespace-nowrap">
+                          {leadAuthor?.name ? <span aria-hidden className="opacity-50 mr-3">·</span> : null}
+                          {formatDate(leadArticle.publishedDate, locale)}
+                        </span>
                       ) : null}
-                      {fmtDate(leadArticle.publishedDate) ? <span>{fmtDate(leadArticle.publishedDate)}</span> : null}
-                      {leadArticle.readingTime ? (
-                        <>
-                          <span aria-hidden className="opacity-50">·</span>
-                          <span>{leadArticle.readingTime} min</span>
-                        </>
+                      {readingTimeLabel(leadArticle.readingTime, locale) ? (
+                        <span className="whitespace-nowrap">
+                          {leadAuthor?.name || formatDate(leadArticle.publishedDate, locale) ? (
+                            <span aria-hidden className="opacity-50 mr-3">·</span>
+                          ) : null}
+                          {readingTimeLabel(leadArticle.readingTime, locale)}
+                        </span>
                       ) : null}
                     </p>
                   </div>
@@ -205,6 +204,7 @@ export default async function HubPage({
                         publishedDate={a.publishedDate}
                         readingTime={a.readingTime}
                         imageUrl={(img as { url?: string } | null)?.url || null}
+                        locale={locale}
                       />
                     </Reveal>
                   )

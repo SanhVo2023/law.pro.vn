@@ -113,7 +113,9 @@ export async function hubMetadata(sectionKey: string, locale: Locale): Promise<M
   const navKey = section.navKey as 'courtPractice'
   // Title is bare — root layout.tsx's title.template appends `| The Apolo Review` once.
   const title = tNav(navKey)
-  const description = section.description[locale]
+  // Prefer the trimmed meta variant when the long-form hero description
+  // exceeds SERP display length (QA-LPRO-055).
+  const description = section.metaDescription?.[locale] ?? section.description[locale]
   const images = ogImageForSection(section.ogFilename)
   return {
     title,

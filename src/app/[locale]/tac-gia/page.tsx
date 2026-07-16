@@ -10,6 +10,9 @@ import JsonLd from '@/components/seo/JsonLd'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://law.pro.vn'
 
+// ISR (QA-LPRO-010): cache for an hour instead of SSR-ing every request.
+export const revalidate = 3600
+
 export async function generateMetadata({
   params,
 }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -19,6 +22,12 @@ export async function generateMetadata({
   const path = locale === 'vi' ? '/tac-gia' : '/authors'
   return {
     title: t('authors'),
+    // QA-LPRO-088: page-specific description instead of inheriting the
+    // homepage meta description.
+    description:
+      locale === 'vi'
+        ? 'Tác giả và cộng tác viên của The Apolo Review — luật sư hành nghề và chuyên gia pháp lý viết về pháp luật Việt Nam.'
+        : 'Meet the authors and contributing editors of The Apolo Review — practising lawyers and legal experts writing on Vietnamese law.',
     alternates: {
       canonical: `${SITE_URL}/${locale}${path}`,
       languages: { vi: `${SITE_URL}/vi/tac-gia`, en: `${SITE_URL}/en/authors` },

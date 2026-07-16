@@ -8,6 +8,10 @@ import { hubMetadata } from '@/lib/seo'
 
 const SECTION_KEY = 'professional-perspective'
 
+// ISR (QA-LPRO-010): cache the section listing for an hour instead of SSR-ing
+// (and querying the shared pooler) on every request.
+export const revalidate = 3600
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   if (!hasLocale(routing.locales, locale)) return {}

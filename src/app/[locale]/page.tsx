@@ -13,8 +13,13 @@ import {
 import JsonLd from '@/components/seo/JsonLd'
 import Reveal from '@/components/ui/Reveal'
 import { organizationSchema } from '@/lib/identity'
+import { formatDate, readingTimeLabel } from '@/lib/format'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://law.pro.vn'
+
+// ISR (QA-LPRO-010): cache the homepage for an hour instead of SSR-ing
+// (8 DB queries against the shared pooler) on every request.
+export const revalidate = 3600
 
 const SECTION_PATHNAMES = {
   'court-practice':           '/thuc-tien-xet-xu/[slug]',
@@ -45,12 +50,6 @@ const SECTION_KEY_TO_SLUG = {
 
 function mediaUrl(m: unknown): string | null {
   return m && typeof m === 'object' && 'url' in m ? ((m as { url?: string }).url ?? null) : null
-}
-
-function fmtDate(d?: string | null) {
-  return d
-    ? new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
-    : null
 }
 
 export default async function Home({
@@ -193,17 +192,21 @@ export default async function Home({
                       {featuredArticle.excerpt}
                     </p>
                   ) : null}
-                  <p className="mt-5 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-3">
-                    {featuredAuthor?.name ? <span>{featuredAuthor.name}</span> : null}
-                    {featuredAuthor?.name && (fmtDate(featuredArticle.publishedDate) || featuredArticle.readingTime) ? (
-                      <span aria-hidden className="opacity-50">·</span>
+                  {/* QA-LPRO-038/075: flex-wrap + nowrap tokens so items never
+                      break mid-date/mid-name at narrow widths. */}
+                  <p className="mt-5 font-[family-name:var(--font-inter)] text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] flex items-center gap-x-3 gap-y-1 flex-wrap">
+                    {featuredAuthor?.name ? <span className="whitespace-nowrap">{featuredAuthor.name}</span> : null}
+                    {formatDate(featuredArticle.publishedDate, locale as Locale) ? (
+                      <span className="whitespace-nowrap">
+                        {featuredAuthor?.name ? <span aria-hidden className="opacity-50 mr-3">·</span> : null}
+                        {formatDate(featuredArticle.publishedDate, locale as Locale)}
+                      </span>
                     ) : null}
-                    {fmtDate(featuredArticle.publishedDate) ? <span>{fmtDate(featuredArticle.publishedDate)}</span> : null}
-                    {featuredArticle.readingTime ? (
-                      <>
-                        <span aria-hidden className="opacity-50">·</span>
-                        <span>{featuredArticle.readingTime} min</span>
-                      </>
+                    {readingTimeLabel(featuredArticle.readingTime, locale as Locale) ? (
+                      <span className="whitespace-nowrap">
+                        <span aria-hidden className="opacity-50 mr-3">·</span>
+                        {readingTimeLabel(featuredArticle.readingTime, locale as Locale)}
+                      </span>
                     ) : null}
                   </p>
                 </Link>
@@ -251,7 +254,9 @@ export default async function Home({
                             <p className="mt-2 font-[family-name:var(--font-inter)] text-[10.5px] uppercase tracking-[0.14em] text-[var(--color-ink-muted)] flex items-center gap-2.5">
                               {author?.name ? <span className="truncate">{author.name}</span> : null}
                               {author?.name && a.readingTime ? <span aria-hidden className="opacity-50">·</span> : null}
-                              {a.readingTime ? <span className="shrink-0">{a.readingTime} min</span> : null}
+                              {a.readingTime ? (
+                                <span className="shrink-0 whitespace-nowrap">{readingTimeLabel(a.readingTime, locale as Locale)}</span>
+                              ) : null}
                             </p>
                           </div>
                         </Link>
@@ -295,7 +300,9 @@ export default async function Home({
                   <div className="flex items-baseline justify-between mb-2">
                     <p className="eyebrow text-[var(--color-burgundy)]">{String(i + 1).padStart(2, '0')}</p>
                     {latestInSection?.readingTime ? (
-                      <span className="eyebrow text-[var(--color-ink-muted)]">{latestInSection.readingTime} min</span>
+                      <span className="eyebrow text-[var(--color-ink-muted)] whitespace-nowrap">
+                        {readingTimeLabel(latestInSection.readingTime, locale as Locale)}
+                      </span>
                     ) : null}
                   </div>
                   <h3 className="font-[family-name:var(--font-cormorant)] text-2xl md:text-[1.7rem] leading-tight text-[var(--color-ink)] group-hover:text-[var(--color-burgundy)] transition-colors">

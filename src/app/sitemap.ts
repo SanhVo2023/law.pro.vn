@@ -5,6 +5,10 @@ import { listAllArticleSlugs, listAuthors } from '@/lib/queries'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://law.pro.vn'
 
+// ISR (QA-LPRO-010): regenerate the sitemap hourly instead of hitting the DB
+// on every crawler fetch.
+export const revalidate = 3600
+
 // Map category slug (== sectionKey-like VI slug) → SECTIONS entry so we
 // can build the right hub prefix per locale.
 const CATEGORY_TO_SECTION: Record<string, (typeof SECTIONS)[number]> = Object.fromEntries(

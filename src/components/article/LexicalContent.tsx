@@ -5,6 +5,11 @@
  */
 import Image from 'next/image'
 import React from 'react'
+import {
+  normalizeLexicalChildren,
+  type LexNode,
+  type MdTableNode,
+} from '@/lib/lexical-normalize'
 
 type LexicalNode = {
   type: string
@@ -95,11 +100,14 @@ function renderNode(node: LexicalNode, key: string | number): React.ReactNode {
         </blockquote>
       )
     case 'list': {
+      // QA-LPRO-041/085: list items used to render as flex rows (span.flex-1),
+      // which suppresses ::marker — ordered lists showed no numbers and
+      // unordered lists no bullets. Native list rendering restored.
       const Tag = node.tag === 'ol' ? 'ol' : 'ul'
       const cls =
         Tag === 'ol'
           ? 'list-decimal pl-6 my-6 space-y-2 marker:text-[var(--color-burgundy)] marker:font-[family-name:var(--font-cormorant)]'
-          : 'pl-6 my-6 space-y-2'
+          : 'list-disc pl-6 my-6 space-y-2 marker:text-[var(--color-gold)]'
       return (
         <Tag key={key} className={cls}>
           {renderChildren(node.children)}
@@ -107,15 +115,47 @@ function renderNode(node: LexicalNode, key: string | number): React.ReactNode {
       )
     }
     case 'listitem': {
-      const isUl = !node.value && node.value !== 0
       return (
         <li
           key={key}
-          className="leading-[1.7] text-[17px] font-[family-name:var(--font-lora)] text-[var(--color-body)] flex gap-3 items-start"
+          className="leading-[1.7] text-[17px] font-[family-name:var(--font-lora)] text-[var(--color-body)] pl-1"
         >
-          {isUl ? null : null}
-          <span className="flex-1">{renderChildren(node.children)}</span>
+          {renderChildren(node.children)}
         </li>
+      )
+    }
+    case 'md-table': {
+      // Table recovered from a space-joined markdown pipe table (QA-LPRO-026/030).
+      const t = node as unknown as MdTableNode
+      const th =
+        'border border-[var(--color-line)] bg-[var(--color-parchment)] px-4 py-2.5 text-left font-[family-name:var(--font-inter)] text-[12px] uppercase tracking-[0.08em] text-[var(--color-burgundy)]'
+      const td =
+        'border border-[var(--color-line)] px-4 py-2.5 align-top font-[family-name:var(--font-lora)] text-[16px] text-[var(--color-body)]'
+      return (
+        <div key={key} className="my-8 overflow-x-auto">
+          <table className="w-full border-collapse text-left">
+            <thead>
+              <tr>
+                {t.header.map((c, i) => (
+                  <th key={i} scope="col" className={th}>
+                    {c}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {t.rows.map((row, ri) => (
+                <tr key={ri}>
+                  {row.map((c, ci) => (
+                    <td key={ci} className={td}>
+                      {c}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )
     }
     case 'horizontalrule':
@@ -170,13 +210,17 @@ function renderNode(node: LexicalNode, key: string | number): React.ReactNode {
 
 type LexicalRoot = { root: LexicalNode } | null | undefined
 
-export default function LexicalContent({ data }: { data: LexicalRoot }) {
+export default function LexicalContent({ data, title }: { data: LexicalRoot; title?: string }) {
   if (!data?.root?.children?.length) {
     return null
   }
-  // Tag the first top-level paragraph so it renders with .lead-paragraph (drop-cap).
-  // Walks until it finds a paragraph (skipping headings, hr, etc.).
-  const children = [...data.root.children] as LexicalNode[]
+  // Recover block structure the original markdown import flattened (literal
+  // "###" headings, " - " list runs, pipe tables, stray backticks) and drop a
+  // leading heading that duplicates the page title. See lib/lexical-normalize.
+  const children = normalizeLexicalChildren(
+    data.root.children as LexNode[],
+    { title },
+  ) as LexicalNode[]
   for (let i = 0; i < children.length; i++) {
     if (children[i]?.type === 'paragraph') {
       children[i] = { ...children[i], __lead: true } as LexicalNode

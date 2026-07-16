@@ -32,7 +32,13 @@ function FooterLinkItem({ link, locale }: { link: FooterLink; locale: Locale }) 
 
 function phoneList(phones: string | string[] | null | undefined): string[] {
   if (!phones) return []
-  return (Array.isArray(phones) ? phones : phones.split('\n')).map((p) => p.trim()).filter(Boolean)
+  return (Array.isArray(phones) ? phones : phones.split('\n'))
+    .map((p) => p.trim())
+    // QA-LPRO-035/057: normalize the fused "(+8428)" (country+area code mashed
+    // together) to "(+84 28)" even when the value comes from the CMS global,
+    // which was seeded with the old format.
+    .map((p) => p.replace(/\(\+84(\d{2,3})\)/, '(+84 $1)'))
+    .filter(Boolean)
 }
 
 // Small gold line-icons for the contact block (matches the site's inline-SVG

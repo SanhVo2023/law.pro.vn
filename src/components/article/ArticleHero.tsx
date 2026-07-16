@@ -1,5 +1,7 @@
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
+import type { Locale } from '@/i18n/routing'
+import { formatDate, readingTimeLabel } from '@/lib/format'
 
 type Props = {
   category: string
@@ -13,6 +15,7 @@ type Props = {
   readingTime?: number | null
   heroImageUrl?: string | null
   heroAlt?: string | null
+  locale?: Locale
 }
 
 /**
@@ -34,14 +37,11 @@ export default function ArticleHero({
   readingTime,
   heroImageUrl,
   heroAlt,
+  locale = 'vi',
 }: Props) {
-  const formattedDate = publishedDate
-    ? new Date(publishedDate).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    : null
+  // QA-LPRO-061/086: byline strings follow the page locale.
+  const formattedDate = formatDate(publishedDate, locale, 'long')
+  const readLabel = readingTimeLabel(readingTime, locale, 'read')
 
   return (
     <header className="border-b border-[var(--color-line)]">
@@ -89,11 +89,11 @@ export default function ArticleHero({
           {authorName && (formattedDate || readingTime) ? (
             <span className="hidden md:block h-5 w-px bg-[var(--color-gold)]/40" aria-hidden />
           ) : null}
-          {formattedDate ? <span className="eyebrow text-[var(--color-ink-muted)]">{formattedDate}</span> : null}
-          {readingTime ? (
+          {formattedDate ? <span className="eyebrow text-[var(--color-ink-muted)] whitespace-nowrap">{formattedDate}</span> : null}
+          {readLabel ? (
             <>
               <span className="hidden md:block h-5 w-px bg-[var(--color-gold)]/40" aria-hidden />
-              <span className="eyebrow text-[var(--color-ink-muted)]">{readingTime} min read</span>
+              <span className="eyebrow text-[var(--color-ink-muted)] whitespace-nowrap">{readLabel}</span>
             </>
           ) : null}
         </div>

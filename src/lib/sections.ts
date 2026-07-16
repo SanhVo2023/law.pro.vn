@@ -7,6 +7,9 @@ export type Section = {
   /** Long-form description used by hub hero, metadata, JSON-LD. SSOT — do
    *  not hand-write the description anywhere else. */
   description: { vi: string; en: string }
+  /** Optional ~155-char override for the <meta name="description"> when the
+   *  long-form description exceeds the SERP display limit (QA-LPRO-055). */
+  metaDescription?: { vi?: string; en?: string }
   /** R2 filename prefix of the OG card for this section (matches manifest entries). */
   ogFilename: string
   /** R2 filename prefix of the hub thumbnail (matches manifest entries). */
@@ -83,6 +86,12 @@ export const SECTIONS: Section[] = [
     description: {
       vi: 'Bình luận và phân tích các bản án tiêu biểu tại Việt Nam — tranh chấp hợp đồng, lao động, đất đai, hôn nhân gia đình, doanh nghiệp. Bài viết có tính tham khảo, tên cá nhân (nếu có) chỉ mang tính minh họa.',
       en: 'Commentary and analysis of notable Vietnamese judgments — contract, labour, land, family, and corporate disputes. Each piece works from a verifiable ruling (number, date, court) and engages with how the court reasoned, where the precedent sits, and what counsel can take into practice. Reference only; any names mentioned are illustrative.',
+    },
+    // QA-LPRO-055: the long-form description above is ~345 chars — far past the
+    // ~160-char SERP limit — so the meta description uses this trimmed variant.
+    metaDescription: {
+      vi: 'Bình luận các bản án tiêu biểu tại Việt Nam — hợp đồng, lao động, đất đai, hôn nhân gia đình, doanh nghiệp — kèm lập luận của tòa và bài học thực tiễn.',
+      en: "Commentary on notable Vietnamese judgments — contract, labour, land, family and corporate disputes — with the ruling, the court's reasoning, and practice takeaways.",
     },
     ogFilename: 'og-binh-luan-ban-an.webp',
     thumbFilename: 'thumb-template-binh-luan-ban-an.webp',
